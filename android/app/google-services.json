@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "389112933381",
+    "project_id": "appluy-cf5e4",
+    "storage_bucket": "appluy-cf5e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389112933381:android:0abdf958783aa9e3fb406c",
+        "android_client_info": {
+          "package_name": "com.example.pear_market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389112933381-uplr2a5o6v7kqguas690kvi1sidb5fuc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3N-1EECUo2in7bRFs4MhqmY82afy2E_g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389112933381-uplr2a5o6v7kqguas690kvi1sidb5fuc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "389112933381-alqa6vbbg84lujf6f1k5l67l93ioc5bn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.apple"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
