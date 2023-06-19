@@ -1,4 +1,4 @@
-import '../entities/product_entity.dart';
+import '../entities/iphone_product_entity.dart';
 import '../repository/product_base_repository.dart';
 
 class AddProductUseCase {
@@ -6,7 +6,7 @@ class AddProductUseCase {
 
   AddProductUseCase(this._productBaseRepository);
 
-  Future<void> execute(Product product) async {
+  Future<void> execute(IphoneProductEntity product) async {
     await _productBaseRepository.addProduct(product);
   }
 }

@@ -7,3 +7,7 @@ abstract class Failure {
 class ServerFailure extends Failure {
   ServerFailure(super.errorMessage);
 }
+
+class ReadJsonFailure extends Failure {
+  ReadJsonFailure(super.errorMessage);
+}

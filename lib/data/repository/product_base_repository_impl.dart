@@ -1,3 +1,4 @@
+import 'package:pear_market/data/models/iphone_product_model.dart';
 import 'package:pear_market/data/source/remote_base_datasource.dart';
 import 'package:pear_market/domain/entities/product_entity.dart';
 
@@ -5,6 +6,7 @@ import 'package:pear_market/core/error/failure.dart';
 
 import 'package:dartz/dartz.dart';
 
+import '../../domain/entities/iphone_product_entity.dart';
 import '../../domain/repository/product_base_repository.dart';
 
 class ProductBaseRepositoryImpl implements ProductBaseRepository {
@@ -13,9 +15,10 @@ class ProductBaseRepositoryImpl implements ProductBaseRepository {
   ProductBaseRepositoryImpl(this._remoteDatasource);
 
   @override
-  Future<void> addProduct(Product product) async {
+  Future<void> addProduct(IphoneProductEntity product) async {
     try {
-      await _remoteDatasource.addProduct(product);
+      await _remoteDatasource
+          .addProduct(IphoneProductModel.fromEntity(product));
     } catch (e) {
       throw ServerFailure(e.toString());
     }

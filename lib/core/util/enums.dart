@@ -15,6 +15,6 @@ enum ProductStatus {
 }
 
 enum ProductCondition {
-  fresh,
-  used,
+  NEW,
+  USED,
 }

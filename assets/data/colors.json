@@ -1,0 +1,133 @@
+{
+    "iphone": {
+        "iPhone 8": [
+            "Space Gray",
+            "Silver",
+            "Gold",
+            "RED (PRODUCT)"
+        ],
+        "iPhone 8 Plus": [
+            "Space Gray",
+            "Silver",
+            "Gold",
+            "RED (PRODUCT)"
+        ],
+        "iPhone X": [
+            "Space Gray",
+            "Silver"
+        ],
+        "iPhone XR": [
+            "RED (PRODUCT)",
+            "Black",
+            "Blue",
+            "Coral",
+            "White",
+            "Yellow"
+        ],
+        "iPhone XS": [
+            "Space Gray",
+            "Silver",
+            "Gold"
+        ],
+        "iPhone XS Max": [
+            "Space Gray",
+            "Silver",
+            "Gold"
+        ],
+        "iPhone SE": [
+            "RED (PRODUCT)",
+            "Black",
+            "White"
+        ],
+        "iPhone 11": [
+            "RED (PRODUCT)",
+            "Black",
+            "White",
+            "Green",
+            "Purple",
+            "Yellow"
+        ],
+        "iPhone 11 Pro": [
+            "Space Gray",
+            "Silver",
+            "Gold",
+            "Midnight Green"
+        ],
+        "iPhone 11 Pro Max": [
+            "Space Gray",
+            "Silver",
+            "Gold",
+            "Midnight Green"
+        ],
+        "iPhone 12": [
+            "RED (PRODUCT)",
+            "Black",
+            "White",
+            "Green",
+            "Blue"
+        ],
+        "iPhone 12 Mini": [
+            "RED (PRODUCT)",
+            "Black",
+            "White",
+            "Green",
+            "Blue",
+            "Purple"
+        ],
+        "iPhone 12 Pro": [
+            "Gold",
+            "Silver",
+            "Graphite",
+            "Pacific Blue"
+        ],
+        "iPhone 12 Pro Max": [
+            "Gold",
+            "Silver",
+            "Graphite",
+            "Pacific Blue"
+        ],
+        "iPhone 13": [
+            "RED (PRODUCT)",
+            "Blue",
+            "Green",
+            "Midnight",
+            "Pink",
+            "Starlight"
+        ],
+        "iPhone 13 Mini": [
+            
+        ],
+        "iPhone 13 Pro": [
+            "Gold",
+            "Graphite",
+            "Sierra Blue",
+            "Silver"
+        ],
+        "iPhone 13 Pro Max": [
+            "Gold",
+            "Graphite",
+            "Sierra Blue",
+            "Silver"
+        ],
+        "iPhone 14": [
+            "Blue",
+            "Midnight",
+            "Purple",
+            "Starlight",
+            "Red"
+        ],
+        "iPhone 14 Pro": [
+            "Gold",
+            "Silver",
+            "Space Black",
+            "Deep Purple"
+        ],
+        "iPhone 14 Pro Max": [
+            "Gold",
+            "Silver",
+            "Space Black",
+            "Deep Purple"
+        ]
+
+    }
+}
