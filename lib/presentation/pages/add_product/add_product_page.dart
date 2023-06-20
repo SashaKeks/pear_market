@@ -51,10 +51,16 @@ class AddProductPage extends StatelessWidget {
                 SizedBox(height: AppDemensions.appSize20),
                 DropdownButtonFormField<String>(
                   value: context
-                      .watch<AddProductViewModel>()
-                      .state
-                      .product
-                      .generation,
+                          .watch<AddProductViewModel>()
+                          .state
+                          .generationList
+                          .isEmpty
+                      ? null
+                      : context
+                          .watch<AddProductViewModel>()
+                          .state
+                          .generationList
+                          .last,
                   borderRadius: BorderRadius.circular(AppDemensions.appSize20),
                   icon: const Icon(
                     Icons.keyboard_double_arrow_down_sharp,
@@ -73,7 +79,6 @@ class AddProductPage extends StatelessWidget {
                 ),
                 SizedBox(height: AppDemensions.appSize20),
                 DropdownButtonFormField<String>(
-                  hint: const Text("Choose color"),
                   value: context
                           .watch<AddProductViewModel>()
                           .state
@@ -84,7 +89,7 @@ class AddProductPage extends StatelessWidget {
                           .watch<AddProductViewModel>()
                           .state
                           .colorList
-                          .first,
+                          .last,
                   borderRadius: BorderRadius.circular(AppDemensions.appSize20),
                   icon: const Icon(
                     Icons.keyboard_double_arrow_down_sharp,
@@ -100,6 +105,35 @@ class AddProductPage extends StatelessWidget {
                       .toList(),
                   onChanged:
                       context.read<AddProductViewModel>().addProductColor,
+                ),
+                SizedBox(height: AppDemensions.appSize20),
+                DropdownButtonFormField<String>(
+                  value: context
+                          .watch<AddProductViewModel>()
+                          .state
+                          .storageList
+                          .isEmpty
+                      ? null
+                      : context
+                          .watch<AddProductViewModel>()
+                          .state
+                          .storageList
+                          .last,
+                  borderRadius: BorderRadius.circular(AppDemensions.appSize20),
+                  icon: const Icon(
+                    Icons.keyboard_double_arrow_down_sharp,
+                  ),
+                  items: context
+                      .watch<AddProductViewModel>()
+                      .state
+                      .storageList
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged:
+                      context.read<AddProductViewModel>().addProductStorage,
                 ),
               ],
             ),

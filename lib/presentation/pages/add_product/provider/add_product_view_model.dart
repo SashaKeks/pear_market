@@ -11,21 +11,25 @@ class _AddProductState {
   final IphoneProductEntity product;
   final List<String> generationList;
   final List<String> colorList;
+  final List<String> storageList;
 
-  _AddProductState(
-      {required this.product,
-      this.generationList = const [],
-      this.colorList = const []});
+  _AddProductState({
+    required this.product,
+    this.generationList = const [],
+    this.colorList = const [],
+    this.storageList = const [],
+  });
 
-  _AddProductState copyWith({
-    IphoneProductEntity? product,
-    List<String>? generationList,
-    List<String>? colorList,
-  }) {
+  _AddProductState copyWith(
+      {IphoneProductEntity? product,
+      List<String>? generationList,
+      List<String>? colorList,
+      List<String>? storageList}) {
     return _AddProductState(
       product: product ?? this.product,
       generationList: generationList ?? this.generationList,
       colorList: colorList ?? this.colorList,
+      storageList: storageList ?? this.storageList,
     );
   }
 }
@@ -40,6 +44,7 @@ class AddProductViewModel extends ChangeNotifier {
 
   AddProductViewModel(this.context, this.add, this.repository) {
     getProductGeneration();
+    getProductStorage();
   }
 
   Future<void> getProductGeneration() async {
@@ -55,9 +60,15 @@ class AddProductViewModel extends ChangeNotifier {
         );
       },
       (right) {
-        state = state.copyWith(generationList: right);
+        state = state.copyWith(
+          generationList: right,
+          product: state.product.copyWith(
+            generation: right.last,
+          ),
+        );
       },
     );
+    getProductColors(state.product.generation);
     notifyListeners();
   }
 
@@ -78,6 +89,22 @@ class AddProductViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getProductStorage() async {
+    final result = await repository.getProductStorage(state.product.type.name);
+    result.fold(
+      (l) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed load storages...'),
+            backgroundColor: (Colors.black12),
+          ),
+        );
+      },
+      (right) => state = state.copyWith(storageList: right),
+    );
+    notifyListeners();
+  }
+
   void addProduct() {}
 
   addProductType() {}
@@ -89,7 +116,16 @@ class AddProductViewModel extends ChangeNotifier {
 
   addProductStatus() {}
   addProductBuyInfo() {}
-  addProductStorage() {}
+  addProductStorage(String? storage) async {
+    if (storage != null) {
+      state = state.copyWith(
+        product: state.product.copyWith(
+          storage: storage,
+        ),
+      );
+    }
+  }
+
   addProductSellInfo() {}
   void addProductCondition(int? condition) {
     if (condition != null) {

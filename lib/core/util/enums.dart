@@ -9,7 +9,6 @@ enum ProductType {
 }
 
 enum ProductStatus {
-  expect,
   instock,
   sold,
 }

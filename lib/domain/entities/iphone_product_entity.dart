@@ -34,10 +34,10 @@ class IphoneProductEntity implements Product {
       color: "",
       status: ProductStatus.instock,
       buyInfo: "",
-      storage: "128 GB",
+      storage: "",
       sellInfo: "",
       condition: ProductCondition.NEW,
-      generation: "iPhone 14 Pro Max",
+      generation: "",
       description: "",
     );
   }
