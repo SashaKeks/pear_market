@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pear_market/presentation/pages/add_product/add_product_page.dart';
-import 'package:pear_market/presentation/pages/add_product/provider/add_product_view_model.dart';
-import 'package:pear_market/presentation/pages/home/home_page.dart';
-import 'package:pear_market/presentation/pages/products/provider/product_view_model.dart'
-    show ProductViewModel;
+import 'package:pear_market/features/products/presentation/pages/add_product/add_product_page.dart';
+import 'package:pear_market/features/products/presentation/pages/add_product/provider/add_product_view_model.dart';
+import 'package:pear_market/features/products/presentation/pages/menu/menu_page.dart';
+import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../presentation/pages/products/products_page.dart';
+import '../../features/products/presentation/pages/products/products_page.dart';
 
 final getIt = GetIt.instance;
 
@@ -21,15 +20,15 @@ class AppNavigationNames {
 class AppNavigation {
   static Map<String, Widget Function(BuildContext)> routes =
       <String, WidgetBuilder>{
-    AppNavigationNames.homePage: (context) => const HomePage(),
+    AppNavigationNames.homePage: (context) => const MenuPage(),
     AppNavigationNames.iphoneList: (context) => ChangeNotifierProvider(
-          create: (context) => ProductViewModel(),
+          create: (context) => ProductViewModel(getIt(), context),
           child: const ProductsPage(),
         ),
     AppNavigationNames.addProduct: (context) => ChangeNotifierProvider(
           create: (context) => AddProductViewModel(context, getIt(), getIt()),
           lazy: false,
-          child: const AddProductPage(),
+          child: AddProductPage(),
         ),
   };
 

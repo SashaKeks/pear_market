@@ -17,3 +17,5 @@ enum ProductCondition {
   NEW,
   USED,
 }
+
+enum ProductCurrency { USD, UAH, EUR }
