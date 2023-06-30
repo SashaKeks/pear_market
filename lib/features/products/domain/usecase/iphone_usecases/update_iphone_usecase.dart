@@ -1,12 +1,12 @@
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
-class UpdateProductUseCase {
+class UpdateIphoneUseCase {
   final ProductBaseRepository _productBaseRepository;
 
-  UpdateProductUseCase(this._productBaseRepository);
+  UpdateIphoneUseCase(this._productBaseRepository);
 
-  Future<void> execute(Product updatedProduct) async {
+  Future<void> call(Product updatedProduct) async {
     await _productBaseRepository.updateProduct(updatedProduct);
   }
 }

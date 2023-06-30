@@ -1,11 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
+import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_parameters_repository.dart';
-import 'package:pear_market/features/products/domain/usecase/product_base/add_product_usecase.dart';
-
-import '../../../../../../core/util/enums.dart';
+import 'package:pear_market/features/products/domain/usecase/iphone_usecases/add_iphone_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_version_parameter_usecase.dart';
 
 class _AddProductState {
   final IphoneProductEntity product;
@@ -41,20 +42,31 @@ class _AddProductState {
 
 class AddProductViewModel extends ChangeNotifier {
   final BuildContext context;
-  final AddProductUseCase add;
-  final ProductParametersRepository repository;
+  final AddIphoneUseCase addIphoneUseCase;
+  final GetProductGenerationParameterUsecase
+      getProductGenerationParameterUsecase;
+  final GetProductColorParameterUsecase getProductColorParameterUsecase;
+  final GetProductStorageParameterUsecase getProductStorageParameterUsecase;
+  final GetProductVersionParameterUsecase getProductVersionParameterUsecase;
   _AddProductState state = _AddProductState(
     product: IphoneProductEntity.empty(),
   );
 
-  AddProductViewModel(this.context, this.add, this.repository) {
+  AddProductViewModel({
+    required this.context,
+    required this.addIphoneUseCase,
+    required this.getProductGenerationParameterUsecase,
+    required this.getProductStorageParameterUsecase,
+    required this.getProductColorParameterUsecase,
+    required this.getProductVersionParameterUsecase,
+  }) {
     getProductGeneration();
     getProductStorage();
   }
 
   Future<void> getProductGeneration() async {
     final result =
-        await repository.getProductGeneration(state.product.type.name);
+        await getProductGenerationParameterUsecase(state.product.type.name);
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -78,8 +90,8 @@ class AddProductViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductColors(String generetion) async {
-    final result =
-        await repository.getProductColor(state.product.type.name, generetion);
+    final result = await getProductColorParameterUsecase(
+        state.product.type.name, generetion);
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -100,7 +112,8 @@ class AddProductViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductStorage() async {
-    final result = await repository.getProductStorage(state.product.type.name);
+    final result =
+        await getProductStorageParameterUsecase(state.product.type.name);
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -200,7 +213,7 @@ class AddProductViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveProduct() {
-    add.execute(state.product);
+  void saveProduct() async {
+    await addIphoneUseCase(state.product);
   }
 }

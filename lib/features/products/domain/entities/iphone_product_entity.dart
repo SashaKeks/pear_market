@@ -80,6 +80,6 @@ class IphoneProductEntity extends Product {
 
   @override
   String toString() {
-    return "$generation $storage $color";
+    return "$generation $color $storage";
   }
 }

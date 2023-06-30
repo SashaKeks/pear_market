@@ -1,3 +1,5 @@
+import 'package:pear_market/core/common/data_state.dart';
+import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
@@ -12,54 +14,69 @@ class IphoneBaseRepositoryImpl
   IphoneBaseRepositoryImpl(this._remoteDatasource);
 
   @override
-  Future<void> addProduct(IphoneProductEntity product) async {
+  Future<DataState> addProduct(IphoneProductEntity product) async {
     try {
       await _remoteDatasource
           .addProduct(IphoneProductModel.fromEntity(product).toJson());
+      return DataSuccess("add product success");
+    } on AddProductFailure catch (e) {
+      return DataFailure(e.errorMessage);
     } catch (e) {
-      throw ServerFailure(e.toString());
+      throw UnknowingFailure(e.toString());
     }
   }
 
   @override
-  Future<void> deleteProduct(String productId) async {
+  Future<DataState> deleteProduct(
+      String productId, ProductType productType) async {
     try {
-      await _remoteDatasource.deleteProduct(productId);
+      await _remoteDatasource.deleteProduct(productId, productType);
+      return DataSuccess("product deleted success");
+    } on ServerFailure catch (e) {
+      return DataFailure(e.toString());
     } catch (e) {
-      throw ServerFailure(e.toString());
+      throw UnknowingFailure(e.toString());
     }
   }
 
   @override
   Future<Either<Failure, List<IphoneProductEntity>>> getAllProducts(
-      int productTypeId) async {
+      ProductType productType) async {
     try {
-      final result = await _remoteDatasource.getAllProducts(productTypeId);
+      final result = await _remoteDatasource.getAllProducts(productType);
       return right(result
           .map((e) => IphoneProductModel.fromJson(e).toEntity())
           .toList());
-    } on ServerFailure {
-      throw left(ServerFailure("Somthing was wrong"));
-    }
-  }
-
-  @override
-  Future<Either<Failure, IphoneProductEntity>> getDetail(int productId) async {
-    try {
-      final result = await _remoteDatasource.getDetail(productId);
-      return right(IphoneProductModel.fromJson(result).toEntity());
-    } catch (e) {
+    } on ServerFailure catch (e) {
       throw left(ServerFailure(e.toString()));
+    } catch (e) {
+      throw UnknowingFailure(e.toString());
     }
   }
 
   @override
-  Future<void> updateProduct(IphoneProductEntity updatedProduct) async {
+  Future<Either<Failure, IphoneProductEntity>> getDetail(
+      String productId, ProductType productType) async {
+    try {
+      final result = await _remoteDatasource.getDetail(productId, productType);
+      return right(IphoneProductModel.fromJson(result).toEntity());
+    } on ServerFailure catch (e) {
+      throw left(ServerFailure(e.toString()));
+    } catch (e) {
+      throw UnknowingFailure(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState> updateProduct(IphoneProductEntity updatedProduct) async {
     try {
       await _remoteDatasource.updateProduct(
           IphoneProductModel.fromEntity(updatedProduct).toJson());
+      return DataSuccess("product updated success");
+    } on UpdateProductFailure catch (e) {
+      return DataFailure(e.toString());
     } catch (e) {
-      throw ServerFailure(e.toString());
+      throw UnknowingFailure(e.toString());
     }
   }
 }

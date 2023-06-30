@@ -3,6 +3,7 @@ import 'package:pear_market/features/products/domain/entities/iphone_product_ent
 
 class IphoneProductModel extends IphoneProductEntity {
   IphoneProductModel({
+    super.id,
     required super.type,
     required super.color,
     required super.status,
@@ -18,6 +19,7 @@ class IphoneProductModel extends IphoneProductEntity {
 
   factory IphoneProductModel.fromJson(Map<String, dynamic> json) {
     return IphoneProductModel(
+      id: json["id"],
       type: ProductType.values[json["type"]],
       color: json["color"],
       status: ProductStatus.values[json["status"]],
@@ -33,6 +35,7 @@ class IphoneProductModel extends IphoneProductEntity {
   }
   factory IphoneProductModel.fromEntity(IphoneProductEntity entity) {
     return IphoneProductModel(
+      id: entity.id,
       type: entity.type,
       color: entity.color,
       status: entity.status,
@@ -48,6 +51,7 @@ class IphoneProductModel extends IphoneProductEntity {
   }
   IphoneProductEntity toEntity() {
     return IphoneProductEntity(
+      id: id,
       type: type,
       color: color,
       status: status,
@@ -64,6 +68,7 @@ class IphoneProductModel extends IphoneProductEntity {
 
   Map<String, dynamic> toJson() {
     return {
+      "id": id ?? '',
       "type": type.index,
       "color": color,
       "status": status.index,

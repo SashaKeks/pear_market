@@ -2,44 +2,40 @@ import 'package:flutter/material.dart';
 
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
-import 'package:pear_market/features/products/domain/usecase/product_base/get_all_products_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/iphone_usecases/get_all_iphones_usecase.dart';
 
 import '../../../../../../core/service/service_navigation.dart';
 
 class _ProductState {
   final List<IphoneProductEntity> productList;
-  final List<IphoneProductEntity?> searchList;
-  final bool showSearch;
   _ProductState({
     required this.productList,
-    this.searchList = const [],
-    this.showSearch = false,
   });
 
   _ProductState copyWith({
     List<IphoneProductEntity>? productList,
-    List<IphoneProductEntity?>? searchList,
-    bool? showSearch,
   }) {
     return _ProductState(
       productList: productList ?? this.productList,
-      searchList: searchList ?? this.searchList,
-      showSearch: showSearch ?? this.showSearch,
     );
   }
 }
 
 class ProductViewModel extends ChangeNotifier {
-  final GetAllProductsUseCase getAllProductsUseCase;
+  final GetAllIphonesUseCase getAllIphonesUseCase;
   final BuildContext context;
+  final ProductType productType;
   _ProductState state = _ProductState(productList: []);
-  ProductViewModel(this.getAllProductsUseCase, this.context) {
+  ProductViewModel({
+    required this.getAllIphonesUseCase,
+    required this.context,
+    required this.productType,
+  }) {
     getAllProducts();
   }
 
   Future<void> getAllProducts() async {
-    final result =
-        await getAllProductsUseCase.execute(ProductType.iphone.index);
+    final result = await getAllIphonesUseCase(productType);
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -59,27 +55,5 @@ class ProductViewModel extends ChangeNotifier {
   void onAddProductButtonPress() async {
     await Navigator.pushNamed(context, AppNavigationNames.addProduct);
     getAllProducts();
-  }
-
-  void onShowSearchBar() {
-    state = state.copyWith(
-        showSearch: !state.showSearch, searchList: state.productList);
-    notifyListeners();
-  }
-
-  void onSearchProduct(String? value) {
-    if (value != null) {
-      final searchList = state.productList.where((e) {
-        if (e.toString().toLowerCase().contains(value.toLowerCase()) ||
-            e.condition.name.toLowerCase().contains(value.toLowerCase())) {
-          return true;
-        }
-        return false;
-      }).toList();
-
-      state =
-          state.copyWith(searchList: searchList.isNotEmpty ? searchList : []);
-    }
-    notifyListeners();
   }
 }

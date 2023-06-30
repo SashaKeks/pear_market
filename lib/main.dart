@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      initialRoute: AppNavigationNames.iphoneList,
+      initialRoute: AppNavigationNames.homePage,
       routes: AppNavigation.routes,
       onGenerateRoute: AppNavigation.onGenerateRoute,
     );

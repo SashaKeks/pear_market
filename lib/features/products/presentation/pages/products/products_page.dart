@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/colors.dart';
 import 'package:pear_market/core/resources/demencions.dart';
+import 'package:pear_market/core/service/service_navigation.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -12,47 +13,22 @@ class ProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: context.watch<ProductViewModel>().state.showSearch
-              ? TextField(
-                  autofocus: true,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                    labelText: "Search",
-                    labelStyle: GoogleFonts.acme(
-                        textStyle: const TextStyle(color: Colors.white)),
-                    focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  style: GoogleFonts.acme(
-                    textStyle: TextStyle(color: Colors.white),
-                  ),
-                  onChanged: context.read<ProductViewModel>().onSearchProduct,
-                )
-              : const Text("Products"),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: context.read<ProductViewModel>().onShowSearchBar,
-            ),
-          ]),
+        title: Text(
+            context.watch<ProductViewModel>().productType.name.toUpperCase()),
+      ),
       body: Container(
         padding: EdgeInsets.all(AppDemensions.appSize20),
         child: ListView.separated(
-          itemCount: context.watch<ProductViewModel>().state.showSearch
-              ? context.watch<ProductViewModel>().state.searchList.length
-              : context.watch<ProductViewModel>().state.productList.length,
+          itemCount: context.watch<ProductViewModel>().state.productList.length,
           itemBuilder: ((context, index) {
-            final productList = context
-                    .watch<ProductViewModel>()
-                    .state
-                    .showSearch
-                ? context.watch<ProductViewModel>().state.searchList[index]
-                : context.watch<ProductViewModel>().state.productList[index];
+            final product =
+                context.watch<ProductViewModel>().state.productList[index];
             return InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                    AppNavigationNames.productDetail,
+                    arguments: {"id": product.id, "type": product.type});
+              },
               child: Container(
                 padding: EdgeInsets.all(AppDemensions.appSize10),
                 color: AppColors.productCardColor,
@@ -66,7 +42,7 @@ class ProductsPage extends StatelessWidget {
                             padding: EdgeInsets.all(AppDemensions.appSize5),
                             decoration: BoxDecoration(border: Border.all()),
                             child: Text(
-                              productList?.condition.name ?? "",
+                              product.condition.name,
                               style: GoogleFonts.acme(
                                 textStyle: TextStyle(
                                   fontSize: AppDemensions.appSize25,
@@ -79,21 +55,22 @@ class ProductsPage extends StatelessWidget {
                         ),
                         Container(
                           height: AppDemensions.appSize150,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(
-                                  'assets/images/iphone_14_pro_max.png'),
+                                  'assets/images/${product.type.name}.png'),
                             ),
                           ),
                         ),
                       ],
                     ),
                     Text(
-                      productList.toString(),
+                      product.toString(),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.acme(
+                      style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
-                          fontSize: AppDemensions.appSize25,
+                          fontSize: AppDemensions.appSize20,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -106,7 +83,10 @@ class ProductsPage extends StatelessWidget {
                         onPressed: () {},
                         child: Text(
                           'SELL',
-                          style: GoogleFonts.acme(),
+                          style: GoogleFonts.montserrat(
+                            fontSize: AppDemensions.appSize20,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
