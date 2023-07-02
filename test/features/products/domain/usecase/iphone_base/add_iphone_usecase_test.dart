@@ -11,10 +11,10 @@ void main() {
   ProductBaseRepository productBaseRepository = ProductBaseRepositoryMock();
   AddIphoneUseCase usecase = AddIphoneUseCase(productBaseRepository);
   final product = IphoneProductEntity.empty();
-  group("add product usecase", () {
-    test("should add product success", () async {
+  group("add iphone usecase", () {
+    test("should add iphone success", () async {
       when(() => productBaseRepository.addProduct(product)).thenAnswer(
-        (invocation) async => DataSuccess("${product.type.name} added"),
+        (invocation) async => DataSuccess(""),
       );
 
       final result = await usecase(product);
@@ -22,7 +22,7 @@ void main() {
       expect(result, isA<DataSuccess>());
     });
 
-    test("should add product failure", () async {
+    test("should add iphone failure", () async {
       when(() => productBaseRepository.addProduct(product)).thenAnswer(
         (invocation) async => DataFailure(""),
       );

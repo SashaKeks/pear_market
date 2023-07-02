@@ -48,9 +48,9 @@ class IphoneBaseRepositoryImpl
           .map((e) => IphoneProductModel.fromJson(e).toEntity())
           .toList());
     } on ServerFailure catch (e) {
-      throw left(ServerFailure(e.toString()));
+      return left(ServerFailure(e.toString()));
     } catch (e) {
-      throw UnknowingFailure(e.toString());
+      return left(UnknowingFailure(e.toString()));
     }
   }
 
@@ -61,9 +61,9 @@ class IphoneBaseRepositoryImpl
       final result = await _remoteDatasource.getDetail(productId, productType);
       return right(IphoneProductModel.fromJson(result).toEntity());
     } on ServerFailure catch (e) {
-      throw left(ServerFailure(e.toString()));
+      return left(ServerFailure(e.toString()));
     } catch (e) {
-      throw UnknowingFailure(e.toString());
+      return left(UnknowingFailure(e.toString()));
     }
   }
 
