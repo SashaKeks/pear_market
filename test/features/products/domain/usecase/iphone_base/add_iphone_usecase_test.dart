@@ -5,10 +5,12 @@ import 'package:pear_market/features/products/domain/entities/iphone_product_ent
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 import 'package:pear_market/features/products/domain/usecase/iphone_usecases/add_iphone_usecase.dart';
 
-class ProductBaseRepositoryMock extends Mock implements ProductBaseRepository {}
+class ProductBaseRepositoryMock extends Mock
+    implements ProductBaseRepository<IphoneProductEntity> {}
 
 void main() {
-  ProductBaseRepository productBaseRepository = ProductBaseRepositoryMock();
+  ProductBaseRepository<IphoneProductEntity> productBaseRepository =
+      ProductBaseRepositoryMock();
   AddIphoneUseCase usecase = AddIphoneUseCase(productBaseRepository);
   final product = IphoneProductEntity.empty();
   group("add iphone usecase", () {

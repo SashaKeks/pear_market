@@ -24,11 +24,8 @@ class ProductsPage extends StatelessWidget {
             final product =
                 context.watch<ProductViewModel>().state.productList[index];
             return InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                    AppNavigationNames.productDetail,
-                    arguments: {"id": product.id, "type": product.type});
-              },
+              onTap: () =>
+                  context.read<ProductViewModel>().onDetailProductButton(index),
               child: Container(
                 padding: EdgeInsets.all(AppDemensions.appSize10),
                 color: AppColors.productCardColor,

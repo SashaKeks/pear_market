@@ -152,6 +152,19 @@ class AddProductPage extends StatelessWidget {
                 ),
                 SizedBox(height: AppDemensions.appSize20),
                 TextFormField(
+                  initialValue: context
+                              .watch<AddProductViewModel>()
+                              .state
+                              .product
+                              .buyPrice ==
+                          0
+                      ? null
+                      : context
+                          .watch<AddProductViewModel>()
+                          .state
+                          .product
+                          .buyPrice
+                          .toString(),
                   validator: (value) {
                     if (double.tryParse(value ?? '') == null) {
                       return "Only integer value";
@@ -190,6 +203,19 @@ class AddProductPage extends StatelessWidget {
                 SizedBox(height: AppDemensions.appSize20),
                 context.watch<AddProductViewModel>().state.showExRateField
                     ? TextFormField(
+                        initialValue: context
+                                    .watch<AddProductViewModel>()
+                                    .state
+                                    .product
+                                    .buyExRate ==
+                                1
+                            ? null
+                            : context
+                                .watch<AddProductViewModel>()
+                                .state
+                                .product
+                                .buyPrice
+                                .toString(),
                         validator: (value) {
                           if (double.tryParse(value ?? '') == null) {
                             return "Only integer value";

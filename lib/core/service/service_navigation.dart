@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product/add_product_page.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product/provider/add_product_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/menu/menu_page.dart';
@@ -25,18 +26,6 @@ class AppNavigation {
   static Map<String, Widget Function(BuildContext)> routes =
       <String, WidgetBuilder>{
     AppNavigationNames.homePage: (context) => const MenuPage(),
-    AppNavigationNames.addProduct: (context) => ChangeNotifierProvider(
-          create: (context) => AddProductViewModel(
-            context: context,
-            addIphoneUseCase: getIt(),
-            getProductColorParameterUsecase: getIt(),
-            getProductGenerationParameterUsecase: getIt(),
-            getProductStorageParameterUsecase: getIt(),
-            getProductVersionParameterUsecase: getIt(),
-          ),
-          lazy: false,
-          child: AddProductPage(),
-        ),
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -57,9 +46,32 @@ class AppNavigation {
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
             create: (context) => ProductDetailViewModel(
-                productType: arguments["type"], productId: arguments["id"]),
-            lazy: false,
-            child: ProductDetailPage(),
+              productType: arguments["type"],
+              productId: arguments["id"],
+              context: context,
+              getIphoneDetailUsecase: getIt(),
+              deleteIphoneUseCase: getIt(),
+              updateIphoneUseCase: getIt(),
+            ),
+            child: const ProductDetailPage(),
+          ),
+        );
+      case AppNavigationNames.addProduct:
+        final product = settings.arguments;
+        return MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            create: (context) => AddProductViewModel(
+              context: context,
+              editproduct:
+                  product != null ? product as IphoneProductEntity : null,
+              addIphoneUseCase: getIt(),
+              updateIphoneUseCase: getIt(),
+              getProductColorParameterUsecase: getIt(),
+              getProductGenerationParameterUsecase: getIt(),
+              getProductStorageParameterUsecase: getIt(),
+              getProductVersionParameterUsecase: getIt(),
+            ),
+            child: AddProductPage(),
           ),
         );
     }

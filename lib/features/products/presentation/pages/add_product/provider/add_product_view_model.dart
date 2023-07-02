@@ -3,6 +3,7 @@ import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_parameters_repository.dart';
 import 'package:pear_market/features/products/domain/usecase/iphone_usecases/add_iphone_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/iphone_usecases/update_iphone_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
@@ -42,24 +43,30 @@ class _AddProductState {
 
 class AddProductViewModel extends ChangeNotifier {
   final BuildContext context;
+  final IphoneProductEntity? editproduct;
   final AddIphoneUseCase addIphoneUseCase;
+  final UpdateIphoneUseCase updateIphoneUseCase;
   final GetProductGenerationParameterUsecase
       getProductGenerationParameterUsecase;
   final GetProductColorParameterUsecase getProductColorParameterUsecase;
   final GetProductStorageParameterUsecase getProductStorageParameterUsecase;
   final GetProductVersionParameterUsecase getProductVersionParameterUsecase;
-  _AddProductState state = _AddProductState(
-    product: IphoneProductEntity.empty(),
-  );
+  late _AddProductState state =
+      _AddProductState(product: IphoneProductEntity.empty());
 
   AddProductViewModel({
     required this.context,
+    this.editproduct,
     required this.addIphoneUseCase,
     required this.getProductGenerationParameterUsecase,
     required this.getProductStorageParameterUsecase,
+    required this.updateIphoneUseCase,
     required this.getProductColorParameterUsecase,
     required this.getProductVersionParameterUsecase,
   }) {
+    state = state.copyWith(
+      product: editproduct ?? IphoneProductEntity.empty(),
+    );
     getProductGeneration();
     getProductStorage();
   }
@@ -214,6 +221,10 @@ class AddProductViewModel extends ChangeNotifier {
   }
 
   void saveProduct() async {
-    await addIphoneUseCase(state.product);
+    if (editproduct == null) {
+      await addIphoneUseCase(state.product);
+    } else {
+      await updateIphoneUseCase(state.product);
+    }
   }
 }

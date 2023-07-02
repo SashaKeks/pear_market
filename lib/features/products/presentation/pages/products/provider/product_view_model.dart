@@ -45,8 +45,8 @@ class ProductViewModel extends ChangeNotifier {
           ),
         );
       },
-      (r) => state = state.copyWith(
-        productList: r as List<IphoneProductEntity>,
+      (right) => state = state.copyWith(
+        productList: right,
       ),
     );
     notifyListeners();
@@ -54,6 +54,15 @@ class ProductViewModel extends ChangeNotifier {
 
   void onAddProductButtonPress() async {
     await Navigator.pushNamed(context, AppNavigationNames.addProduct);
+    getAllProducts();
+  }
+
+  void onDetailProductButton(int index) async {
+    await Navigator.of(context).pushNamed(AppNavigationNames.productDetail,
+        arguments: {
+          "id": state.productList[index].id,
+          "type": state.productList[index].type
+        });
     getAllProducts();
   }
 }

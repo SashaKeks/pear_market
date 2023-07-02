@@ -54,9 +54,10 @@ class ProductBaseRemoteDataSourceImpl implements ProducBaseRemoteDataSource {
     final docRef =
         FirebaseFirestore.instance.collection(productType.name).doc(productId);
 
-    return docRef
-        .get()
-        .then((value) => value.data() as Map<String, dynamic>)
-        .catchError((e) => throw ServerFailure(e.toString()));
+    return docRef.get().then((value) {
+      final product = value.data() as Map<String, dynamic>;
+      product["id"] = value.id;
+      return product;
+    }).catchError((e) => throw ServerFailure(e.toString()));
   }
 }

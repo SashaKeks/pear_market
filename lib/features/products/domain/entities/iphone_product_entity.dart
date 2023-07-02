@@ -10,7 +10,11 @@ class IphoneProductEntity extends Product {
   final double buyPrice;
   final ProductCurrency buyCurrency;
   final double buyExRate;
-  final String sellInfo;
+  final DateTime buyDateTime;
+  final double? sellPrice;
+  final ProductCurrency sellCurrency;
+  final double? sellExRate;
+  final DateTime? sellDateTime;
   final ProductType type;
   final String generation;
   final String description;
@@ -19,14 +23,18 @@ class IphoneProductEntity extends Product {
 
   IphoneProductEntity({
     this.id,
+    this.sellPrice,
+    this.sellCurrency = ProductCurrency.UAH,
+    this.sellExRate = 1,
+    this.sellDateTime,
+    this.buyExRate = 1,
     required this.type,
     required this.color,
     required this.status,
     required this.buyPrice,
-    required this.buyCurrency,
-    required this.buyExRate,
+    required this.buyDateTime,
+    this.buyCurrency = ProductCurrency.UAH,
     required this.storage,
-    required this.sellInfo,
     required this.condition,
     required this.generation,
     required this.description,
@@ -38,14 +46,17 @@ class IphoneProductEntity extends Product {
       color: "",
       status: ProductStatus.instock,
       buyPrice: 0,
-      buyCurrency: ProductCurrency.UAH,
-      buyExRate: 1,
+      buyDateTime: DateTime.now(),
       storage: "",
-      sellInfo: "",
       condition: ProductCondition.NEW,
       generation: "",
       description: "",
     );
+  }
+
+  @override
+  String toString() {
+    return "$generation $color $storage";
   }
 
   IphoneProductEntity copyWith({
@@ -55,7 +66,11 @@ class IphoneProductEntity extends Product {
     double? buyPrice,
     ProductCurrency? buyCurrency,
     double? buyExRate,
-    String? sellInfo,
+    DateTime? buyDateTime,
+    double? sellPrice,
+    ProductCurrency? sellCurrency,
+    double? sellExRate,
+    DateTime? sellDateTime,
     ProductType? type,
     String? generation,
     String? description,
@@ -69,17 +84,16 @@ class IphoneProductEntity extends Product {
       buyPrice: buyPrice ?? this.buyPrice,
       buyCurrency: buyCurrency ?? this.buyCurrency,
       buyExRate: buyExRate ?? this.buyExRate,
-      sellInfo: sellInfo ?? this.sellInfo,
+      buyDateTime: buyDateTime ?? this.buyDateTime,
+      sellPrice: sellPrice ?? this.sellPrice,
+      sellCurrency: sellCurrency ?? this.sellCurrency,
+      sellExRate: sellExRate ?? this.sellExRate,
+      sellDateTime: sellDateTime ?? this.sellDateTime,
       type: type ?? this.type,
       generation: generation ?? this.generation,
       description: description ?? this.description,
       status: status ?? this.status,
       condition: condition ?? this.condition,
     );
-  }
-
-  @override
-  String toString() {
-    return "$generation $color $storage";
   }
 }

@@ -1,5 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:pear_market/core/resources/demencions.dart';
+import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/provider/product_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +13,19 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.watch<ProductDetailViewModel>().productId),
+        title: Text(
+          context
+              .watch<ProductDetailViewModel>()
+              .productType
+              .name
+              .toUpperCase(),
+        ),
+        actions: [
+          IconButton(
+              onPressed:
+                  context.read<ProductDetailViewModel>().onEditButtonPress,
+              icon: Icon(Icons.edit))
+        ],
       ),
       body: Column(
         children: [
@@ -18,7 +33,8 @@ class ProductDetailPage extends StatelessWidget {
             options: CarouselOptions(
               height: 400,
               viewportFraction: 1,
-              enlargeCenterPage: true,
+              enableInfiniteScroll: false,
+              enlargeCenterPage: false,
             ),
             items: [1, 2, 3].map(
               (i) {
@@ -27,7 +43,7 @@ class ProductDetailPage extends StatelessWidget {
                     return Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: Colors.grey[200],
                         image: DecorationImage(
                           image: AssetImage(
                             "assets/images/iphone2.png",
@@ -35,12 +51,27 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                       ),
                       child: Align(
-                        alignment: Alignment.bottomLeft,
+                        alignment: Alignment.topRight,
                         child: Padding(
                           padding: const EdgeInsets.all(25.0),
-                          child: Text(
-                            'Photo 1',
-                            style: TextStyle(fontSize: 16.0),
+                          child: Container(
+                            padding: EdgeInsets.all(AppDemensions.appSize5),
+                            decoration: BoxDecoration(border: Border.all()),
+                            child: Text(
+                              context
+                                  .watch<ProductDetailViewModel>()
+                                  .state
+                                  .iphoneProduct
+                                  .condition
+                                  .name,
+                              style: GoogleFonts.acme(
+                                textStyle: TextStyle(
+                                  fontSize: AppDemensions.appSize25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -50,7 +81,31 @@ class ProductDetailPage extends StatelessWidget {
               },
             ).toList(),
           ),
-          Text("Iphone 12 pro max"),
+          const Divider(),
+          Text(
+            context
+                .watch<ProductDetailViewModel>()
+                .state
+                .iphoneProduct
+                .generation,
+            style: GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                fontSize: AppDemensions.appSize25,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: AppDemensions.appSize20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text("Some"),
+              Text("data"),
+            ],
+          ),
+          Divider(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -59,15 +114,24 @@ class ProductDetailPage extends StatelessWidget {
         height: 100,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ElevatedButton(
-              onPressed: () {},
-              child: Text("Sell"),
+              onPressed:
+                  context.read<ProductDetailViewModel>().onSellButtonPress,
+              child: Text(context
+                          .watch<ProductDetailViewModel>()
+                          .state
+                          .iphoneProduct
+                          .status ==
+                      ProductStatus.sold
+                  ? "Un Sell"
+                  : "Sell"),
             ),
             ElevatedButton(
-              onPressed: () {},
-              child: Text("Delete"),
+              onPressed:
+                  context.read<ProductDetailViewModel>().onDeleteButtonPress,
+              child: const Text("Delete"),
             ),
           ],
         ),
