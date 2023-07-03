@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
-import 'package:pear_market/features/products/domain/repository/product_parameters_repository.dart';
 import 'package:pear_market/features/products/domain/usecase/iphone_usecases/add_iphone_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/iphone_usecases/update_iphone_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
@@ -9,14 +8,14 @@ import 'package:pear_market/features/products/domain/usecase/produc_parameters/g
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_version_parameter_usecase.dart';
 
-class _AddProductState {
+class AddIphoneState {
   final IphoneProductEntity product;
   final List<String> generationList;
   final List<String> colorList;
   final List<String> storageList;
   final bool showExRateField;
 
-  _AddProductState({
+  AddIphoneState({
     required this.product,
     this.generationList = const [],
     this.colorList = const [],
@@ -24,14 +23,14 @@ class _AddProductState {
     this.showExRateField = false,
   });
 
-  _AddProductState copyWith({
+  AddIphoneState copyWith({
     IphoneProductEntity? product,
     List<String>? generationList,
     List<String>? colorList,
     List<String>? storageList,
     bool? showExRateField,
   }) {
-    return _AddProductState(
+    return AddIphoneState(
       product: product ?? this.product,
       generationList: generationList ?? this.generationList,
       colorList: colorList ?? this.colorList,
@@ -41,39 +40,45 @@ class _AddProductState {
   }
 }
 
-class AddProductViewModel extends ChangeNotifier {
+class AddIphoneViewModel extends ChangeNotifier {
   final BuildContext context;
-  final IphoneProductEntity? editproduct;
-  final AddIphoneUseCase addIphoneUseCase;
-  final UpdateIphoneUseCase updateIphoneUseCase;
-  final GetProductGenerationParameterUsecase
-      getProductGenerationParameterUsecase;
-  final GetProductColorParameterUsecase getProductColorParameterUsecase;
-  final GetProductStorageParameterUsecase getProductStorageParameterUsecase;
-  final GetProductVersionParameterUsecase getProductVersionParameterUsecase;
-  late _AddProductState state =
-      _AddProductState(product: IphoneProductEntity.empty());
+  final IphoneProductEntity editproduct;
+  late AddIphoneState state = AddIphoneState(product: editproduct);
 
-  AddProductViewModel({
+  /// iphone add usecase
+  final AddIphoneUseCase addIphoneUseCase;
+
+  /// iphone update usecase
+  final UpdateIphoneUseCase updateIphoneUseCase;
+
+  /// iphone generation usecase
+  final GetProductGenerationParameterUsecase getProductGenerationUsecase;
+
+  /// iphone color usecase
+  final GetProductColorParameterUsecase getProductColorUsecase;
+
+  /// iphone storage usecase
+  final GetProductStorageParameterUsecase getProductStorageUsecase;
+
+  /// iphone version usecase
+  final GetProductVersionParameterUsecase getProductVersionUsecase;
+
+  AddIphoneViewModel({
     required this.context,
-    this.editproduct,
+    required this.editproduct,
     required this.addIphoneUseCase,
-    required this.getProductGenerationParameterUsecase,
-    required this.getProductStorageParameterUsecase,
+    required this.getProductGenerationUsecase,
+    required this.getProductStorageUsecase,
     required this.updateIphoneUseCase,
-    required this.getProductColorParameterUsecase,
-    required this.getProductVersionParameterUsecase,
+    required this.getProductColorUsecase,
+    required this.getProductVersionUsecase,
   }) {
-    state = state.copyWith(
-      product: editproduct ?? IphoneProductEntity.empty(),
-    );
     getProductGeneration();
     getProductStorage();
   }
 
   Future<void> getProductGeneration() async {
-    final result =
-        await getProductGenerationParameterUsecase(state.product.type.name);
+    final result = await getProductGenerationUsecase(state.product.type.name);
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -97,8 +102,8 @@ class AddProductViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductColors(String generetion) async {
-    final result = await getProductColorParameterUsecase(
-        state.product.type.name, generetion);
+    final result =
+        await getProductColorUsecase(state.product.type.name, generetion);
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -119,8 +124,7 @@ class AddProductViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductStorage() async {
-    final result =
-        await getProductStorageParameterUsecase(state.product.type.name);
+    final result = await getProductStorageUsecase(state.product.type.name);
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(

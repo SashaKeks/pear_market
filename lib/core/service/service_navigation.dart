@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
-import 'package:pear_market/features/products/presentation/pages/add_product/add_product_page.dart';
-import 'package:pear_market/features/products/presentation/pages/add_product/provider/add_product_view_model.dart';
+import 'package:pear_market/features/products/presentation/pages/add_product/iphone/add_iphone_page.dart';
+import 'package:pear_market/features/products/presentation/pages/add_product/iphone/provider/add_iphone_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/menu/menu_page.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/product_detail.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/provider/product_detail_view_model.dart';
@@ -57,19 +57,18 @@ class AppNavigation {
           ),
         );
       case AppNavigationNames.addProduct:
-        final product = settings.arguments;
+        final product = settings.arguments as IphoneProductEntity;
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
-            create: (context) => AddProductViewModel(
+            create: (context) => AddIphoneViewModel(
               context: context,
-              editproduct:
-                  product != null ? product as IphoneProductEntity : null,
+              editproduct: product,
               addIphoneUseCase: getIt(),
               updateIphoneUseCase: getIt(),
-              getProductColorParameterUsecase: getIt(),
-              getProductGenerationParameterUsecase: getIt(),
-              getProductStorageParameterUsecase: getIt(),
-              getProductVersionParameterUsecase: getIt(),
+              getProductColorUsecase: getIt(),
+              getProductGenerationUsecase: getIt(),
+              getProductStorageUsecase: getIt(),
+              getProductVersionUsecase: getIt(),
             ),
             child: AddProductPage(),
           ),

@@ -53,7 +53,8 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   void onAddProductButtonPress() async {
-    await Navigator.pushNamed(context, AppNavigationNames.addProduct);
+    await Navigator.pushNamed(context, AppNavigationNames.addProduct,
+        arguments: IphoneProductEntity.empty());
     getAllProducts();
   }
 

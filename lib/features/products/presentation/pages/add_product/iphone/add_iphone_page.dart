@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pear_market/features/products/presentation/pages/add_product/provider/add_product_view_model.dart';
+import 'package:pear_market/core/resources/demencions.dart';
+import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/products/presentation/pages/add_product/iphone/provider/add_iphone_view_model.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../../core/resources/demencions.dart';
-import '../../../../../core/util/enums.dart';
 
 class AddProductPage extends StatelessWidget {
   AddProductPage({super.key});
@@ -18,7 +17,7 @@ class AddProductPage extends StatelessWidget {
           FilledButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  context.read<AddProductViewModel>().saveProduct();
+                  context.read<AddIphoneViewModel>().saveProduct();
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -45,7 +44,7 @@ class AddProductPage extends StatelessWidget {
                 SizedBox(height: AppDemensions.appSize20),
                 DropdownButtonFormField<int>(
                   value: context
-                      .watch<AddProductViewModel>()
+                      .watch<AddIphoneViewModel>()
                       .state
                       .product
                       .condition
@@ -61,18 +60,18 @@ class AddProductPage extends StatelessWidget {
                           ))
                       .toList(),
                   onChanged:
-                      context.read<AddProductViewModel>().addProductCondition,
+                      context.read<AddIphoneViewModel>().addProductCondition,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
                 DropdownButtonFormField<String>(
                   value: context
-                          .watch<AddProductViewModel>()
+                          .watch<AddIphoneViewModel>()
                           .state
                           .generationList
                           .isEmpty
                       ? null
                       : context
-                          .watch<AddProductViewModel>()
+                          .watch<AddIphoneViewModel>()
                           .state
                           .generationList
                           .last,
@@ -81,7 +80,7 @@ class AddProductPage extends StatelessWidget {
                     Icons.keyboard_double_arrow_down_sharp,
                   ),
                   items: context
-                      .watch<AddProductViewModel>()
+                      .watch<AddIphoneViewModel>()
                       .state
                       .generationList
                       .map((e) => DropdownMenuItem(
@@ -90,18 +89,18 @@ class AddProductPage extends StatelessWidget {
                           ))
                       .toList(),
                   onChanged:
-                      context.read<AddProductViewModel>().addProductGeneration,
+                      context.read<AddIphoneViewModel>().addProductGeneration,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
                 DropdownButtonFormField<String>(
                   value: context
-                          .watch<AddProductViewModel>()
+                          .watch<AddIphoneViewModel>()
                           .state
                           .colorList
                           .isEmpty
                       ? null
                       : context
-                          .watch<AddProductViewModel>()
+                          .watch<AddIphoneViewModel>()
                           .state
                           .colorList
                           .last,
@@ -110,7 +109,7 @@ class AddProductPage extends StatelessWidget {
                     Icons.keyboard_double_arrow_down_sharp,
                   ),
                   items: context
-                      .watch<AddProductViewModel>()
+                      .watch<AddIphoneViewModel>()
                       .state
                       .colorList
                       .map((e) => DropdownMenuItem(
@@ -118,19 +117,18 @@ class AddProductPage extends StatelessWidget {
                             child: Text(e),
                           ))
                       .toList(),
-                  onChanged:
-                      context.read<AddProductViewModel>().addProductColor,
+                  onChanged: context.read<AddIphoneViewModel>().addProductColor,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
                 DropdownButtonFormField<String>(
                   value: context
-                          .watch<AddProductViewModel>()
+                          .watch<AddIphoneViewModel>()
                           .state
                           .storageList
                           .isEmpty
                       ? null
                       : context
-                          .watch<AddProductViewModel>()
+                          .watch<AddIphoneViewModel>()
                           .state
                           .storageList
                           .last,
@@ -139,7 +137,7 @@ class AddProductPage extends StatelessWidget {
                     Icons.keyboard_double_arrow_down_sharp,
                   ),
                   items: context
-                      .watch<AddProductViewModel>()
+                      .watch<AddIphoneViewModel>()
                       .state
                       .storageList
                       .map((e) => DropdownMenuItem(
@@ -148,19 +146,19 @@ class AddProductPage extends StatelessWidget {
                           ))
                       .toList(),
                   onChanged:
-                      context.read<AddProductViewModel>().addProductStorage,
+                      context.read<AddIphoneViewModel>().addProductStorage,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
                 TextFormField(
                   initialValue: context
-                              .watch<AddProductViewModel>()
+                              .watch<AddIphoneViewModel>()
                               .state
                               .product
                               .buyPrice ==
                           0
                       ? null
                       : context
-                          .watch<AddProductViewModel>()
+                          .watch<AddIphoneViewModel>()
                           .state
                           .product
                           .buyPrice
@@ -177,12 +175,12 @@ class AddProductPage extends StatelessWidget {
                     labelText: "Buy Price",
                   ),
                   onChanged:
-                      context.read<AddProductViewModel>().addProductBuyPrice,
+                      context.read<AddIphoneViewModel>().addProductBuyPrice,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
                 DropdownButtonFormField<int>(
                   value: context
-                      .watch<AddProductViewModel>()
+                      .watch<AddIphoneViewModel>()
                       .state
                       .product
                       .buyCurrency
@@ -198,20 +196,20 @@ class AddProductPage extends StatelessWidget {
                           ))
                       .toList(),
                   onChanged:
-                      context.read<AddProductViewModel>().addProductBuyCurrency,
+                      context.read<AddIphoneViewModel>().addProductBuyCurrency,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
-                context.watch<AddProductViewModel>().state.showExRateField
+                context.watch<AddIphoneViewModel>().state.showExRateField
                     ? TextFormField(
                         initialValue: context
-                                    .watch<AddProductViewModel>()
+                                    .watch<AddIphoneViewModel>()
                                     .state
                                     .product
                                     .buyExRate ==
                                 1
                             ? null
                             : context
-                                .watch<AddProductViewModel>()
+                                .watch<AddIphoneViewModel>()
                                 .state
                                 .product
                                 .buyPrice
@@ -228,7 +226,7 @@ class AddProductPage extends StatelessWidget {
                           labelText: "Price ex-rate",
                         ),
                         onChanged: context
-                            .read<AddProductViewModel>()
+                            .read<AddIphoneViewModel>()
                             .addProductBuyExRate,
                       )
                     : const SizedBox(),
@@ -241,7 +239,7 @@ class AddProductPage extends StatelessWidget {
                   minLines: 3,
                   maxLines: null,
                   onChanged:
-                      context.read<AddProductViewModel>().addProductDescription,
+                      context.read<AddIphoneViewModel>().addProductDescription,
                 )
               ],
             ),
