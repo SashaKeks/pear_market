@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/service/service_navigation.dart';
 
@@ -19,7 +17,7 @@ class ProductDetailState {
     IphoneProductEntity? iphoneProductEntity,
   }) {
     return ProductDetailState(
-      iphoneProduct: iphoneProductEntity ?? this.iphoneProduct,
+      iphoneProduct: iphoneProductEntity ?? iphoneProduct,
     );
   }
 }
@@ -62,18 +60,17 @@ class ProductDetailViewModel extends ChangeNotifier {
     if (isDelete != null && isDelete) {
       await deleteIphoneUseCase(productId, productType);
 
-      if (!context.mounted) return;
-      Navigator.pop(context);
+      returnToPreviosPage();
     }
     notifyListeners();
   }
 
-  void onEditButtonPress() {
-    Navigator.of(context).pushNamed(
-      AppNavigationNames.addProduct,
+  void onEditButtonPress() async {
+    await Navigator.of(context).pushNamed(
+      AppNavigationNames.formForIphone,
       arguments: state.iphoneProduct,
     );
-    getIphoneDetail();
+    await getIphoneDetail();
   }
 
   void onSellButtonPress() async {
@@ -95,5 +92,10 @@ class ProductDetailViewModel extends ChangeNotifier {
 
       getIphoneDetail();
     }
+  }
+
+  void returnToPreviosPage() {
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 }

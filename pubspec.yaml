@@ -43,6 +43,7 @@ dependencies:
   google_fonts: ^4.0.4
   mocktail: ^0.3.0
   carousel_slider: ^4.2.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

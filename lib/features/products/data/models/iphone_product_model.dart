@@ -33,7 +33,7 @@ class IphoneProductModel extends IphoneProductEntity {
       status: ProductStatus.values[json["status"]],
       buyPrice: json["buyPrice"],
       buyCurrency: ProductCurrency.values[json["buyCurrency"]],
-      buyExRate: json["buyPrice"],
+      buyExRate: json["buyExRate"],
       storage: json["storage"],
       buyDateTime:
           DateTime.tryParse(json["buyDateTime"]) ?? DateTime(1, 1, 1, 1, 00),

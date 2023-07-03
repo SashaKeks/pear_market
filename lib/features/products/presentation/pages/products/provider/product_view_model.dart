@@ -6,16 +6,16 @@ import 'package:pear_market/features/products/domain/usecase/iphone_usecases/get
 
 import '../../../../../../core/service/service_navigation.dart';
 
-class _ProductState {
+class ProductState {
   final List<IphoneProductEntity> productList;
-  _ProductState({
+  ProductState({
     required this.productList,
   });
 
-  _ProductState copyWith({
+  ProductState copyWith({
     List<IphoneProductEntity>? productList,
   }) {
-    return _ProductState(
+    return ProductState(
       productList: productList ?? this.productList,
     );
   }
@@ -25,7 +25,7 @@ class ProductViewModel extends ChangeNotifier {
   final GetAllIphonesUseCase getAllIphonesUseCase;
   final BuildContext context;
   final ProductType productType;
-  _ProductState state = _ProductState(productList: []);
+  ProductState state = ProductState(productList: []);
   ProductViewModel({
     required this.getAllIphonesUseCase,
     required this.context,
@@ -53,8 +53,7 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   void onAddProductButtonPress() async {
-    await Navigator.pushNamed(context, AppNavigationNames.addProduct,
-        arguments: IphoneProductEntity.empty());
+    await Navigator.pushNamed(context, AppNavigationNames.formForIphone);
     getAllProducts();
   }
 

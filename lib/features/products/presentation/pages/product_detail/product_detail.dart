@@ -24,7 +24,7 @@ class ProductDetailPage extends StatelessWidget {
           IconButton(
               onPressed:
                   context.read<ProductDetailViewModel>().onEditButtonPress,
-              icon: Icon(Icons.edit))
+              icon: const Icon(Icons.edit))
         ],
       ),
       body: Column(
@@ -44,7 +44,7 @@ class ProductDetailPage extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
-                        image: DecorationImage(
+                        image: const DecorationImage(
                           image: AssetImage(
                             "assets/images/iphone2.png",
                           ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/colors.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/core/service/service_navigation.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
 import 'package:provider/provider.dart';
 
