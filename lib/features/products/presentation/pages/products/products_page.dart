@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/colors.dart';
 import 'package:pear_market/core/resources/demencions.dart';
+import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -73,19 +74,57 @@ class ProductsPage extends StatelessWidget {
                     const Divider(
                       color: Colors.black,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text(
-                          'SELL',
-                          style: GoogleFonts.montserrat(
-                            fontSize: AppDemensions.appSize20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
+                    context
+                                .watch<ProductViewModel>()
+                                .state
+                                .productList[index]
+                                .status ==
+                            ProductStatus.instock
+                        ? SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () => context
+                                  .read<ProductViewModel>()
+                                  .onSellButtonPress(index),
+                              child: Text(
+                                'SELL',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: AppDemensions.appSize20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                "DAYS: ${(context.watch<ProductViewModel>().state.productList[index].sellDateTime ?? DateTime.now()).difference(context.watch<ProductViewModel>().state.productList[index].buyDateTime).inDays}",
+                                style: GoogleFonts.montserrat(
+                                  fontSize: AppDemensions.appSize20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                ((context
+                                                .watch<ProductViewModel>()
+                                                .state
+                                                .productList[index]
+                                                .sellPrice ??
+                                            0) -
+                                        context
+                                            .watch<ProductViewModel>()
+                                            .state
+                                            .productList[index]
+                                            .buyPrice)
+                                    .toString(),
+                                style: GoogleFonts.montserrat(
+                                  fontSize: AppDemensions.appSize20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          )
                   ],
                 ),
               ),

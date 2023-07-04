@@ -2,14 +2,14 @@ import 'package:get_it/get_it.dart';
 import 'package:pear_market/features/products/data/data_source/local/local_product_create_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source_impl.dart';
-import 'package:pear_market/features/products/data/repository/iphone_base_repository.dart';
+import 'package:pear_market/features/products/data/repository/product_base_repository.dart';
 import 'package:pear_market/features/products/data/repository/product_parameters_repository_impl.dart';
 import 'package:pear_market/features/products/domain/repository/product_parameters_repository.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/add_iphone_usecase.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/delete_iphone_usecase.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/get_all_iphones_usecase.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/get_iphone_detail_usecase.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/update_iphone_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/delete_product_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/get_all_products_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/get_product_detail_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
@@ -20,23 +20,25 @@ final getIt = GetIt.instance;
 class ServicesLocator {
   void init() {
     //USECASE
-    //iphone_usecase
+
+    ///product
     getIt.registerLazySingleton(
-      () => AddIphoneUseCase(getIt<IphoneBaseRepositoryImpl>()),
+      () => AddProductUseCase(getIt<ProductBaseRepositoryImpl>()),
     );
     getIt.registerLazySingleton(
-      () => DeleteIphoneUseCase(getIt<IphoneBaseRepositoryImpl>()),
+      () => DeleteProductUseCase(getIt<ProductBaseRepositoryImpl>()),
     );
     getIt.registerLazySingleton(
-      () => GetAllIphonesUseCase(getIt<IphoneBaseRepositoryImpl>()),
+      () => GetAllProductsUseCase(getIt<ProductBaseRepositoryImpl>()),
     );
     getIt.registerLazySingleton(
-      () => GetIphoneDetailUseCase(getIt<IphoneBaseRepositoryImpl>()),
+      () => GetProductDetailUseCase(getIt<ProductBaseRepositoryImpl>()),
     );
     getIt.registerLazySingleton(
-      () => UpdateIphoneUseCase(getIt<IphoneBaseRepositoryImpl>()),
+      () => UpdateProductUseCase(getIt<ProductBaseRepositoryImpl>()),
     );
-    //parameters
+
+    ///parameters
     getIt.registerLazySingleton(
       () => GetProductColorParameterUsecase(getIt()),
     );
@@ -51,8 +53,8 @@ class ServicesLocator {
     );
 
     //repositories
-    getIt.registerLazySingleton<IphoneBaseRepositoryImpl>(
-      () => IphoneBaseRepositoryImpl(getIt()),
+    getIt.registerLazySingleton<ProductBaseRepositoryImpl>(
+      () => ProductBaseRepositoryImpl(getIt()),
     );
     getIt.registerLazySingleton<ProductParametersRepository>(
       () => ProductParametersRepositoryImpl(getIt()),

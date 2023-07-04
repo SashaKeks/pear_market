@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
-import 'package:pear_market/features/products/presentation/pages/form_for_product/iphone/form_for_iphone_page.dart';
-import 'package:pear_market/features/products/presentation/pages/form_for_product/iphone/provider/form_for_iphone_view_model.dart';
+import 'package:pear_market/features/products/domain/entities/product_entity.dart';
+import 'package:pear_market/features/products/presentation/pages/form_for_product/form_for_product_page.dart';
+import 'package:pear_market/features/products/presentation/pages/form_for_product/provider/form_for_product_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/menu/menu_page.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/product_detail.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/provider/product_detail_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
+import 'package:pear_market/features/products/presentation/pages/sell_product/provider/sell_product_view_model.dart';
+import 'package:pear_market/features/products/presentation/pages/sell_product/sell_product_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/products/presentation/pages/products/products_page.dart';
@@ -19,7 +21,8 @@ class AppNavigationNames {
   static const String categoryMenu = '/category_menu';
   static const String productList = '/product_list';
   static const String productDetail = '/product_list/product_detail';
-  static const String formForIphone = '/form_for_iphone';
+  static const String formForProduct = '/form_for_product';
+  static const String sellProduct = '/sell_product';
 }
 
 class AppNavigation {
@@ -35,10 +38,23 @@ class AppNavigation {
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
             create: (context) => ProductViewModel(
-                getAllIphonesUseCase: getIt(),
+                getAllProductsUseCase: getIt(),
+                updateProductUseCase: getIt(),
                 context: context,
                 productType: productType),
             child: const ProductsPage(),
+          ),
+        );
+      case AppNavigationNames.sellProduct:
+        final product = settings.arguments as ProductEntity;
+        return MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            create: (context) => SellProductViewModel(
+              updateProductUseCase: getIt(),
+              context: context,
+              product: product,
+            ),
+            child: const SellProductPage(),
           ),
         );
       case AppNavigationNames.productDetail:
@@ -49,30 +65,30 @@ class AppNavigation {
               productType: arguments["type"],
               productId: arguments["id"],
               context: context,
-              getIphoneDetailUsecase: getIt(),
-              deleteIphoneUseCase: getIt(),
-              updateIphoneUseCase: getIt(),
+              getProductDetailUsecase: getIt(),
+              deleteProductUseCase: getIt(),
+              updateProductUseCase: getIt(),
             ),
             child: const ProductDetailPage(),
           ),
         );
-      case AppNavigationNames.formForIphone:
+      case AppNavigationNames.formForProduct:
         final product = settings.arguments == null
             ? null
-            : settings.arguments as IphoneProductEntity;
+            : settings.arguments as ProductEntity;
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
-            create: (context) => FormForIphoneViewModel(
+            create: (context) => FormForProductViewModel(
               context: context,
               editproduct: product,
-              addIphoneUseCase: getIt(),
-              updateIphoneUseCase: getIt(),
+              addProductUseCase: getIt(),
+              updateProductUseCase: getIt(),
               getProductColorUsecase: getIt(),
               getProductGenerationUsecase: getIt(),
               getProductStorageUsecase: getIt(),
               getProductVersionUsecase: getIt(),
             ),
-            child: const FormForIphonePage(),
+            child: const FormForProductPage(),
           ),
         );
     }

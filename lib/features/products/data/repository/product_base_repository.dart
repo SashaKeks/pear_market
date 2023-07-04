@@ -3,21 +3,20 @@ import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:pear_market/features/products/data/models/iphone_product_model.dart';
-import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
+import 'package:pear_market/features/products/data/models/product_model.dart';
+import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
-class IphoneBaseRepositoryImpl
-    extends ProductBaseRepository<IphoneProductEntity> {
+class ProductBaseRepositoryImpl extends ProductBaseRepository<ProductEntity> {
   final ProducBaseRemoteDataSource _remoteDatasource;
 
-  IphoneBaseRepositoryImpl(this._remoteDatasource);
+  ProductBaseRepositoryImpl(this._remoteDatasource);
 
   @override
-  Future<DataState> addProduct(IphoneProductEntity product) async {
+  Future<DataState> addProduct(ProductEntity product) async {
     try {
       await _remoteDatasource
-          .addProduct(IphoneProductModel.fromEntity(product).toJson());
+          .addProduct(ProductModel.fromEntity(product).toJson());
       return DataSuccess("add product success");
     } on AddProductFailure catch (e) {
       return DataFailure(e.errorMessage);
@@ -40,13 +39,12 @@ class IphoneBaseRepositoryImpl
   }
 
   @override
-  Future<Either<Failure, List<IphoneProductEntity>>> getAllProducts(
+  Future<Either<Failure, List<ProductEntity>>> getAllProducts(
       ProductType productType) async {
     try {
       final result = await _remoteDatasource.getAllProducts(productType);
-      return right(result
-          .map((e) => IphoneProductModel.fromJson(e).toEntity())
-          .toList());
+      return right(
+          result.map((e) => ProductModel.fromJson(e).toEntity()).toList());
     } on ServerFailure catch (e) {
       return left(ServerFailure(e.toString()));
     } catch (e) {
@@ -55,11 +53,11 @@ class IphoneBaseRepositoryImpl
   }
 
   @override
-  Future<Either<Failure, IphoneProductEntity>> getDetail(
+  Future<Either<Failure, ProductEntity>> getDetail(
       String productId, ProductType productType) async {
     try {
       final result = await _remoteDatasource.getDetail(productId, productType);
-      return right(IphoneProductModel.fromJson(result).toEntity());
+      return right(ProductModel.fromJson(result).toEntity());
     } on ServerFailure catch (e) {
       return left(ServerFailure(e.toString()));
     } catch (e) {
@@ -68,10 +66,10 @@ class IphoneBaseRepositoryImpl
   }
 
   @override
-  Future<DataState> updateProduct(IphoneProductEntity updatedProduct) async {
+  Future<DataState> updateProduct(ProductEntity updatedProduct) async {
     try {
-      await _remoteDatasource.updateProduct(
-          IphoneProductModel.fromEntity(updatedProduct).toJson());
+      await _remoteDatasource
+          .updateProduct(ProductModel.fromEntity(updatedProduct).toJson());
       return DataSuccess("product updated success");
     } on UpdateProductFailure catch (e) {
       return DataFailure(e.toString());

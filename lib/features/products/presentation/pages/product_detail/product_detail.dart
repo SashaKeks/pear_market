@@ -61,7 +61,7 @@ class ProductDetailPage extends StatelessWidget {
                               context
                                   .watch<ProductDetailViewModel>()
                                   .state
-                                  .iphoneProduct
+                                  .product
                                   .condition
                                   .name,
                               style: GoogleFonts.acme(
@@ -83,11 +83,7 @@ class ProductDetailPage extends StatelessWidget {
           ),
           const Divider(),
           Text(
-            context
-                .watch<ProductDetailViewModel>()
-                .state
-                .iphoneProduct
-                .generation,
+            context.watch<ProductDetailViewModel>().state.product.generation,
             style: GoogleFonts.montserrat(
               textStyle: TextStyle(
                 fontSize: AppDemensions.appSize25,
@@ -122,7 +118,7 @@ class ProductDetailPage extends StatelessWidget {
               child: Text(context
                           .watch<ProductDetailViewModel>()
                           .state
-                          .iphoneProduct
+                          .product
                           .status ==
                       ProductStatus.sold
                   ? "Un Sell"

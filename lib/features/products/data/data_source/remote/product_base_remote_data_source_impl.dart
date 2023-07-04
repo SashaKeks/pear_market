@@ -21,6 +21,7 @@ class ProductBaseRemoteDataSourceImpl implements ProducBaseRemoteDataSource {
 
     final result = await productsCollection
         .where("type", isEqualTo: productType.index)
+        .orderBy("status")
         .get()
         .then((snapshot) => snapshot.docs.map((e) {
               final product = e.data() as Map<String, dynamic>;

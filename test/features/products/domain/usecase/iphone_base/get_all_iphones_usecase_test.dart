@@ -3,34 +3,34 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pear_market/core/error/failure.dart';
 import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
+import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/get_all_iphones_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/get_all_products_usecase.dart';
 
 class ProductBaseRepositoryMock<T> extends Mock
-    implements ProductBaseRepository<IphoneProductEntity> {}
+    implements ProductBaseRepository<ProductEntity> {}
 
 void main() {
-  ProductBaseRepository<IphoneProductEntity> productBaseRepository =
+  ProductBaseRepository<ProductEntity> productBaseRepository =
       ProductBaseRepositoryMock();
-  GetAllIphonesUseCase usecase = GetAllIphonesUseCase(productBaseRepository);
+  GetAllProductsUseCase usecase = GetAllProductsUseCase(productBaseRepository);
   const productType = ProductType.iphone;
-  List<IphoneProductEntity> iphoneList = [
-    IphoneProductEntity.empty(),
-    IphoneProductEntity.empty(),
-    IphoneProductEntity.empty(),
+  List<ProductEntity> productList = [
+    ProductEntity.empty(),
+    ProductEntity.empty(),
+    ProductEntity.empty(),
   ];
-  group("get all iphones usecase", () {
-    test("should get all iphones success", () async {
+  group("get all products usecase", () {
+    test("should get all products success", () async {
       when(() => productBaseRepository.getAllProducts(productType))
-          .thenAnswer((invocation) async => right(iphoneList));
+          .thenAnswer((invocation) async => right(productList));
 
       final result = await usecase(productType);
 
-      expect(result, right(iphoneList));
+      expect(result, right(productList));
     });
     Failure fail = ServerFailure("");
-    test("should get all iphones failure", () async {
+    test("should get all products failure", () async {
       when(() => productBaseRepository.getAllProducts(productType)).thenAnswer(
         (invocation) async => left(fail),
       );

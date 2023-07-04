@@ -1,8 +1,8 @@
 import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
+import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 
-class IphoneProductModel extends IphoneProductEntity {
-  IphoneProductModel({
+class ProductModel extends ProductEntity {
+  ProductModel({
     super.id,
     super.sellPrice,
     super.sellCurrency,
@@ -21,8 +21,8 @@ class IphoneProductModel extends IphoneProductEntity {
     required super.description,
   });
 
-  factory IphoneProductModel.fromJson(Map<String, dynamic> json) {
-    return IphoneProductModel(
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
       id: json["id"],
       sellPrice: json["sellPrice"],
       sellCurrency: ProductCurrency.values[json["sellCurrency"]],
@@ -42,8 +42,8 @@ class IphoneProductModel extends IphoneProductEntity {
       description: json["description"],
     );
   }
-  factory IphoneProductModel.fromEntity(IphoneProductEntity entity) {
-    return IphoneProductModel(
+  factory ProductModel.fromEntity(ProductEntity entity) {
+    return ProductModel(
       id: entity.id,
       type: entity.type,
       color: entity.color,
@@ -62,8 +62,8 @@ class IphoneProductModel extends IphoneProductEntity {
       description: entity.description,
     );
   }
-  IphoneProductEntity toEntity() {
-    return IphoneProductEntity(
+  ProductEntity toEntity() {
+    return ProductEntity(
       id: id,
       type: type,
       color: color,

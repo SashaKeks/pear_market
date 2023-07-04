@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/products/domain/entities/iphone_product_entity.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/add_iphone_usecase.dart';
-import 'package:pear_market/features/products/domain/usecase/iphone_usecases/update_iphone_usecase.dart';
+import 'package:pear_market/features/products/domain/entities/product_entity.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_version_parameter_usecase.dart';
 import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
-class FormForIphoneState {
-  final IphoneProductEntity product;
+class FormForProductState {
+  final ProductEntity product;
   final List<String> generationList;
   final List<String> colorList;
   final List<String> storageList;
   final bool showExRateField;
 
-  FormForIphoneState({
+  FormForProductState({
     required this.product,
     this.generationList = const [],
     this.colorList = const [],
@@ -25,14 +24,14 @@ class FormForIphoneState {
     this.showExRateField = false,
   });
 
-  FormForIphoneState copyWith({
-    IphoneProductEntity? product,
+  FormForProductState copyWith({
+    ProductEntity? product,
     List<String>? generationList,
     List<String>? colorList,
     List<String>? storageList,
     bool? showExRateField,
   }) {
-    return FormForIphoneState(
+    return FormForProductState(
       product: product ?? this.product,
       generationList: generationList ?? this.generationList,
       colorList: colorList ?? this.colorList,
@@ -42,42 +41,42 @@ class FormForIphoneState {
   }
 }
 
-class FormForIphoneViewModel extends ChangeNotifier {
+class FormForProductViewModel extends ChangeNotifier {
   final BuildContext context;
   final formKey = GlobalKey<FormState>();
-  final IphoneProductEntity? editproduct;
-  late FormForIphoneState state = FormForIphoneState(
-    product: editproduct ?? IphoneProductEntity.empty(),
+  final ProductEntity? editproduct;
+  late FormForProductState state = FormForProductState(
+    product: editproduct ?? ProductEntity.empty(),
     showExRateField: editproduct == null
         ? false
         : editproduct?.buyCurrency != ProductCurrency.UAH,
   );
 
-  /// iphone add usecase
-  final AddIphoneUseCase addIphoneUseCase;
+  /// product add usecase
+  final AddProductUseCase addProductUseCase;
 
-  /// iphone update usecase
-  final UpdateIphoneUseCase updateIphoneUseCase;
+  /// product update usecase
+  final UpdateProductUseCase updateProductUseCase;
 
-  /// iphone generation usecase
+  /// product generation usecase
   final GetProductGenerationParameterUsecase getProductGenerationUsecase;
 
-  /// iphone color usecase
+  /// product color usecase
   final GetProductColorParameterUsecase getProductColorUsecase;
 
-  /// iphone storage usecase
+  /// product storage usecase
   final GetProductStorageParameterUsecase getProductStorageUsecase;
 
-  /// iphone version usecase
+  /// product version usecase
   final GetProductVersionParameterUsecase getProductVersionUsecase;
 
-  FormForIphoneViewModel({
+  FormForProductViewModel({
     required this.context,
     required this.editproduct,
-    required this.addIphoneUseCase,
+    required this.addProductUseCase,
     required this.getProductGenerationUsecase,
     required this.getProductStorageUsecase,
-    required this.updateIphoneUseCase,
+    required this.updateProductUseCase,
     required this.getProductColorUsecase,
     required this.getProductVersionUsecase,
   }) {
@@ -257,9 +256,9 @@ class FormForIphoneViewModel extends ChangeNotifier {
   void saveProduct() async {
     if (formKey.currentState!.validate()) {
       if (editproduct == null) {
-        await addIphoneUseCase(state.product);
+        await addProductUseCase(state.product);
       } else {
-        await updateIphoneUseCase(state.product);
+        await updateProductUseCase(state.product);
       }
     } else {
       showSnackbarInfo(context, "Fields are wrong cheak it and try again");
