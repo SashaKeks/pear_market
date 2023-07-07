@@ -3,5 +3,18 @@
         "e-Sim",
         "Global",
         "UA"
+    ],
+    "ipad": [
+        "Wi-Fi + LTE(4G)",
+        "Wi-Fi only"
+    ],
+    "applewatch": [
+        "Watch Edition",
+        "Watch Hermes",
+        "Watch Nike",
+        "Watch Sport",
+        "Watch Stainless",
+        "Watch Ultra"
     ]
+    
 }

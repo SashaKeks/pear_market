@@ -44,7 +44,7 @@ class ProductDetailViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductDetail() async {
-    final result = await getProductDetailUsecase(productId, productType);
+    final result = await getProductDetailUsecase(productId);
     result.fold(
       (left) => null,
       (right) {
@@ -57,7 +57,7 @@ class ProductDetailViewModel extends ChangeNotifier {
   Future<void> onDeleteButtonPress() async {
     final isDelete = await showAlertDialogDelete(context: context);
     if (isDelete != null && isDelete) {
-      await deleteProductUseCase(productId, productType);
+      await deleteProductUseCase(productId);
 
       returnToPreviosPage();
     }

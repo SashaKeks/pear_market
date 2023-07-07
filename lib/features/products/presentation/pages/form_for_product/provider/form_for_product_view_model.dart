@@ -43,6 +43,7 @@ class FormForProductState {
 
 class FormForProductViewModel extends ChangeNotifier {
   final BuildContext context;
+  final ProductType? productType;
   final formKey = GlobalKey<FormState>();
   final ProductEntity? editproduct;
   late FormForProductState state = FormForProductState(
@@ -72,6 +73,7 @@ class FormForProductViewModel extends ChangeNotifier {
 
   FormForProductViewModel({
     required this.context,
+    required this.productType,
     required this.editproduct,
     required this.addProductUseCase,
     required this.getProductGenerationUsecase,
@@ -81,8 +83,12 @@ class FormForProductViewModel extends ChangeNotifier {
     required this.getProductVersionUsecase,
   }) {
     initFields();
+    print(productType);
   }
   Future<void> initFields() async {
+    state = state.copyWith(
+        product:
+            state.product.copyWith(type: productType ?? editproduct?.type));
     await getProductGeneration();
     await getProductStorage();
   }
@@ -260,10 +266,10 @@ class FormForProductViewModel extends ChangeNotifier {
       } else {
         await updateProductUseCase(state.product);
       }
+      returnToPreviosPage();
     } else {
       showSnackbarInfo(context, "Fields are wrong cheak it and try again");
     }
-    returnToPreviosPage();
   }
 
   void returnToPreviosPage() {

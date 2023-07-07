@@ -4,6 +4,7 @@ import 'package:pear_market/core/resources/colors.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
+import 'package:pear_market/features/products/presentation/widgets/drop_down_button_for_form.dart';
 import 'package:provider/provider.dart';
 
 class ProductsPage extends StatelessWidget {
@@ -14,11 +15,122 @@ class ProductsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            context.watch<ProductViewModel>().productType.name.toUpperCase()),
+          context.watch<ProductViewModel>().productType.name.toUpperCase(),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  isDismissible: false,
+                  context: context,
+                  builder: (builder) {
+                    return StatefulBuilder(
+                      builder: (_, setState) => Padding(
+                        padding: EdgeInsets.all(AppDemensions.appSize10),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    onPressed: context
+                                        .read<ProductViewModel>()
+                                        .onClearFilterButtonPress,
+                                    child: const Text("Clear filter")),
+                                TextButton(
+                                    onPressed: context
+                                        .read<ProductViewModel>()
+                                        .onFilterButtonPress,
+                                    child: const Text("Filter"))
+                              ],
+                            ),
+                            dropDownButtonForForm<ProductCondition>(
+                              enumList: true,
+                              hint: const Text("Condition filter"),
+                              value: context
+                                  .watch<ProductViewModel>()
+                                  .state
+                                  .filter
+                                  .condition,
+                              items: ProductCondition.values,
+                              onChanged: (value) => context
+                                  .read<ProductViewModel>()
+                                  .onFilterConditionChange(value),
+                            ),
+                            SizedBox(
+                              height: AppDemensions.appSize20,
+                            ),
+                            dropDownButtonForForm<String>(
+                                hint: const Text("Generation filter"),
+                                value: context
+                                    .watch<ProductViewModel>()
+                                    .state
+                                    .filter
+                                    .generation,
+                                items: context
+                                    .watch<ProductViewModel>()
+                                    .state
+                                    .generationList,
+                                onChanged: (value) {
+                                  context
+                                      .read<ProductViewModel>()
+                                      .onFilterGenerationChange(value);
+                                  setState(() {});
+                                }),
+                            SizedBox(
+                              height: AppDemensions.appSize20,
+                            ),
+                            dropDownButtonForForm<String?>(
+                              hint: const Text("Color filter"),
+                              key: context.watch<ProductViewModel>().key,
+                              value: context
+                                  .watch<ProductViewModel>()
+                                  .state
+                                  .filter
+                                  .color,
+                              items: context
+                                  .watch<ProductViewModel>()
+                                  .state
+                                  .colorList,
+                              onChanged: context
+                                  .read<ProductViewModel>()
+                                  .onFilterColorChange,
+                            ),
+                            SizedBox(
+                              height: AppDemensions.appSize20,
+                            ),
+                            dropDownButtonForForm<String?>(
+                              hint: const Text("Storage filter"),
+                              value: context
+                                  .watch<ProductViewModel>()
+                                  .state
+                                  .filter
+                                  .storage,
+                              items: context
+                                  .watch<ProductViewModel>()
+                                  .state
+                                  .storagetList,
+                              onChanged: context
+                                  .read<ProductViewModel>()
+                                  .onFilterStorageChange,
+                            ),
+                            SizedBox(
+                              height: AppDemensions.appSize20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.filter_alt_outlined))
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(AppDemensions.appSize20),
         child: ListView.separated(
+          shrinkWrap: true,
           itemCount: context.watch<ProductViewModel>().state.productList.length,
           itemBuilder: ((context, index) {
             final product =
@@ -99,24 +211,18 @@ class ProductsPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                "DAYS: ${(context.watch<ProductViewModel>().state.productList[index].sellDateTime ?? DateTime.now()).difference(context.watch<ProductViewModel>().state.productList[index].buyDateTime).inDays}",
+                                "DAYS: ${context.watch<ProductViewModel>().state.productList[index].getDateTimeDiference}",
                                 style: GoogleFonts.montserrat(
                                   fontSize: AppDemensions.appSize20,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               Text(
-                                ((context
-                                                .watch<ProductViewModel>()
-                                                .state
-                                                .productList[index]
-                                                .sellPrice ??
-                                            0) -
-                                        context
-                                            .watch<ProductViewModel>()
-                                            .state
-                                            .productList[index]
-                                            .buyPrice)
+                                context
+                                    .watch<ProductViewModel>()
+                                    .state
+                                    .productList[index]
+                                    .getPriceDiference
                                     .toString(),
                                 style: GoogleFonts.montserrat(
                                   fontSize: AppDemensions.appSize20,

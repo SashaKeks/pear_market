@@ -39,7 +39,10 @@ class AppNavigation {
           builder: (context) => ChangeNotifierProvider(
             create: (context) => ProductViewModel(
                 getAllProductsUseCase: getIt(),
-                updateProductUseCase: getIt(),
+                storageParameterUsecase: getIt(),
+                generationParameterUsecase: getIt(),
+                colorParameterUsecase: getIt(),
+                versionParameterUsecase: getIt(),
                 context: context,
                 productType: productType),
             child: const ProductsPage(),
@@ -73,13 +76,21 @@ class AppNavigation {
           ),
         );
       case AppNavigationNames.formForProduct:
-        final product = settings.arguments == null
-            ? null
-            : settings.arguments as ProductEntity;
+        ProductType? productType;
+        ProductEntity? product;
+        if (settings.arguments is ProductType) {
+          productType = settings.arguments as ProductType;
+        } else {
+          product = settings.arguments == null
+              ? null
+              : settings.arguments as ProductEntity;
+        }
+
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
             create: (context) => FormForProductViewModel(
               context: context,
+              productType: productType,
               editproduct: product,
               addProductUseCase: getIt(),
               updateProductUseCase: getIt(),

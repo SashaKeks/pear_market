@@ -48,4 +48,34 @@ class ProductParametersRepositoryImpl extends ProductParametersRepository {
       return left(ReadJsonFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<String>>> getProductProc(String type) async {
+    try {
+      final result = await source.getProductProc(type);
+      return right(result);
+    } catch (e) {
+      return left(ReadJsonFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getProductRam(String type) async {
+    try {
+      final result = await source.getProductRam(type);
+      return right(result);
+    } catch (e) {
+      return left(ReadJsonFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getProductVideo(String type) async {
+    try {
+      final result = await source.getProductVideo(type);
+      return right(result);
+    } catch (e) {
+      return left(ReadJsonFailure(e.toString()));
+    }
+  }
 }

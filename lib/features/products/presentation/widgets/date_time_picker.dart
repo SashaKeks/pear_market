@@ -57,11 +57,11 @@ class _DateTimePickerState extends State<DateTimePicker> {
                     children: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: Text("Cancel"),
+                        child: const Text("Cancel"),
                       ),
                       TextButton(
                         onPressed: () => widget.onDateTimeChanged(setTime),
-                        child: Text("OK"),
+                        child: const Text("OK"),
                       ),
                     ],
                   ),
@@ -69,20 +69,15 @@ class _DateTimePickerState extends State<DateTimePicker> {
                 Container(
                   height: 216,
                   padding: const EdgeInsets.only(top: 6.0),
-                  // The Bottom margin is provided to align the popup above the system
-                  // navigation bar.
                   margin: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  // Provide a background color for the popup.
                   color: CupertinoColors.systemBackground.resolveFrom(context),
-                  // Use a SafeArea widget to avoid system overlaps.
                   child: SafeArea(
                       top: false,
                       child: CupertinoDatePicker(
                           initialDateTime: widget.time,
                           mode: CupertinoDatePickerMode.date,
-                          // This is called when the user changes the time.
                           onDateTimeChanged: (time) {
                             setState(() {
                               setTime = time;

@@ -3,7 +3,7 @@ import 'package:pear_market/features/products/domain/entities/product_entity.dar
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
 class AddProductUseCase {
-  final ProductBaseRepository<ProductEntity> _productBaseRepository;
+  final ProductBaseRepository _productBaseRepository;
 
   AddProductUseCase(this._productBaseRepository);
 

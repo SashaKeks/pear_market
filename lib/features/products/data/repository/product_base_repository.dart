@@ -7,7 +7,7 @@ import 'package:pear_market/features/products/data/models/product_model.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
-class ProductBaseRepositoryImpl extends ProductBaseRepository<ProductEntity> {
+class ProductBaseRepositoryImpl extends ProductBaseRepository {
   final ProducBaseRemoteDataSource _remoteDatasource;
 
   ProductBaseRepositoryImpl(this._remoteDatasource);
@@ -26,10 +26,9 @@ class ProductBaseRepositoryImpl extends ProductBaseRepository<ProductEntity> {
   }
 
   @override
-  Future<DataState> deleteProduct(
-      String productId, ProductType productType) async {
+  Future<DataState> deleteProduct(String productId) async {
     try {
-      await _remoteDatasource.deleteProduct(productId, productType);
+      await _remoteDatasource.deleteProduct(productId);
       return DataSuccess("product deleted success");
     } on ServerFailure catch (e) {
       return DataFailure(e.toString());
@@ -40,9 +39,11 @@ class ProductBaseRepositoryImpl extends ProductBaseRepository<ProductEntity> {
 
   @override
   Future<Either<Failure, List<ProductEntity>>> getAllProducts(
-      ProductType productType) async {
+      ProductType productType,
+      [Map<String, dynamic>? params]) async {
     try {
-      final result = await _remoteDatasource.getAllProducts(productType);
+      final result =
+          await _remoteDatasource.getAllProducts(productType, params);
       return right(
           result.map((e) => ProductModel.fromJson(e).toEntity()).toList());
     } on ServerFailure catch (e) {
@@ -53,10 +54,9 @@ class ProductBaseRepositoryImpl extends ProductBaseRepository<ProductEntity> {
   }
 
   @override
-  Future<Either<Failure, ProductEntity>> getDetail(
-      String productId, ProductType productType) async {
+  Future<Either<Failure, ProductEntity>> getDetail(String productId) async {
     try {
-      final result = await _remoteDatasource.getDetail(productId, productType);
+      final result = await _remoteDatasource.getDetail(productId);
       return right(ProductModel.fromJson(result).toEntity());
     } on ServerFailure catch (e) {
       return left(ServerFailure(e.toString()));

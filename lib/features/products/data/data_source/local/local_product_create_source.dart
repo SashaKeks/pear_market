@@ -15,6 +15,21 @@ class LocalProductCreateSource {
     return json[type];
   }
 
+  Future<List<String>> getProductRam(String type) async {
+    final json = await _readJson("ram.json");
+    return json[type];
+  }
+
+  Future<List<String>> getProductProc(String type) async {
+    final json = await _readJson("proc.json");
+    return json[type];
+  }
+
+  Future<List<String>> getProductVideo(String type) async {
+    final json = await _readJson("video.json");
+    return json[type];
+  }
+
   Future<List<String>> getProductGeneration(String type) async {
     final json = await _readJson("generations.json");
     final list = (json[type] as List).map((e) => e.toString()).toList();

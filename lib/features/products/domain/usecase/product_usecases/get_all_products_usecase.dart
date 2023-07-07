@@ -5,12 +5,12 @@ import 'package:pear_market/features/products/domain/entities/product_entity.dar
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
 class GetAllProductsUseCase {
-  final ProductBaseRepository<ProductEntity> _productBaseRepository;
+  final ProductBaseRepository _productBaseRepository;
 
   GetAllProductsUseCase(this._productBaseRepository);
 
-  Future<Either<Failure, List<ProductEntity>>> call(
-      ProductType productType) async {
-    return await _productBaseRepository.getAllProducts(productType);
+  Future<Either<Failure, List<ProductEntity>>> call(ProductType productType,
+      [Map<String, dynamic>? params]) async {
+    return await _productBaseRepository.getAllProducts(productType, params);
   }
 }

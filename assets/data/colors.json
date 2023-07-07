@@ -95,7 +95,12 @@
             "Starlight"
         ],
         "iPhone 13 Mini": [
-            
+            "RED (PRODUCT)",
+            "Blue",
+            "Green",
+            "Midnight",
+            "Pink",
+            "Starlight"
         ],
         "iPhone 13 Pro": [
             "Gold",
@@ -129,5 +134,148 @@
             "Deep Purple"
         ]
 
+    },
+    "ipad": {
+        "iPad Pro 12.9 (2021)": [
+            "Space Gray",
+            "Silver"
+        ],
+        "iPad Pro 12.9 (2022)": [
+            "Space Gray",
+            "Silver"
+        ],
+        "iPad Pro 11 (2021)": [
+            "Space Gray",
+            "Silver"
+        ],
+        "iPad Pro 11 (2022)": [
+            "Space Gray",
+            "Silver"
+        ],
+        "iPad mini 6": [
+            "Space Gray",
+            "Starlight",
+            "Purple",
+            "Pink"
+        ],
+        "iPad Air (2022)": [
+            "Space Gray",
+            "Starlight",
+            "Purple",
+            "Pink",
+            "Blue"
+        ],
+        "iPad 10.2":[
+            "Space Gray",
+            "Silver"
+        ],
+        "iPad 10.9":[
+            "Blue",
+            "Silver",
+            "Pink",
+            "Yellow"
+
+        ]
+    },
+    "airpods":{
+        "AirPods 2":[
+            "White"
+        ],
+        "AirPods 3":[
+            "White"
+        ],
+        "AirPods Pro":[
+            "White"
+        ],
+        "AirPods Pro 2":[
+            "White"
+        ],
+        "AirPods Max":[
+            "Green",
+            "Pink",
+            "Silver",
+            "Sky Blue",
+            "Space Gray"
+        ]
+    },
+    "applewatch":{
+        "Watch Series 4": [
+            "Silver",
+            "Space Gray"
+        ],
+        "Watch Series 5": [
+            "Gold",
+            "Space Gray"
+        ],
+        "Watch Series 6": [
+            "RED (PRODUCT)",
+            "Blue",
+            "Gold",
+            "Silver",
+            "Space Gray"
+        ],
+        "Watch Series 7": [
+            "RED (PRODUCT)",
+            "Blue",
+            "Green",
+            "Midnight",
+            "Starlight"
+        ],
+        "Watch Series SE": [
+            "Gold",
+            "Silver",
+            "Space Gray"
+        ],
+        "Watch Series 8": [
+            "Midnight",
+            "Silver",
+            "Starlight"
+        ],
+        "Watch Series SE 2": [
+            "Midnight",
+            "Silver",
+            "Starlight"
+        ],
+        "Watch Series Ultra": [
+            "Titanium"
+        ]
+
+    },
+    "mac":{
+        "MacBook Air": [
+            "Gold",
+            "Midnight",
+            "Silver",
+            "Space Gray",
+            "Starlight"
+        ],
+        "MacBook Pro 13": [
+            "Silver",
+            "Space Gray"
+        ],
+        "MacBook Pro 14": [
+            "Silver",
+            "Space Gray"
+        ],
+        "MacBook Pro 16": [
+            "Silver",
+            "Space Gray"
+        ],
+        "iMac": [
+            "Blue",
+            "Green",
+            "Orange",
+            "Pink",
+            "Purple",
+            "Silver",
+            "Yellow"
+        ],
+        "Mac Studio": [
+            "Silver"
+        ],
+        "Mac mini": [
+            "Silver",
+            "Space Gray"
+        ]
     }
 }

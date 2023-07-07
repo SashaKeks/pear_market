@@ -21,5 +21,43 @@
         "iPhone 14",
         "iPhone 14 Pro",
         "iPhone 14 Pro Max"
+    ],
+    "ipad": [
+        "iPad 10.9",
+        "iPad 10.2",
+        "iPad Air (2022)",
+        "iPad Pro 11 (2022)",
+        "iPad Pro 11 (2021)",
+        "iPad Pro 12.9 (2022)",
+        "iPad Pro 12.9 (2021)",
+        "iPad mini 6"
+
+    ],
+    "airpods":[
+        "AirPods 2",
+        "AirPods 3",
+        "AirPods Pro",
+        "AirPods Pro 2",
+        "AirPods Max"
+    ],
+    "applewatch":[
+        "Watch Series 4",
+        "Watch Series 5",
+        "Watch Series 6",
+        "Watch Series 7",
+        "Watch Series SE",
+        "Watch Series 8",
+        "Watch Series SE 2",
+        "Watch Series Ultra"
+
+    ],
+    "mac":[
+        "MacBook Air",
+        "MacBook Pro 13",
+        "MacBook Pro 14",
+        "MacBook Pro 16",
+        "iMac",
+        "Mac Studio",
+        "Mac mini"
     ]
 }

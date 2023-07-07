@@ -14,23 +14,21 @@ void main() {
   const productType = ProductType.iphone;
   group("delete product usecase", () {
     test("should delete product success", () async {
-      when(() => productBaseRepository.deleteProduct(productId, productType))
-          .thenAnswer(
+      when(() => productBaseRepository.deleteProduct(productId)).thenAnswer(
         (invocation) async => DataSuccess(""),
       );
 
-      final result = await usecase(productId, productType);
+      final result = await usecase(productId);
 
       expect(result, isA<DataSuccess>());
     });
 
     test("should delete product failure", () async {
-      when(() => productBaseRepository.deleteProduct(productId, productType))
-          .thenAnswer(
+      when(() => productBaseRepository.deleteProduct(productId)).thenAnswer(
         (invocation) async => DataFailure(""),
       );
 
-      final result = await usecase(productId, productType);
+      final result = await usecase(productId);
 
       expect(result, isA<DataFailure>());
     });

@@ -37,6 +37,15 @@ class ProductEntity {
     required this.description,
   });
 
+  double get getPriceDiference {
+    if (sellPrice == null) return 0;
+    return (sellPrice! * (sellExRate ?? 1)) - (buyPrice * buyExRate);
+  }
+
+  int get getDateTimeDiference {
+    return (sellDateTime ?? DateTime.now()).difference(buyDateTime).inDays;
+  }
+
   factory ProductEntity.empty() {
     return ProductEntity(
       type: ProductType.iphone,

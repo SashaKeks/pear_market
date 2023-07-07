@@ -8,11 +8,10 @@ import 'package:pear_market/features/products/domain/repository/product_base_rep
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_all_products_usecase.dart';
 
 class ProductBaseRepositoryMock<T> extends Mock
-    implements ProductBaseRepository<ProductEntity> {}
+    implements ProductBaseRepository {}
 
 void main() {
-  ProductBaseRepository<ProductEntity> productBaseRepository =
-      ProductBaseRepositoryMock();
+  ProductBaseRepository productBaseRepository = ProductBaseRepositoryMock();
   GetAllProductsUseCase usecase = GetAllProductsUseCase(productBaseRepository);
   const productType = ProductType.iphone;
   List<ProductEntity> productList = [

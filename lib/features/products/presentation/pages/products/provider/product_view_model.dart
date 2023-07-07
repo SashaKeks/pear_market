@@ -1,23 +1,49 @@
 import 'package:flutter/material.dart';
 
 import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/products/domain/entities/filter_entity.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_version_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_all_products_usecase.dart';
-import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
+import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 import '../../../../../../core/service/service_navigation.dart';
 
 class ProductState {
   final List<ProductEntity> productList;
+  final List<String> generationList;
+  final List<String?> colorList;
+  final List<String> storagetList;
+  final List<String> versiontList;
+  final FilterEntity filter;
+
   ProductState({
-    required this.productList,
+    this.generationList = const [],
+    this.colorList = const [],
+    this.storagetList = const [],
+    this.productList = const [],
+    this.versiontList = const [],
+    required this.filter,
   });
 
   ProductState copyWith({
     List<ProductEntity>? productList,
+    List<String>? generationList,
+    List<String>? colorList,
+    List<String>? storagetList,
+    List<String>? versiontList,
+    FilterEntity? filter,
   }) {
     return ProductState(
       productList: productList ?? this.productList,
+      generationList: generationList ?? this.generationList,
+      colorList: colorList ?? this.colorList,
+      storagetList: storagetList ?? this.storagetList,
+      versiontList: versiontList ?? this.versiontList,
+      filter: filter ?? this.filter,
     );
   }
 }
@@ -25,28 +51,117 @@ class ProductState {
 class ProductViewModel extends ChangeNotifier {
   final BuildContext context;
   final ProductType productType;
-  ProductState _state = ProductState(productList: []);
+  GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
+  ProductState _state = ProductState(filter: FilterEntity());
   ProductState get state => _state;
 
   ///usecase
   final GetAllProductsUseCase getAllProductsUseCase;
-  final UpdateProductUseCase updateProductUseCase;
+  final GetProductGenerationParameterUsecase generationParameterUsecase;
+  final GetProductStorageParameterUsecase storageParameterUsecase;
+  final GetProductColorParameterUsecase colorParameterUsecase;
+  final GetProductVersionParameterUsecase versionParameterUsecase;
   ProductViewModel({
     required this.getAllProductsUseCase,
-    required this.updateProductUseCase,
+    required this.generationParameterUsecase,
+    required this.storageParameterUsecase,
+    required this.colorParameterUsecase,
+    required this.versionParameterUsecase,
     required this.context,
     required this.productType,
   }) {
     getAllProducts();
+    getProductGeneration();
+    getProductStorage();
+  }
+
+  void getProductGeneration() async {
+    final generations = await generationParameterUsecase(productType.name);
+    generations.fold(
+      (l) => showSnackbarInfo(context, "Failed load generation"),
+      (r) => _state = _state.copyWith(generationList: r),
+    );
+  }
+
+  Future<void> getProductColor(String? productGeneration) async {
+    if (productGeneration == null) return;
+    final colors =
+        await colorParameterUsecase(productType.name, productGeneration);
+    colors.fold(
+      (l) => showSnackbarInfo(context, "Failed load colors"),
+      (r) => _state = _state.copyWith(colorList: r),
+    );
+    notifyListeners();
+  }
+
+  Future<void> getProductStorage() async {
+    final storages = await storageParameterUsecase(productType.name);
+    storages.fold(
+      (l) => showSnackbarInfo(context, "Failed load storages"),
+      (r) => _state = _state.copyWith(storagetList: r),
+    );
+    notifyListeners();
+  }
+
+  Future<void> getProductVersion() async {
+    final versions = await versionParameterUsecase(productType.name);
+    versions.fold(
+      (l) => showSnackbarInfo(context, "Failed load versions"),
+      (r) => _state = _state.copyWith(versiontList: r),
+    );
+    notifyListeners();
+  }
+
+  Future<void> onFilterButtonPress() async {
+    await getAllProducts();
+    onNavigationPop();
+  }
+
+  void onClearFilterButtonPress() {
+    _state = _state.copyWith(filter: FilterEntity(), colorList: []);
+    getAllProducts();
+    notifyListeners();
+    onNavigationPop();
+  }
+
+  void onFilterGenerationChange(String? value) {
+    _state = _state.copyWith(
+      filter: _state.filter.copyWith(generation: value, color: ''),
+      colorList: [],
+    );
+    key.currentState?.reset();
+    notifyListeners();
+    getProductColor(value);
+  }
+
+  void onFilterColorChange(String? value) {
+    _state = _state.copyWith(filter: _state.filter.copyWith(color: value));
+    notifyListeners();
+  }
+
+  void onFilterStorageChange(String? value) {
+    _state = _state.copyWith(filter: _state.filter.copyWith(storage: value));
+    notifyListeners();
+  }
+
+  // void onFilterVersionChange(String? value) {
+  //   _state = _state.copyWith(filter: _state.filter.copyWith(version: value));
+  //   notifyListeners();
+  // }
+
+  void onFilterConditionChange(ProductCondition? value) {
+    _state = _state.copyWith(filter: _state.filter.copyWith(condition: value));
+    notifyListeners();
   }
 
   Future<void> getAllProducts() async {
-    final result = await getAllProductsUseCase(productType);
+    final result =
+        await getAllProductsUseCase(productType, _state.filter.toJson());
     result.fold(
       (l) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed load products...'),
+          SnackBar(
+            content: Text(l.errorMessage),
             backgroundColor: (Colors.black12),
           ),
         );
@@ -67,7 +182,8 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   void onAddProductButtonPress() async {
-    await Navigator.pushNamed(context, AppNavigationNames.formForProduct);
+    await Navigator.pushNamed(context, AppNavigationNames.formForProduct,
+        arguments: productType);
     getAllProducts();
   }
 
@@ -78,5 +194,9 @@ class ProductViewModel extends ChangeNotifier {
           "type": _state.productList[index].type
         });
     getAllProducts();
+  }
+
+  void onNavigationPop() {
+    Navigator.pop(context);
   }
 }
