@@ -1,10 +1,10 @@
 import 'package:pear_market/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:pear_market/features/products/data/data_source/local/local_product_create_source.dart';
+import 'package:pear_market/features/products/data/data_source/remote/product_create_source.dart';
 import 'package:pear_market/features/products/domain/repository/product_parameters_repository.dart';
 
 class ProductParametersRepositoryImpl extends ProductParametersRepository {
-  LocalProductCreateSource source;
+  RemoteProductCreateSource source;
   ProductParametersRepositoryImpl(this.source);
 
   @override

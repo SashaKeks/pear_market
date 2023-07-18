@@ -13,7 +13,8 @@ class FormForProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Product"),
+        title: Text(
+            "ADD ${context.watch<FormForProductViewModel>().state.product.type.name.toUpperCase()}"),
         actions: [
           FilledButton(
               onPressed: context.read<FormForProductViewModel>().saveProduct,
@@ -27,7 +28,7 @@ class FormForProductPage extends StatelessWidget {
             key: context.read<FormForProductViewModel>().formKey,
             child: Column(
               children: [
-                SizedBox(height: AppDemensions.appSize20),
+                // SizedBox(height: AppDemensions.appSize20),
                 dropDownButtonForForm<ProductCondition>(
                   value: context
                       .watch<FormForProductViewModel>()
@@ -40,7 +41,6 @@ class FormForProductPage extends StatelessWidget {
                       .addProductCondition(value?.index),
                   enumList: true,
                 ),
-                SizedBox(height: AppDemensions.appSize20),
                 dropDownButtonForForm<String>(
                   value: context
                       .watch<FormForProductViewModel>()
@@ -55,8 +55,8 @@ class FormForProductPage extends StatelessWidget {
                       .read<FormForProductViewModel>()
                       .addProductGeneration,
                 ),
-                SizedBox(height: AppDemensions.appSize20),
                 dropDownButtonForForm<String>(
+                  hint: const Text("Product color"),
                   value: context
                       .watch<FormForProductViewModel>()
                       .state
@@ -67,7 +67,6 @@ class FormForProductPage extends StatelessWidget {
                   onChanged:
                       context.read<FormForProductViewModel>().addProductColor,
                 ),
-                SizedBox(height: AppDemensions.appSize20),
                 dropDownButtonForForm<String>(
                   value: context
                       .watch<FormForProductViewModel>()
@@ -81,7 +80,6 @@ class FormForProductPage extends StatelessWidget {
                   onChanged:
                       context.read<FormForProductViewModel>().addProductStorage,
                 ),
-                SizedBox(height: AppDemensions.appSize20),
                 TextFormField(
                   initialValue: context
                               .watch<FormForProductViewModel>()
@@ -124,7 +122,6 @@ class FormForProductPage extends StatelessWidget {
                       .read<FormForProductViewModel>()
                       .addProductBuyCurrency(value?.index),
                 ),
-                SizedBox(height: AppDemensions.appSize20),
                 context.watch<FormForProductViewModel>().state.showExRateField
                     ? TextFormField(
                         initialValue: context
@@ -156,7 +153,13 @@ class FormForProductPage extends StatelessWidget {
                             .addProductBuyExRate,
                       )
                     : const SizedBox(),
-                SizedBox(height: AppDemensions.appSize20),
+                SizedBox(
+                    height: context
+                            .watch<FormForProductViewModel>()
+                            .state
+                            .showExRateField
+                        ? AppDemensions.appSize20
+                        : 0),
                 TextFormField(
                   initialValue: context
                       .watch<FormForProductViewModel>()
@@ -174,6 +177,41 @@ class FormForProductPage extends StatelessWidget {
                       .addProductDescription,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
+                dropDownButtonForForm<String>(
+                    value: context
+                        .watch<FormForProductViewModel>()
+                        .state
+                        .product
+                        .ram,
+                    items:
+                        context.watch<FormForProductViewModel>().state.ramList,
+                    onChanged:
+                        context.read<FormForProductViewModel>().addProductRam),
+                dropDownButtonForForm<String>(
+                    value: context
+                        .watch<FormForProductViewModel>()
+                        .state
+                        .product
+                        .proc,
+                    items:
+                        context.watch<FormForProductViewModel>().state.procList,
+                    onChanged:
+                        context.read<FormForProductViewModel>().addProductProc),
+
+                dropDownButtonForForm<String>(
+                    value: context
+                        .watch<FormForProductViewModel>()
+                        .state
+                        .product
+                        .video,
+                    items: context
+                        .watch<FormForProductViewModel>()
+                        .state
+                        .videoList,
+                    onChanged: context
+                        .read<FormForProductViewModel>()
+                        .addProductVideo),
+
                 DateTimePicker(
                   context: context,
                   time: context
@@ -184,6 +222,7 @@ class FormForProductPage extends StatelessWidget {
                   onDateTimeChanged:
                       context.read<FormForProductViewModel>().addBuyDateTime,
                 ),
+                SizedBox(height: AppDemensions.appSize50),
               ],
             ),
           ),

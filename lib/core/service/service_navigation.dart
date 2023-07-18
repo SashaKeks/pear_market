@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
+import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/add_product_other_page.dart';
+import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/provider/add_product_other_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/form_for_product/form_for_product_page.dart';
 import 'package:pear_market/features/products/presentation/pages/form_for_product/provider/form_for_product_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/menu/menu_page.dart';
@@ -85,23 +87,45 @@ class AppNavigation {
               ? null
               : settings.arguments as ProductEntity;
         }
-
-        return MaterialPageRoute(
-          builder: (context) => ChangeNotifierProvider(
-            create: (context) => FormForProductViewModel(
-              context: context,
-              productType: productType,
-              editproduct: product,
-              addProductUseCase: getIt(),
-              updateProductUseCase: getIt(),
-              getProductColorUsecase: getIt(),
-              getProductGenerationUsecase: getIt(),
-              getProductStorageUsecase: getIt(),
-              getProductVersionUsecase: getIt(),
+        if ((productType != null &&
+                (productType == ProductType.accessories ||
+                    productType == ProductType.other)) ||
+            (product != null &&
+                (product.type == ProductType.accessories ||
+                    product.type == ProductType.other))) {
+          return MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (context) => AddProductOtherViewModel(
+                context: context,
+                productType: productType,
+                editProduct: product,
+                addProductUseCase: getIt(),
+                updateProductUseCase: getIt(),
+              ),
+              child: const AddProductOtherPage(),
             ),
-            child: const FormForProductPage(),
-          ),
-        );
+          );
+        } else {
+          return MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (context) => FormForProductViewModel(
+                context: context,
+                productType: productType,
+                editproduct: product,
+                addProductUseCase: getIt(),
+                updateProductUseCase: getIt(),
+                getProductColorUsecase: getIt(),
+                getProductGenerationUsecase: getIt(),
+                getProductStorageUsecase: getIt(),
+                getProductVersionUsecase: getIt(),
+                getProductProcUsecase: getIt(),
+                getProductRamUsecase: getIt(),
+                getProductVideoUsecase: getIt(),
+              ),
+              child: const FormForProductPage(),
+            ),
+          );
+        }
     }
     return null;
   }

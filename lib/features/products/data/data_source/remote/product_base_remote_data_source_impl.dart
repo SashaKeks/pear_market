@@ -27,7 +27,12 @@ class ProductBaseRemoteDataSourceImpl implements ProducBaseRemoteDataSource {
         .where("version", isEqualTo: params?["version"])
         .where("color", isEqualTo: params?["color"])
         .where("condition", isEqualTo: params?["condition"])
-        .orderBy("status")
+        .where("status", isEqualTo: params?["status"])
+        .orderBy((params?["status"] != null)
+            ? (params?["generation"] != null)
+                ? "id"
+                : "generation"
+            : "status")
         .get()
         .then((snapshot) => snapshot.docs.map((e) {
               final product = e.data() as Map<String, dynamic>;

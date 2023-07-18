@@ -2,9 +2,13 @@ import 'package:get_it/get_it.dart';
 import 'package:pear_market/features/products/data/data_source/local/local_product_create_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source_impl.dart';
+import 'package:pear_market/features/products/data/data_source/remote/product_create_source.dart';
 import 'package:pear_market/features/products/data/repository/product_base_repository.dart';
 import 'package:pear_market/features/products/data/repository/product_parameters_repository_impl.dart';
 import 'package:pear_market/features/products/domain/repository/product_parameters_repository.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_proc_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_ram_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_video_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/delete_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_all_products_usecase.dart';
@@ -43,6 +47,15 @@ class ServicesLocator {
       () => GetProductColorParameterUsecase(getIt()),
     );
     getIt.registerLazySingleton(
+      () => GetProductProcParameterUsecase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => GetProductVideoParameterUsecase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => GetProductRamParameterUsecase(getIt()),
+    );
+    getIt.registerLazySingleton(
       () => GetProductStorageParameterUsecase(getIt()),
     );
     getIt.registerLazySingleton(
@@ -63,6 +76,9 @@ class ServicesLocator {
     //datasources
     getIt.registerLazySingleton<ProducBaseRemoteDataSource>(
       () => ProductBaseRemoteDataSourceImpl(),
+    );
+    getIt.registerLazySingleton<RemoteProductCreateSource>(
+      () => RemoteProductCreateSource(),
     );
     getIt.registerLazySingleton<LocalProductCreateSource>(
       () => LocalProductCreateSource(),

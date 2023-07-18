@@ -1,5 +1,5 @@
 {
-    "mac": [
+    "mac":{"mac": [
         "Apple M1",
         "Apple M1 Max",
         "Apple M1 Pro",
@@ -14,5 +14,5 @@
         "Pro 5500M (4GB)",
         "Pro 555X (2GB)",
         "Pro 560X (4GB)"
-        ]
+        ]}
 }

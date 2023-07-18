@@ -1,9 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import '../../../../core/util/enums.dart';
 
 class ProductEntity {
   final String? id;
-  final String color;
-  final String storage;
+  final String? color;
+  final String? storage;
+  final String? ram;
+  final String? proc;
+  final String? video;
   final double buyPrice;
   final ProductCurrency buyCurrency;
   final double buyExRate;
@@ -27,6 +31,9 @@ class ProductEntity {
     this.buyExRate = 1,
     required this.type,
     required this.color,
+    required this.ram,
+    required this.video,
+    required this.proc,
     required this.status,
     required this.buyPrice,
     required this.buyDateTime,
@@ -49,12 +56,15 @@ class ProductEntity {
   factory ProductEntity.empty() {
     return ProductEntity(
       type: ProductType.iphone,
-      color: "",
+      color: null,
       status: ProductStatus.instock,
       buyPrice: 0,
       buyDateTime: DateTime.now(),
-      storage: "",
+      storage: null,
       condition: ProductCondition.NEW,
+      proc: null,
+      ram: null,
+      video: null,
       generation: "",
       description: "",
     );
@@ -62,13 +72,16 @@ class ProductEntity {
 
   @override
   String toString() {
-    return "$generation $color $storage";
+    return "$generation ${color ?? ""} ${storage ?? ""}";
   }
 
   ProductEntity copyWith({
     String? id,
     String? color,
     String? storage,
+    String? ram,
+    String? proc,
+    String? video,
     double? buyPrice,
     ProductCurrency? buyCurrency,
     double? buyExRate,
@@ -87,6 +100,9 @@ class ProductEntity {
       id: id ?? this.id,
       color: color ?? this.color,
       storage: storage ?? this.storage,
+      ram: ram ?? this.ram,
+      proc: proc ?? this.proc,
+      video: video ?? this.video,
       buyPrice: buyPrice ?? this.buyPrice,
       buyCurrency: buyCurrency ?? this.buyCurrency,
       buyExRate: buyExRate ?? this.buyExRate,

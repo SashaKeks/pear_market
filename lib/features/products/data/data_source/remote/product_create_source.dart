@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:pear_market/core/error/failure.dart';
 
-class LocalProductCreateSource {
+class RemoteProductCreateSource {
   Future<Map<String, dynamic>> _readJson(String filename) async {
     final String response =
         await rootBundle.loadString('assets/data/$filename');
@@ -35,7 +37,7 @@ class LocalProductCreateSource {
   }
 
   Future<List<String>> getProductGeneration(String type) async {
-    final json = await _readJson("generations.json");
+    final json = await _readData(collectionName: "generations", type: type);
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
   }
@@ -51,5 +53,25 @@ class LocalProductCreateSource {
     final json = await _readJson("storage.json");
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
+  }
+
+  Future<Map<String, dynamic>> _readData(
+      {required String collectionName, required String type}) async {
+    CollectionReference productsCollection =
+        FirebaseFirestore.instance.collection(collectionName);
+
+    final result = await productsCollection
+        .doc(type)
+        .get()
+        .then((value) => value.data() as Map<String, dynamic>)
+        // .then((snapshot) => snapshot.docs.map((e) {
+        //       final product = e.data() as Map<String, dynamic>;
+        //       return product;
+        //     }).toList())
+        .catchError(
+          (e) => throw ServerFailure(e.toString()),
+        );
+
+    return result;
   }
 }

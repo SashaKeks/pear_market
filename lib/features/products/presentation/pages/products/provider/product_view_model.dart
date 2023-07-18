@@ -70,9 +70,21 @@ class ProductViewModel extends ChangeNotifier {
     required this.context,
     required this.productType,
   }) {
+    init();
+  }
+  void init() {
     getAllProducts();
-    getProductGeneration();
-    getProductStorage();
+
+    if (productType != ProductType.accessories &&
+        productType != ProductType.other) {
+      getProductGeneration();
+    }
+
+    if (productType == ProductType.mac ||
+        productType == ProductType.iphone ||
+        productType == ProductType.ipad) {
+      getProductStorage();
+    }
   }
 
   void getProductGeneration() async {
@@ -84,13 +96,17 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductColor(String? productGeneration) async {
-    if (productGeneration == null) return;
-    final colors =
-        await colorParameterUsecase(productType.name, productGeneration);
-    colors.fold(
-      (l) => showSnackbarInfo(context, "Failed load colors"),
-      (r) => _state = _state.copyWith(colorList: r),
-    );
+    if (productGeneration == null) {
+      _state = _state.copyWith(colorList: []);
+    } else {
+      final colors =
+          await colorParameterUsecase(productType.name, productGeneration);
+      colors.fold(
+        (l) => showSnackbarInfo(context, "Failed load colors"),
+        (r) => _state = _state.copyWith(colorList: r),
+      );
+    }
+
     notifyListeners();
   }
 
@@ -112,46 +128,10 @@ class ProductViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> onFilterButtonPress() async {
+  Future<void> onFilterButtonPress(FilterEntity? filter) async {
+    _state = _state.copyWith(filter: filter ?? FilterEntity());
     await getAllProducts();
-    onNavigationPop();
-  }
-
-  void onClearFilterButtonPress() {
-    _state = _state.copyWith(filter: FilterEntity(), colorList: []);
-    getAllProducts();
-    notifyListeners();
-    onNavigationPop();
-  }
-
-  void onFilterGenerationChange(String? value) {
-    _state = _state.copyWith(
-      filter: _state.filter.copyWith(generation: value, color: ''),
-      colorList: [],
-    );
-    key.currentState?.reset();
-    notifyListeners();
-    getProductColor(value);
-  }
-
-  void onFilterColorChange(String? value) {
-    _state = _state.copyWith(filter: _state.filter.copyWith(color: value));
-    notifyListeners();
-  }
-
-  void onFilterStorageChange(String? value) {
-    _state = _state.copyWith(filter: _state.filter.copyWith(storage: value));
-    notifyListeners();
-  }
-
-  // void onFilterVersionChange(String? value) {
-  //   _state = _state.copyWith(filter: _state.filter.copyWith(version: value));
-  //   notifyListeners();
-  // }
-
-  void onFilterConditionChange(ProductCondition? value) {
-    _state = _state.copyWith(filter: _state.filter.copyWith(condition: value));
-    notifyListeners();
+    // onNavigationPop();
   }
 
   Future<void> getAllProducts() async {

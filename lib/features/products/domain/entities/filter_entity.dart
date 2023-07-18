@@ -6,13 +6,15 @@ class FilterEntity {
   final String? generation;
   final String? version;
   final ProductCondition? condition;
+  final ProductStatus? status;
 
   FilterEntity(
       {this.storage,
       this.generation,
       this.color,
       this.condition,
-      this.version});
+      this.version,
+      this.status});
 
   Map<String, dynamic> toJson() {
     return {
@@ -20,27 +22,26 @@ class FilterEntity {
       "generation": generation,
       "color": color,
       "condition": condition?.index,
-      "version": version
+      "version": version,
+      "status": status?.index
     };
   }
 
   FilterEntity copyWith({
-    String? storage,
-    String? generation,
-    String? color,
-    String? version,
-    ProductCondition? condition,
+    String? Function()? storage,
+    String? Function()? generation,
+    String? Function()? color,
+    String? Function()? version,
+    ProductCondition? Function()? condition,
+    ProductStatus? Function()? status,
   }) {
     return FilterEntity(
-      storage: storage ?? this.storage,
-      generation: generation ?? this.generation,
-      color: color == null
-          ? this.color
-          : color == ''
-              ? null
-              : color,
-      condition: condition ?? this.condition,
-      version: version ?? this.version,
+      storage: storage != null ? storage() : this.storage,
+      generation: generation != null ? generation() : this.generation,
+      color: color != null ? color() : this.color,
+      condition: condition != null ? condition() : this.condition,
+      version: version != null ? version() : this.version,
+      status: status != null ? status() : this.status,
     );
   }
 }

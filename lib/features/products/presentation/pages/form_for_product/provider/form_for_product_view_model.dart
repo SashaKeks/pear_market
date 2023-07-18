@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
-import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
-import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_proc_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_ram_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_version_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_video_parameter_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
 import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class FormForProductState {
@@ -14,6 +18,9 @@ class FormForProductState {
   final List<String> generationList;
   final List<String> colorList;
   final List<String> storageList;
+  final List<String> videoList;
+  final List<String> ramList;
+  final List<String> procList;
   final bool showExRateField;
 
   FormForProductState({
@@ -21,6 +28,9 @@ class FormForProductState {
     this.generationList = const [],
     this.colorList = const [],
     this.storageList = const [],
+    this.ramList = const [],
+    this.procList = const [],
+    this.videoList = const [],
     this.showExRateField = false,
   });
 
@@ -29,6 +39,9 @@ class FormForProductState {
     List<String>? generationList,
     List<String>? colorList,
     List<String>? storageList,
+    List<String>? videoList,
+    List<String>? ramList,
+    List<String>? procList,
     bool? showExRateField,
   }) {
     return FormForProductState(
@@ -36,6 +49,9 @@ class FormForProductState {
       generationList: generationList ?? this.generationList,
       colorList: colorList ?? this.colorList,
       storageList: storageList ?? this.storageList,
+      videoList: videoList ?? this.videoList,
+      ramList: ramList ?? this.ramList,
+      procList: procList ?? this.procList,
       showExRateField: showExRateField ?? this.showExRateField,
     );
   }
@@ -65,6 +81,15 @@ class FormForProductViewModel extends ChangeNotifier {
   /// product color usecase
   final GetProductColorParameterUsecase getProductColorUsecase;
 
+  /// product color usecase
+  final GetProductProcParameterUsecase getProductProcUsecase;
+
+  /// product color usecase
+  final GetProductVideoParameterUsecase getProductVideoUsecase;
+
+  /// product color usecase
+  final GetProductRamParameterUsecase getProductRamUsecase;
+
   /// product storage usecase
   final GetProductStorageParameterUsecase getProductStorageUsecase;
 
@@ -72,6 +97,9 @@ class FormForProductViewModel extends ChangeNotifier {
   final GetProductVersionParameterUsecase getProductVersionUsecase;
 
   FormForProductViewModel({
+    required this.getProductProcUsecase,
+    required this.getProductVideoUsecase,
+    required this.getProductRamUsecase,
     required this.context,
     required this.productType,
     required this.editproduct,
@@ -83,14 +111,23 @@ class FormForProductViewModel extends ChangeNotifier {
     required this.getProductVersionUsecase,
   }) {
     initFields();
-    print(productType);
   }
   Future<void> initFields() async {
     state = state.copyWith(
         product:
             state.product.copyWith(type: productType ?? editproduct?.type));
     await getProductGeneration();
-    await getProductStorage();
+    if (state.product.type == ProductType.mac ||
+        state.product.type == ProductType.iphone ||
+        state.product.type == ProductType.ipad) {
+      await getProductStorage();
+    }
+
+    if (state.product.type == ProductType.mac) {
+      await getProductProc();
+      await getProductRam();
+      await getProductVideo();
+    }
   }
 
   Future<void> getProductGeneration() async {
@@ -116,6 +153,72 @@ class FormForProductViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getProductRam() async {
+    final result = await getProductRamUsecase(
+      state.product.type.name,
+    );
+    result.fold(
+      (l) => showSnackbarInfo(context, l.errorMessage),
+      (right) {
+        state = state.copyWith(
+          ramList: right,
+        );
+        if (editproduct == null) {
+          state = state.copyWith(
+            product: state.product.copyWith(
+              ram: right.last,
+            ),
+          );
+        }
+      },
+    );
+    notifyListeners();
+  }
+
+  Future<void> getProductProc() async {
+    final result = await getProductProcUsecase(
+      state.product.type.name,
+    );
+    result.fold(
+      (l) => showSnackbarInfo(context, l.errorMessage),
+      (right) {
+        state = state.copyWith(
+          procList: right,
+        );
+        if (editproduct == null) {
+          state = state.copyWith(
+            product: state.product.copyWith(
+              proc: right.last,
+            ),
+          );
+        }
+      },
+    );
+    notifyListeners();
+  }
+
+  Future<void> getProductVideo() async {
+    final result = await getProductVideoUsecase(
+      state.product.type.name,
+    );
+    result.fold(
+      (l) => showSnackbarInfo(context, l.errorMessage),
+      (right) {
+        state = state.copyWith(
+          videoList: right,
+        );
+        if (editproduct == null) {
+          state = state.copyWith(
+            product: state.product.copyWith(
+              video: right.last,
+            ),
+          );
+        }
+      },
+    );
+    notifyListeners();
+  }
+
   Future<void> getProductColors(String generetion) async {
     final result = await getProductColorUsecase(
       state.product.type.name,
@@ -127,7 +230,7 @@ class FormForProductViewModel extends ChangeNotifier {
         state = state.copyWith(
           colorList: right,
         );
-        if (state.product.color.isEmpty) {
+        if (state.product.color?.isEmpty ?? true) {
           state = state.copyWith(
             product: state.product.copyWith(
               color: right.last,
@@ -163,7 +266,6 @@ class FormForProductViewModel extends ChangeNotifier {
 
   void addProductColor(String? color) {
     if (color == null) return;
-
     state = state.copyWith(product: state.product.copyWith(color: color));
     notifyListeners();
   }
@@ -232,7 +334,40 @@ class FormForProductViewModel extends ChangeNotifier {
       ),
       colorList: [],
     );
+    notifyListeners();
     getProductColors(state.product.generation);
+  }
+
+  void addProductRam(String? ram) {
+    if (ram == null) return;
+
+    state = state.copyWith(
+      product: state.product.copyWith(
+        ram: ram,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void addProductProc(String? proc) {
+    if (proc == null) return;
+
+    state = state.copyWith(
+      product: state.product.copyWith(
+        proc: proc,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void addProductVideo(String? video) {
+    if (video == null) return;
+
+    state = state.copyWith(
+      product: state.product.copyWith(
+        video: video,
+      ),
+    );
     notifyListeners();
   }
 
