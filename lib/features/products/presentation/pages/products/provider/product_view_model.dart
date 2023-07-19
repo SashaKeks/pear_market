@@ -131,21 +131,13 @@ class ProductViewModel extends ChangeNotifier {
   Future<void> onFilterButtonPress(FilterEntity? filter) async {
     _state = _state.copyWith(filter: filter ?? FilterEntity());
     await getAllProducts();
-    // onNavigationPop();
   }
 
   Future<void> getAllProducts() async {
     final result =
         await getAllProductsUseCase(productType, _state.filter.toJson());
     result.fold(
-      (l) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l.errorMessage),
-            backgroundColor: (Colors.black12),
-          ),
-        );
-      },
+      (l) => showSnackbarInfo(context, "Failed load products"),
       (right) => _state = _state.copyWith(
         productList: right,
       ),

@@ -10,7 +10,7 @@ class ProductCard extends StatelessWidget {
   final Function() onTapSell;
   final ProductEntity product;
 
-  ProductCard({
+  const ProductCard({
     super.key,
     required this.onTapCard,
     required this.onTapSell,

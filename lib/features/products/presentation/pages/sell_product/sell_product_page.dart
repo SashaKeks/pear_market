@@ -24,7 +24,6 @@ class SellProductPage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: AppDemensions.appSize20),
-                SizedBox(height: AppDemensions.appSize20),
                 TextFormField(
                   initialValue: context
                       .watch<SellProductViewModel>()
@@ -57,31 +56,34 @@ class SellProductPage extends StatelessWidget {
                       .read<SellProductViewModel>()
                       .addProductSellCurrency(value?.index),
                 ),
-                SizedBox(height: AppDemensions.appSize20),
                 context.watch<SellProductViewModel>().showExRateField
-                    ? TextFormField(
-                        initialValue: context
-                            .watch<SellProductViewModel>()
-                            .product
-                            .sellExRate
-                            ?.toString(),
-                        validator: (value) {
-                          if (double.tryParse(value ?? '') == null) {
-                            return "Only integer value";
-                          }
-                          return null;
-                        },
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        decoration: const InputDecoration(
-                          labelText: "Price ex-rate",
-                        ),
-                        onChanged: context
-                            .read<SellProductViewModel>()
-                            .addProductSellExRate,
+                    ? Column(
+                        children: [
+                          TextFormField(
+                            initialValue: context
+                                .watch<SellProductViewModel>()
+                                .product
+                                .sellExRate
+                                ?.toString(),
+                            validator: (value) {
+                              if (double.tryParse(value ?? '') == null) {
+                                return "Only integer value";
+                              }
+                              return null;
+                            },
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            decoration: const InputDecoration(
+                              labelText: "Price ex-rate",
+                            ),
+                            onChanged: context
+                                .read<SellProductViewModel>()
+                                .addProductSellExRate,
+                          ),
+                          SizedBox(height: AppDemensions.appSize20),
+                        ],
                       )
                     : const SizedBox(),
-                SizedBox(height: AppDemensions.appSize20),
                 DateTimePicker(
                   context: context,
                   time: context

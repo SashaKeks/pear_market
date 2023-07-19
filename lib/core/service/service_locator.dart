@@ -13,6 +13,7 @@ import 'package:pear_market/features/products/domain/usecase/product_usecases/ad
 import 'package:pear_market/features/products/domain/usecase/product_usecases/delete_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_all_products_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_product_detail_usecase.dart';
+import 'package:pear_market/features/products/domain/usecase/product_usecases/get_statistic_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
@@ -40,6 +41,9 @@ class ServicesLocator {
     );
     getIt.registerLazySingleton(
       () => UpdateProductUseCase(getIt<ProductBaseRepositoryImpl>()),
+    );
+    getIt.registerLazySingleton(
+      () => GetStatisticUseCase(getIt<ProductBaseRepositoryImpl>()),
     );
 
     ///parameters

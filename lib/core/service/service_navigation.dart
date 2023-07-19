@@ -7,6 +7,7 @@ import 'package:pear_market/features/products/presentation/pages/add_product_oth
 import 'package:pear_market/features/products/presentation/pages/form_for_product/form_for_product_page.dart';
 import 'package:pear_market/features/products/presentation/pages/form_for_product/provider/form_for_product_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/menu/menu_page.dart';
+import 'package:pear_market/features/products/presentation/pages/menu/provider/menu_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/product_detail.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/provider/product_detail_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
@@ -30,7 +31,10 @@ class AppNavigationNames {
 class AppNavigation {
   static Map<String, Widget Function(BuildContext)> routes =
       <String, WidgetBuilder>{
-    AppNavigationNames.homePage: (context) => const MenuPage(),
+    AppNavigationNames.homePage: (context) => ChangeNotifierProvider(
+          create: (context) => MenuViewModel(getIt(), context),
+          child: const MenuPage(),
+        ),
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

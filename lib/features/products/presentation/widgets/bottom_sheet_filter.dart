@@ -7,8 +7,8 @@ import 'package:pear_market/features/products/presentation/widgets/drop_down_fil
 import 'package:provider/provider.dart';
 
 class BottomSheetFilter extends StatefulWidget {
-  FilterEntity? savedFilter;
-  BottomSheetFilter({
+  final FilterEntity? savedFilter;
+  const BottomSheetFilter({
     Key? key,
     this.savedFilter,
   }) : super(key: key);

@@ -135,7 +135,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, l.errorMessage),
+      (l) => showSnackbarInfo(context, "Failed load product generation"),
       (right) {
         state = state.copyWith(
           generationList: right,
@@ -158,7 +158,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, l.errorMessage),
+      (l) => showSnackbarInfo(context, "Failed load product RAM"),
       (right) {
         state = state.copyWith(
           ramList: right,
@@ -180,7 +180,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, l.errorMessage),
+      (l) => showSnackbarInfo(context, "Failed load product processors"),
       (right) {
         state = state.copyWith(
           procList: right,
@@ -202,7 +202,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, l.errorMessage),
+      (l) => showSnackbarInfo(context, "Failed load product video cards"),
       (right) {
         state = state.copyWith(
           videoList: right,
@@ -225,7 +225,7 @@ class FormForProductViewModel extends ChangeNotifier {
       generetion,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, l.errorMessage),
+      (l) => showSnackbarInfo(context, "Failed load product colors"),
       (right) {
         state = state.copyWith(
           colorList: right,
@@ -247,7 +247,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, l.errorMessage),
+      (l) => showSnackbarInfo(context, "Failed load product storages"),
       (right) {
         state = state.copyWith(
           storageList: right,

@@ -5,11 +5,12 @@ class DropDownFilter<T> extends StatefulWidget {
   T? value;
   final List<T> items;
   void Function(T?) onChanged;
-  bool enumList;
+  final bool enumList;
   final Widget? hint;
   final Key? keyF;
 
   DropDownFilter({
+    super.key,
     this.value,
     required this.items,
     required this.onChanged,
@@ -59,7 +60,7 @@ class _DropDownFilterState<T> extends State<DropDownFilter<T>> {
                           widget.value = null;
                         });
                       },
-                      icon: Icon(Icons.delete_forever))
+                      icon: const Icon(Icons.delete_forever))
                   : const SizedBox()
             ],
           ),

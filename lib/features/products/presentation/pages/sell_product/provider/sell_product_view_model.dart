@@ -15,8 +15,15 @@ class SellProductViewModel extends ChangeNotifier {
     required this.context,
     required this.updateProductUseCase,
   }) {
+    init();
     showExRateInit();
   }
+
+  void init() {
+    product = product.copyWith(
+        sellCurrency: ProductCurrency.UAH, sellDateTime: DateTime.now());
+  }
+
   void showExRateInit() {
     showExRateField = product.sellCurrency != ProductCurrency.UAH;
     notifyListeners();

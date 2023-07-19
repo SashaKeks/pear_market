@@ -7,6 +7,7 @@ import 'package:pear_market/features/products/domain/usecase/product_usecases/de
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_product_detail_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
 import 'package:pear_market/features/products/presentation/widgets/show_alert_dialog_reanswer.dart';
+import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class ProductDetailState {
   final ProductEntity product;
@@ -46,7 +47,7 @@ class ProductDetailViewModel extends ChangeNotifier {
   Future<void> getProductDetail() async {
     final result = await getProductDetailUsecase(productId);
     result.fold(
-      (left) => null,
+      (left) => showSnackbarInfo(context, "Failed load product"),
       (right) {
         state = state.copyWith(productEntity: right);
       },
