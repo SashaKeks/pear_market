@@ -3,6 +3,7 @@ import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
+import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class AddProductOtherViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -31,12 +32,16 @@ class AddProductOtherViewModel extends ChangeNotifier {
   }
 
   void onSavePress() async {
-    if (editProduct == null) {
-      await addProductUseCase(product);
+    if (formKey.currentState!.validate()) {
+      if (editProduct == null) {
+        await addProductUseCase(product);
+      } else {
+        await updateProductUseCase(product);
+      }
+      goBAck();
     } else {
-      await updateProductUseCase(product);
+      showSnackbarInfo(context, "Fields are wrong cheak it and try again");
     }
-    goBAck();
   }
 
   void goBAck() {
@@ -100,7 +105,7 @@ class AddProductOtherViewModel extends ChangeNotifier {
 
   void onBuyExRateChange(String? exrate) {
     if (exrate == null) return;
-    product = product.copyWith(buyExRate: double.parse(exrate));
+    product = product.copyWith(buyExRate: double.tryParse(exrate) ?? 1);
     notifyListeners();
   }
 

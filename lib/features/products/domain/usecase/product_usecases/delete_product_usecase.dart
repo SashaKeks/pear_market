@@ -1,4 +1,3 @@
-import 'package:pear_market/core/common/data_state.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
 class DeleteProductUseCase {
@@ -6,7 +5,7 @@ class DeleteProductUseCase {
 
   DeleteProductUseCase(this._productBaseRepository);
 
-  Future<DataState> call(String productId) async {
-    return await _productBaseRepository.deleteProduct(productId);
+  Future<void> call(String productId) async {
+    await _productBaseRepository.deleteProduct(productId);
   }
 }

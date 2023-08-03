@@ -1,4 +1,3 @@
-import 'package:pear_market/core/common/data_state.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
@@ -7,7 +6,7 @@ class AddProductUseCase {
 
   AddProductUseCase(this._productBaseRepository);
 
-  Future<DataState> call(ProductEntity product) async {
-    return await _productBaseRepository.addProduct(product);
+  Future<void> call(ProductEntity product) async {
+    await _productBaseRepository.addProduct(product);
   }
 }

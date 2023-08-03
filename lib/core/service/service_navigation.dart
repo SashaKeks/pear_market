@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/auth/presentation/pages/auth/auth_page.dart';
+import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/add_product_other_page.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/provider/add_product_other_view_model.dart';
@@ -20,8 +22,8 @@ import '../../features/products/presentation/pages/products/products_page.dart';
 final getIt = GetIt.instance;
 
 class AppNavigationNames {
-  static const String homePage = '/';
-  static const String categoryMenu = '/category_menu';
+  static const String authPage = '/';
+  static const String homePage = '/home';
   static const String productList = '/product_list';
   static const String productDetail = '/product_list/product_detail';
   static const String formForProduct = '/form_for_product';
@@ -31,8 +33,14 @@ class AppNavigationNames {
 class AppNavigation {
   static Map<String, Widget Function(BuildContext)> routes =
       <String, WidgetBuilder>{
+    AppNavigationNames.authPage: (context) => ChangeNotifierProvider(
+          create: (context) => AuthViewModel(),
+          lazy: false,
+          child: const AuthPage(),
+        ),
     AppNavigationNames.homePage: (context) => ChangeNotifierProvider(
           create: (context) => MenuViewModel(getIt(), context),
+          lazy: false,
           child: const MenuPage(),
         ),
   };

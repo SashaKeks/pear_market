@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      initialRoute: AppNavigationNames.homePage,
+      initialRoute: AppNavigationNames.authPage,
       routes: AppNavigation.routes,
       onGenerateRoute: AppNavigation.onGenerateRoute,
     );

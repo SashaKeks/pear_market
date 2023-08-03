@@ -88,6 +88,21 @@ class BarChartMoney extends StatelessWidget {
                     topTitles: AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
+                    rightTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles:
+                          SideTitles(showTitles: true, reservedSize: 60),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 20,
+                        getTitlesWidget:
+                            context.read<MenuViewModel>().getTitles,
+                      ),
+                    ),
                   ),
                   borderData: FlBorderData(
                     show: false,

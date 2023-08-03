@@ -84,8 +84,8 @@ class ServicesLocator {
     getIt.registerLazySingleton<RemoteProductCreateSource>(
       () => RemoteProductCreateSource(),
     );
-    getIt.registerLazySingleton<LocalProductCreateSource>(
-      () => LocalProductCreateSource(),
-    );
+    // getIt.registerLazySingleton<LocalProductCreateSource>(
+    //   () => LocalProductCreateSource(),
+    // );
   }
 }

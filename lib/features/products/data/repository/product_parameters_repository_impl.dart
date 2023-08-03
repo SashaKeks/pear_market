@@ -14,7 +14,7 @@ class ProductParametersRepositoryImpl extends ProductParametersRepository {
       final result = await source.getProductColor(type, generation);
       return right(result);
     } catch (e) {
-      return left(ReadJsonFailure(e.toString()));
+      return left(ServerFailure(e.toString()));
     }
   }
 

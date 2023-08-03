@@ -17,7 +17,7 @@ class MenuViewModelState {
   final double _maxMoney;
   double _totalMoney;
 
-  double get maxMoney => _maxMoney * 2;
+  double get maxMoney => _maxMoney * 1.5;
   double get totalMoney => _totalMoney;
   set totalMoney(value) => _totalMoney += value;
 
@@ -44,6 +44,7 @@ class MenuViewModelState {
 class MenuViewModel extends ChangeNotifier {
   final GetStatisticUseCase getStatisticUseCase;
   final BuildContext context;
+  List<StatisticEntity> itemsFromData = [];
   MenuViewModelState state = MenuViewModelState();
   MenuViewModel(this.getStatisticUseCase, this.context) {
     init();
@@ -64,6 +65,7 @@ class MenuViewModel extends ChangeNotifier {
     result.fold(
       (l) => showSnackbarInfo(context, "Failed load statistic"),
       (r) {
+        itemsFromData = r;
         for (StatisticEntity e in r) {
           if (e.buySum > e.sellSum) {
             state = state.copyWith(
@@ -79,8 +81,9 @@ class MenuViewModel extends ChangeNotifier {
         }
 
         state = state.copyWith(
-            items:
-                r.map((e) => makeGroupData(1, e.buySum, e.sellSum)).toList());
+            items: r
+                .map((e) => makeGroupData(r.indexOf(e), e.buySum, e.sellSum))
+                .toList());
       },
     );
     notifyListeners();
@@ -118,6 +121,21 @@ class MenuViewModel extends ChangeNotifier {
           ],
         ),
       ],
+    );
+  }
+
+  Widget getTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 10,
+    );
+    String text =
+        "${itemsFromData[value.toInt()].date.month}_${itemsFromData[value.toInt()].date.year}";
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Text(text, style: style),
     );
   }
 }
