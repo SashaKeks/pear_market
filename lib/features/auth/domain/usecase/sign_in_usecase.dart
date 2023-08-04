@@ -1,14 +1,11 @@
-import 'package:dartz/dartz.dart';
-
-import '../../../../core/error/failure.dart';
 import '../repository/auth_repository.dart';
 
-class SignOutUseCase {
+class SignInUseCase {
   final AuthRepository _authRepository;
 
-  SignOutUseCase(this._authRepository);
+  SignInUseCase(this._authRepository);
 
-  Future<Either<Failure, void>> call() async {
-    return await _authRepository.signOut();
+  Future<void> call({required String login, required String password}) async {
+    await _authRepository.signIn(login: login, password: password);
   }
 }

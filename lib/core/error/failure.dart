@@ -27,3 +27,7 @@ class DeleteProductFailure extends Failure {
 class ReadJsonFailure extends Failure {
   ReadJsonFailure(super.errorMessage);
 }
+
+class AuthFailure extends Failure {
+  AuthFailure(super.errorMessage);
+}

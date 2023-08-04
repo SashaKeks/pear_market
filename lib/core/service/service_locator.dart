@@ -1,4 +1,8 @@
 import 'package:get_it/get_it.dart';
+import 'package:pear_market/features/auth/data/repository/auth_ropository_impl.dart';
+import 'package:pear_market/features/auth/domain/repository/auth_repository.dart';
+import 'package:pear_market/features/auth/domain/usecase/sign_in_usecase.dart';
+import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
 import 'package:pear_market/features/products/data/data_source/local/local_product_create_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source_impl.dart';
@@ -69,7 +73,20 @@ class ServicesLocator {
       () => GetProductGenerationParameterUsecase(getIt()),
     );
 
-    //repositories
+    //auth usecase
+    getIt.registerLazySingleton(
+      () => SignInUseCase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => SignOutUseCase(getIt()),
+    );
+
+    ///repositories
+    //auth
+    getIt.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(),
+    );
+    //product
     getIt.registerLazySingleton<ProductBaseRepositoryImpl>(
       () => ProductBaseRepositoryImpl(getIt()),
     );

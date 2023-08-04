@@ -34,7 +34,11 @@ class AppNavigation {
   static Map<String, Widget Function(BuildContext)> routes =
       <String, WidgetBuilder>{
     AppNavigationNames.authPage: (context) => ChangeNotifierProvider(
-          create: (context) => AuthViewModel(),
+          create: (context) => AuthViewModel(
+            context: context,
+            signInUseCase: getIt(),
+            signOutUseCase: getIt(),
+          ),
           lazy: false,
           child: const AuthPage(),
         ),

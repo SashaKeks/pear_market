@@ -1,5 +1,3 @@
-import 'package:dartz/dartz.dart';
-import 'package:pear_market/core/error/failure.dart';
 import 'package:pear_market/features/auth/domain/repository/auth_repository.dart';
 
 class SignOutUseCase {
@@ -7,7 +5,7 @@ class SignOutUseCase {
 
   SignOutUseCase(this._authRepository);
 
-  Future<Either<Failure, void>> call() async {
-    return await _authRepository.signOut();
+  Future<void> call() async {
+    await _authRepository.signOut();
   }
 }
