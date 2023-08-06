@@ -15,6 +15,7 @@ class FormForProductPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
             "ADD ${context.watch<FormForProductViewModel>().state.product.type.name.toUpperCase()}"),
+        centerTitle: true,
         actions: [
           FilledButton(
               onPressed: context.read<FormForProductViewModel>().saveProduct,

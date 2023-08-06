@@ -3,9 +3,7 @@ import 'package:pear_market/features/products/data/data_source/remote/product_ba
 import 'package:pear_market/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:pear_market/features/products/data/models/product_model.dart';
-import 'package:pear_market/features/products/data/models/statistic_model.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
-import 'package:pear_market/features/products/domain/entities/statistic_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
 class ProductBaseRepositoryImpl extends ProductBaseRepository {
@@ -18,7 +16,6 @@ class ProductBaseRepositoryImpl extends ProductBaseRepository {
     try {
       await _remoteDatasource
           .addProduct(ProductModel.fromEntity(product).toJson());
-      await _remoteDatasource.addBuyStatistic(product);
     } on AddProductFailure catch (e) {
       throw ServerFailure(e.errorMessage);
     } catch (e) {
@@ -71,23 +68,10 @@ class ProductBaseRepositoryImpl extends ProductBaseRepository {
     try {
       await _remoteDatasource
           .updateProduct(ProductModel.fromEntity(updatedProduct).toJson());
-      await _remoteDatasource.addSellStatistic(updatedProduct);
     } on UpdateProductFailure catch (e) {
       ServerFailure(e.toString());
     } catch (e) {
       throw UnknowingFailure(e.toString());
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<StatisticEntity>>> getStatistic() async {
-    try {
-      final result = await _remoteDatasource.getStatistic();
-      return right(result.map((e) => StatisticModel.fromJson(e)).toList());
-    } on ServerFailure catch (e) {
-      return left(ServerFailure(e.toString()));
-    } catch (e) {
-      throw left(UnknowingFailure(e.toString()));
     }
   }
 }

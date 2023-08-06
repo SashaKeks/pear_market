@@ -21,6 +21,7 @@ class ProductDetailPage extends StatelessWidget {
               .name
               .toUpperCase(),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
               onPressed:

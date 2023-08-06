@@ -21,11 +21,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      initialRoute: AppNavigationNames.authPage,
+      initialRoute: AppNavigationNames.homePage,
       routes: AppNavigation.routes,
       onGenerateRoute: AppNavigation.onGenerateRoute,
     );

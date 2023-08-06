@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/error/failure.dart';
 import 'package:pear_market/core/service/service_navigation.dart';
@@ -10,6 +11,7 @@ class AuthViewModel extends ChangeNotifier {
   String _login = "";
   String _password = "";
   String _errorMessage = "";
+  User? _user;
   String get eror => _errorMessage;
 
   AuthStatus _authStatus = AuthStatus.none;
@@ -28,14 +30,16 @@ class AuthViewModel extends ChangeNotifier {
     _errorMessage = "";
     changeAuthStatus(AuthStatus.progress);
     try {
-      await signInUseCase(login: _login, password: _password);
+      _user = await signInUseCase(login: _login, password: _password);
     } on Failure catch (e) {
       _errorMessage = e.errorMessage;
       changeAuthStatus(AuthStatus.failed);
       return;
     }
-    changeAuthStatus(AuthStatus.success);
-    goToPage();
+    if (_user != null) {
+      changeAuthStatus(AuthStatus.success);
+      goToPage();
+    }
   }
 
   void goToPage() => Navigator.pushNamedAndRemoveUntil(

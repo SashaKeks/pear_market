@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../repository/auth_repository.dart';
 
 class SignInUseCase {
@@ -5,7 +7,7 @@ class SignInUseCase {
 
   SignInUseCase(this._authRepository);
 
-  Future<void> call({required String login, required String password}) async {
-    await _authRepository.signIn(login: login, password: password);
+  Future<User?> call({required String login, required String password}) async {
+    return await _authRepository.signIn(login: login, password: password);
   }
 }

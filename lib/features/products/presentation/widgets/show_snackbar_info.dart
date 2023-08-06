@@ -22,11 +22,11 @@ showSnackbarInfo(BuildContext context, [String? infoText]) {
               ),
             ),
             Expanded(
-              flex: 1,
+              flex: 2,
               child: TextButton(
                 onPressed: () =>
                     ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-                child: const Text("CLOSE"),
+                child: const Expanded(child: Text("CLOSE")),
               ),
             )
           ],

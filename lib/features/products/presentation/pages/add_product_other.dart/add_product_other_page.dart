@@ -17,6 +17,7 @@ class AddProductOtherPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("ADD PRODUCT"),
+        centerTitle: true,
         actions: [
           TextButton(
             onPressed: context.read<AddProductOtherViewModel>().onSavePress,

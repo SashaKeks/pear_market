@@ -46,7 +46,7 @@ class RemoteProductCreateSource {
 
   Future<Map<String, dynamic>> _readData(
       {required String collectionName, required String type}) async {
-    CollectionReference productsCollection =
+    CollectionReference? productsCollection =
         FirebaseFirestore.instance.collection(collectionName);
 
     final result = await productsCollection
@@ -56,7 +56,7 @@ class RemoteProductCreateSource {
         .catchError(
           (e) => throw ServerFailure(e.toString()),
         );
-
+    productsCollection = null;
     return result;
   }
 }

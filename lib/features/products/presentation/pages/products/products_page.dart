@@ -18,6 +18,7 @@ class ProductsPage extends StatelessWidget {
         title: Text(
           context.watch<ProductViewModel>().productType.name.toUpperCase(),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
               onPressed: () async {

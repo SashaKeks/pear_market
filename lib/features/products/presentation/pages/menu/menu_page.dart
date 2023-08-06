@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/presentation/pages/menu/provider/menu_view_model.dart';
-import 'package:pear_market/features/products/presentation/widgets/chart_widget.dart';
 import 'package:provider/provider.dart';
 
 class MenuPage extends StatelessWidget {
@@ -14,18 +13,17 @@ class MenuPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("MENU"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: context.read<MenuViewModel>().onSignOutButonPress,
+            icon: const Icon(Icons.exit_to_app),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: SizedBox(
-                  height: AppDemensions.appSize300,
-                  child: ChangeNotifierProvider.value(
-                    value: Provider.of<MenuViewModel>(context),
-                    child: const BarChartMoney(),
-                  )),
-            ),
             Divider(
               thickness: AppDemensions.appSize5,
             ),

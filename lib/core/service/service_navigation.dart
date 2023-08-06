@@ -43,7 +43,7 @@ class AppNavigation {
           child: const AuthPage(),
         ),
     AppNavigationNames.homePage: (context) => ChangeNotifierProvider(
-          create: (context) => MenuViewModel(getIt(), context),
+          create: (context) => MenuViewModel(context, signOutUseCase: getIt()),
           lazy: false,
           child: const MenuPage(),
         ),

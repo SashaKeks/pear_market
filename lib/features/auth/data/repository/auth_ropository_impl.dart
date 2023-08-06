@@ -4,17 +4,19 @@ import 'package:pear_market/features/auth/domain/repository/auth_repository.dart
 
 class AuthRepositoryImpl extends AuthRepository {
   @override
-  Future<void> signIn({required String login, required String password}) async {
+  Future<User?> signIn(
+      {required String login, required String password}) async {
     try {
-      await FirebaseAuth.instance
+      final result = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: login, password: password);
+      return result.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw AuthFailure('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         throw AuthFailure('Wrong password provided for that user.');
       }
-      throw AuthFailure(e.toString());
+      throw AuthFailure(e.message ?? "Something went wrong, try again");
     }
   }
 

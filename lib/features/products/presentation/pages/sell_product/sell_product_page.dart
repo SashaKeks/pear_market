@@ -15,6 +15,7 @@ class SellProductPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Sell Product"),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(

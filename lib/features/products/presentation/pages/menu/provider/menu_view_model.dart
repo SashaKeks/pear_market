@@ -1,12 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/service/service_navigation.dart';
 import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
 import 'package:pear_market/features/products/domain/entities/statistic_entity.dart';
-
-import 'package:pear_market/features/products/domain/usecase/product_usecases/get_statistic_usecase.dart';
-import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class MenuViewModelState {
   final double width = 20;
@@ -42,13 +39,11 @@ class MenuViewModelState {
 }
 
 class MenuViewModel extends ChangeNotifier {
-  final GetStatisticUseCase getStatisticUseCase;
+  final SignOutUseCase signOutUseCase;
   final BuildContext context;
   List<StatisticEntity> itemsFromData = [];
   MenuViewModelState state = MenuViewModelState();
-  MenuViewModel(this.getStatisticUseCase, this.context) {
-    init();
-  }
+  MenuViewModel(this.context, {required this.signOutUseCase}) {}
 
   void onMenuItemTap(int index) async {
     await Navigator.of(context).pushNamed(
@@ -56,37 +51,12 @@ class MenuViewModel extends ChangeNotifier {
       arguments: ProductType.values[index],
     );
     state = MenuViewModelState();
-    init();
   }
 
-  Future<void> init() async {
-    final result = await getStatisticUseCase();
-
-    result.fold(
-      (l) => showSnackbarInfo(context, "Failed load statistic"),
-      (r) {
-        itemsFromData = r;
-        for (StatisticEntity e in r) {
-          if (e.buySum > e.sellSum) {
-            state = state.copyWith(
-                maxMoney:
-                    e.buySum > state._maxMoney ? e.buySum : state._maxMoney);
-          } else {
-            state = state.copyWith(
-                maxMoney:
-                    e.sellSum > state._maxMoney ? e.sellSum : state._maxMoney);
-          }
-
-          state.totalMoney = e.sellSum - e.buySum;
-        }
-
-        state = state.copyWith(
-            items: r
-                .map((e) => makeGroupData(r.indexOf(e), e.buySum, e.sellSum))
-                .toList());
-      },
-    );
-    notifyListeners();
+  onSignOutButonPress() {
+    signOutUseCase();
+    Navigator.pushNamedAndRemoveUntil(
+        context, AppNavigationNames.authPage, (route) => false);
   }
 
   BarChartGroupData makeGroupData(int x, double y1, double y2) {
