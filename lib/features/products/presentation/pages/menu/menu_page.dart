@@ -22,11 +22,9 @@ class MenuPage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
-            Divider(
-              thickness: AppDemensions.appSize5,
-            ),
             Center(
               child: Wrap(
                 children: List.generate(
@@ -41,8 +39,8 @@ class MenuPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: AppDemensions.appSize100,
-                            height: AppDemensions.appSize100,
+                            width: AppDemensions.appSize150,
+                            height: AppDemensions.appSize150,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: AssetImage(
@@ -69,6 +67,33 @@ class MenuPage extends StatelessWidget {
             )
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 100,
+        backgroundColor: Colors.deepPurple,
+        type: BottomNavigationBarType.fixed,
+        fixedColor: Colors.white,
+        unselectedItemColor: Colors.deepPurple[200],
+        items: const [
+          BottomNavigationBarItem(
+            backgroundColor: Colors.red,
+            label: "Home",
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.green,
+            label: "Statistic",
+            icon: Icon(Icons.stacked_line_chart),
+          ),
+          BottomNavigationBarItem(
+            label: "Info",
+            icon: Icon(Icons.info_outline),
+          ),
+          BottomNavigationBarItem(
+            label: "Admin",
+            icon: Icon(Icons.all_inclusive_sharp),
+          ),
+        ],
       ),
     );
   }

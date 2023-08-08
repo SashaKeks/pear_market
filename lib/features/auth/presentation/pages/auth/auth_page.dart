@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
+import 'package:pear_market/features/auth/presentation/widgets/custom_form_field.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends StatelessWidget {
@@ -16,36 +17,13 @@ class AuthPage extends StatelessWidget {
               final authStatus = context.watch<AuthViewModel>().authStatus;
               switch (authStatus) {
                 case AuthStatus.none:
+                case AuthStatus.failed:
                   return const AuthForm();
                 case AuthStatus.success:
                 case AuthStatus.progress:
                   return const Center(
                     child: CircularProgressIndicator(
                       color: Colors.black,
-                    ),
-                  );
-
-                case AuthStatus.failed:
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(context.watch<AuthViewModel>().eror),
-                        SizedBox(height: AppDemensions.appSize25),
-                        ElevatedButton(
-                          style: const ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll(Colors.black),
-                          ),
-                          onPressed: () => context
-                              .read<AuthViewModel>()
-                              .changeAuthStatus(AuthStatus.none),
-                          child: Padding(
-                            padding: EdgeInsets.all(AppDemensions.appSize20),
-                            child: const Text("TRY AGAIN"),
-                          ),
-                        ),
-                      ],
                     ),
                   );
               }
@@ -77,14 +55,16 @@ class AuthForm extends StatelessWidget {
           CustomTextFormField(
             iconData: Icons.lock_open_rounded,
             onChanged: context.read<AuthViewModel>().onPasswordChange,
+            isPassword: true,
+            showPassIcon: Icons.lock_outline_rounded,
           ),
           SizedBox(height: AppDemensions.appSize20),
-          Text(""),
+          Text(context.watch<AuthViewModel>().eror),
           SizedBox(height: AppDemensions.appSize20),
           Container(
             width: AppDemensions.appSize200,
             child: ElevatedButton(
-              style: ButtonStyle(
+              style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(Colors.black),
               ),
               onPressed: context.read<AuthViewModel>().onLoginButtonPress,
@@ -96,21 +76,6 @@ class AuthForm extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-class CustomTextFormField extends StatelessWidget {
-  final IconData iconData;
-  final void Function(String)? onChanged;
-  const CustomTextFormField(
-      {super.key, required this.iconData, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(prefixIcon: Icon(iconData)),
-      onChanged: onChanged,
     );
   }
 }

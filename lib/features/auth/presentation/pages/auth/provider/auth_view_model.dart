@@ -22,9 +22,13 @@ class AuthViewModel extends ChangeNotifier {
   AuthViewModel(
       {required this.signInUseCase,
       required this.signOutUseCase,
-      required this.context});
+      required this.context}) {}
 
   AuthStatus get authStatus => _authStatus;
+
+  Future<void> loginCheacker() async {
+    //// biometrik and get from secure storage login and password
+  }
 
   void onLoginButtonPress() async {
     _errorMessage = "";
