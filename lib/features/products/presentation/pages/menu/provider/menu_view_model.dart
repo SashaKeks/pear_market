@@ -15,9 +15,11 @@ class MenuViewModel extends ChangeNotifier {
     );
   }
 
-  onSignOutButonPress() {
+  void onSignOutButonPress() {
     signOutUseCase();
     Navigator.pushNamedAndRemoveUntil(
         context, AppNavigationNames.authPage, (route) => false);
   }
+
+  void onThemeSwitcher() {}
 }

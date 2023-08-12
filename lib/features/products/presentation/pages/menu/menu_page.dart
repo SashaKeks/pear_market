@@ -15,6 +15,26 @@ class MenuPage extends StatelessWidget {
         title: const Text("MENU"),
         centerTitle: true,
         actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Icon(Icons.light_mode),
+              Switch(
+                // This bool value toggles the switch.
+                value: true,
+                activeColor: Theme.of(context).primaryColorLight,
+                inactiveThumbColor: Theme.of(context).primaryColorLight,
+                onChanged: (bool value) {
+                  // This is called when the user toggles the switch.
+                  // setState(() {
+                  //   light = value;
+                  // });
+                },
+              ),
+              Icon(Icons.dark_mode),
+              SizedBox(width: AppDemensions.appSize5),
+            ],
+          ),
           IconButton(
             onPressed: context.read<MenuViewModel>().onSignOutButonPress,
             icon: const Icon(Icons.exit_to_app),
@@ -22,39 +42,45 @@ class MenuPage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        // physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
-            Center(
-              child: Wrap(
-                children: List.generate(
-                  ProductType.values.length,
-                  (index) => Padding(
-                    padding: EdgeInsets.all(AppDemensions.appSize10),
-                    child: InkWell(
-                      onTap: () =>
-                          context.read<MenuViewModel>().onMenuItemTap(index),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+            SizedBox(
+              height: AppDemensions.appSize10,
+            ),
+            Wrap(
+              children: List.generate(
+                ProductType.values.length,
+                (index) => Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: AppDemensions.appSize10,
+                      vertical: AppDemensions.appSize5),
+                  child: InkWell(
+                    onTap: () =>
+                        context.read<MenuViewModel>().onMenuItemTap(index),
+                    child: Container(
+                      // padding: EdgeInsets.all(AppDemensions.appSize5),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColorLight,
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: AppDemensions.appSize150,
                             height: AppDemensions.appSize150,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "assets/images/${ProductType.values[index].name}.png",
-                                ),
-                              ),
+                            // width: AppDemensions.appSize200,
+                            child: Image.asset(
+                              "assets/images/${ProductType.values[index].name}.png",
+                              fit: BoxFit.contain,
                             ),
                           ),
                           Text(
                             ProductType.values[index].name.toUpperCase(),
-                            style: GoogleFonts.montserrat(
+                            style: GoogleFonts.nanumGothic(
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: AppDemensions.appSize10,
+                                fontSize: 27,
                               ),
                             ),
                           ),
@@ -70,18 +96,16 @@ class MenuPage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 100,
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).primaryColor,
         type: BottomNavigationBarType.fixed,
-        fixedColor: Colors.white,
-        unselectedItemColor: Colors.deepPurple[200],
+        fixedColor: Theme.of(context).primaryColorLight,
+        unselectedItemColor: Theme.of(context).primaryColorDark,
         items: const [
           BottomNavigationBarItem(
-            backgroundColor: Colors.red,
             label: "Home",
             icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.green,
             label: "Statistic",
             icon: Icon(Icons.stacked_line_chart),
           ),

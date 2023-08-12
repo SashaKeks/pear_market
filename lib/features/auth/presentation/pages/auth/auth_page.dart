@@ -61,11 +61,31 @@ class AuthForm extends StatelessWidget {
           SizedBox(height: AppDemensions.appSize20),
           Text(context.watch<AuthViewModel>().eror),
           SizedBox(height: AppDemensions.appSize20),
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              height: AppDemensions.appSize50,
+              padding: EdgeInsets.all(AppDemensions.appSize10),
+              decoration: BoxDecoration(
+                color: Colors.purple.shade100,
+                borderRadius: BorderRadius.circular(AppDemensions.appSize5),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Забули пароль?"),
+                  Icon(Icons.keyboard_double_arrow_right_sharp),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: AppDemensions.appSize20),
           Container(
-            width: AppDemensions.appSize200,
+            width: double.infinity,
             child: ElevatedButton(
               style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.black),
+                backgroundColor:
+                    MaterialStatePropertyAll(Color.fromARGB(255, 21, 5, 47)),
               ),
               onPressed: context.read<AuthViewModel>().onLoginButtonPress,
               child: Padding(
