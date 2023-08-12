@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/products/presentation/pages/menu/provider/menu_view_model.dart';
+import 'package:pear_market/features/menu/presentation/menu/provider/menu_view_model.dart';
 import 'package:provider/provider.dart';
 
 class MenuPage extends StatelessWidget {
