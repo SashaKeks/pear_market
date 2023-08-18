@@ -9,9 +9,9 @@ Future<bool?> showAlertDialogDelete({
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Are You Sure ?'),
-        content: SingleChildScrollView(
+        content: const SingleChildScrollView(
           child: ListBody(
-            children: const <Widget>[
+            children: <Widget>[
               Text('Do you realy want delete this product'),
               Text('Press "Ok" to delete and "Cancel" for exit'),
             ],

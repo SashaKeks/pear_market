@@ -61,7 +61,7 @@ class AuthForm extends StatelessWidget {
           SizedBox(height: AppDemensions.appSize20),
           Text(context.watch<AuthViewModel>().eror),
           SizedBox(height: AppDemensions.appSize20),
-          Container(
+          SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ButtonStyle(

@@ -12,14 +12,14 @@ class AppTheme {
     appBarTheme: const AppBarTheme(foregroundColor: Colors.white),
   );
   static ThemeData darkTheme = ThemeData(
-    primarySwatch: _createMaterialColor(Color(0xff001529)),
-    scaffoldBackgroundColor: Color(0xff001219),
-    textTheme: TextTheme(
+    primarySwatch: _createMaterialColor(const Color(0xff001529)),
+    scaffoldBackgroundColor: const Color(0xff001219),
+    textTheme: const TextTheme(
       bodyMedium: TextStyle(
         color: Color.fromARGB(255, 253, 252, 252),
       ),
     ),
-    appBarTheme: AppBarTheme(foregroundColor: Colors.white),
+    appBarTheme: const AppBarTheme(foregroundColor: Colors.white),
   );
 
   static MaterialColor _createMaterialColor(Color color) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pear_market/core/resources/colors.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';

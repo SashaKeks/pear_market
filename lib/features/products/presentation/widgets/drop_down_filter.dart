@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+
 import 'package:pear_market/core/resources/demencions.dart';
 
 class DropDownFilter<T> extends StatefulWidget {
   T? value;
   final List<T> items;
-  void Function(T?) onChanged;
+  final void Function(T?) onChanged;
   final bool enumList;
   final Widget? hint;
   final Key? keyF;
 
   DropDownFilter({
-    super.key,
+    Key? key,
     this.value,
     required this.items,
     required this.onChanged,
     this.enumList = false,
     this.hint,
     this.keyF,
-  });
+  }) : super(key: key);
 
   @override
   State<DropDownFilter<T>> createState() => _DropDownFilterState<T>();

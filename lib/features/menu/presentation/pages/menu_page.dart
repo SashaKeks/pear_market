@@ -24,7 +24,6 @@ class MenuPage extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        // physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
             SizedBox(
@@ -42,8 +41,9 @@ class MenuPage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
         type: BottomNavigationBarType.fixed,
-        fixedColor: Theme.of(context).primaryColorLight,
-        unselectedItemColor: Theme.of(context).primaryColorDark,
+        // fixedColor: Theme.of(context).primaryColorLight,
+        fixedColor: Colors.white,
+        unselectedItemColor: Theme.of(context).primaryColorLight,
         items: const [
           BottomNavigationBarItem(
             label: "Home",
@@ -74,21 +74,19 @@ class ThemeModeSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MainViewModel>(
-      builder: (context, state, child) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Icon(Icons.light_mode),
-          Switch(
-            value: state.isDark,
-            activeColor: Theme.of(context).primaryColorLight,
-            inactiveThumbColor: Theme.of(context).primaryColorLight,
-            onChanged: state.changeThemeMode,
-          ),
-          const Icon(Icons.dark_mode),
-          SizedBox(width: AppDemensions.appSize5),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        const Icon(Icons.light_mode),
+        Switch(
+          value: context.watch<MainViewModel>().isDark,
+          activeColor: Theme.of(context).primaryColorLight,
+          inactiveThumbColor: Theme.of(context).primaryColorLight,
+          onChanged: context.read<MainViewModel>().changeThemeMode,
+        ),
+        const Icon(Icons.dark_mode),
+        SizedBox(width: AppDemensions.appSize5),
+      ],
     );
   }
 }
@@ -114,7 +112,7 @@ class MenuItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 height: AppDemensions.appSize150,
                 // width: AppDemensions.appSize200,
                 child: Image.asset(
@@ -125,7 +123,7 @@ class MenuItem extends StatelessWidget {
               Text(
                 ProductType.values[index].name.toUpperCase(),
                 style: GoogleFonts.nanumGothic(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 27,
                   ),

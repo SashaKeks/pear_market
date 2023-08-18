@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/auth_page.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
-import 'package:pear_market/features/loader/presentation/provider/main_view_model.dart';
 import 'package:pear_market/features/menu/presentation/pages/menu_page.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/add_product_other_page.dart';
@@ -44,19 +43,12 @@ class AppNavigation {
           lazy: false,
           child: const AuthPage(),
         ),
-    AppNavigationNames.homePage: (context) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(
-              value: MenuViewModel(
-                context,
-                signOutUseCase: getIt(),
-              ),
-            ),
-            ChangeNotifierProvider.value(
-              value: MainViewModel(getIt(), getIt()),
-            ),
-          ],
-          child: MenuPage(),
+    AppNavigationNames.homePage: (context) => ChangeNotifierProvider(
+          create: (context) => MenuViewModel(
+            context,
+            signOutUseCase: getIt(),
+          ),
+          child: const MenuPage(),
         ),
   };
 

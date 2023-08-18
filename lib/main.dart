@@ -19,7 +19,7 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (_) => MainViewModel(getIt(), getIt()),
-      child: MainPage(),
+      child: const MainPage(),
     ),
   );
 }
