@@ -3,13 +3,14 @@ import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/auth_page.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
-import 'package:pear_market/features/menu/presentation/menu_page.dart';
+import 'package:pear_market/features/loader/presentation/provider/main_view_model.dart';
+import 'package:pear_market/features/menu/presentation/pages/menu_page.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/add_product_other_page.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/provider/add_product_other_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/form_for_product/form_for_product_page.dart';
 import 'package:pear_market/features/products/presentation/pages/form_for_product/provider/form_for_product_view_model.dart';
-import 'package:pear_market/features/menu/presentation/menu/provider/menu_view_model.dart';
+import 'package:pear_market/features/menu/presentation/provider/menu_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/product_detail.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/provider/product_detail_view_model.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
@@ -22,7 +23,7 @@ import '../../features/products/presentation/pages/products/products_page.dart';
 final getIt = GetIt.instance;
 
 class AppNavigationNames {
-  static const String authPage = '/';
+  static const String authPage = '/auth';
   static const String homePage = '/home';
   static const String productList = '/product_list';
   static const String productDetail = '/product_list/product_detail';
@@ -37,15 +38,25 @@ class AppNavigation {
           create: (context) => AuthViewModel(
             context: context,
             signInUseCase: getIt(),
-            signOutUseCase: getIt(),
+            getAuthCredFromSecureStorage: getIt(),
+            addAuthCredToSecureStorage: getIt(),
           ),
           lazy: false,
           child: const AuthPage(),
         ),
-    AppNavigationNames.homePage: (context) => ChangeNotifierProvider(
-          create: (context) => MenuViewModel(context, signOutUseCase: getIt()),
-          lazy: false,
-          child: const MenuPage(),
+    AppNavigationNames.homePage: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(
+              value: MenuViewModel(
+                context,
+                signOutUseCase: getIt(),
+              ),
+            ),
+            ChangeNotifierProvider.value(
+              value: MainViewModel(getIt(), getIt()),
+            ),
+          ],
+          child: MenuPage(),
         ),
   };
 

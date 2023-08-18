@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
       onTap: onTapCard,
       child: Container(
         padding: EdgeInsets.all(AppDemensions.appSize10),
-        color: AppColors.productCardColor,
+        color: Theme.of(context).primaryColorLight,
         child: Column(
           children: [
             Stack(
@@ -32,7 +32,9 @@ class ProductCard extends StatelessWidget {
                   right: 0,
                   child: Container(
                     padding: EdgeInsets.all(AppDemensions.appSize5),
-                    decoration: BoxDecoration(border: Border.all()),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Theme.of(context).primaryColorDark)),
                     child: Center(
                       child: Text(
                         product.condition.name,
@@ -40,7 +42,7 @@ class ProductCard extends StatelessWidget {
                           textStyle: TextStyle(
                             fontSize: AppDemensions.appSize20,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).primaryColorDark,
                           ),
                         ),
                       ),
@@ -79,9 +81,10 @@ class ProductCard extends StatelessWidget {
                       child: Text(
                         'SELL',
                         style: GoogleFonts.montserrat(
-                          fontSize: AppDemensions.appSize20,
-                          fontWeight: FontWeight.w600,
-                        ),
+                            fontSize: AppDemensions.appSize20,
+                            fontWeight: FontWeight.w600,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color),
                       ),
                     ),
                   )

@@ -41,7 +41,7 @@ class ProductDetailPage extends StatelessWidget {
                   enableInfiniteScroll: false,
                   enlargeCenterPage: false,
                 ),
-                items: [1].map(
+                items: [1, 2].map(
                   (i) {
                     return Builder(
                       builder: (BuildContext context) {

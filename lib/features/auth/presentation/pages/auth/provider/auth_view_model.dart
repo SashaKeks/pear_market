@@ -1,33 +1,66 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/error/failure.dart';
+import 'package:pear_market/core/resources/app_constants.dart';
 import 'package:pear_market/core/service/service_navigation.dart';
+import 'package:pear_market/features/auth/domain/usecase/add_auth_cred_to_secure_storage.dart';
+import 'package:pear_market/features/auth/domain/usecase/get_auth_cred_from_secure_storage_use_case.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_in_usecase.dart';
-import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
+import 'package:pear_market/features/auth/presentation/pages/auth/provider/biometrick_service.dart';
 
 enum AuthStatus { none, progress, success, failed }
 
 class AuthViewModel extends ChangeNotifier {
   String _login = "";
   String _password = "";
+  bool _secureStorageData = false;
+  final GetAuthCredFromSecureStorage getAuthCredFromSecureStorage;
+  final AddAuthCredToSecureStorage addAuthCredToSecureStorage;
   String _errorMessage = "";
   User? _user;
   String get eror => _errorMessage;
 
   AuthStatus _authStatus = AuthStatus.none;
-  final SignOutUseCase signOutUseCase;
   final SignInUseCase signInUseCase;
   final BuildContext context;
 
   AuthViewModel(
       {required this.signInUseCase,
-      required this.signOutUseCase,
-      required this.context}) {}
+      required this.context,
+      required this.addAuthCredToSecureStorage,
+      required this.getAuthCredFromSecureStorage}) {
+    canAuthBiometrick();
+  }
 
   AuthStatus get authStatus => _authStatus;
+  bool get showBiometrickButton => _secureStorageData;
+
+  Future<void> getDataFromSecureStorage() async {
+    final result = await getAuthCredFromSecureStorage();
+    if (result != null) {
+      _login = result[AppConstants.loginSecStorageKey]!;
+      _password = result[AppConstants.passwordSecStorageKey]!;
+    } else {}
+    notifyListeners();
+  }
+
+  Future<void> canAuthBiometrick() async {
+    if (await BiometrickAuth.canAuthenticate()) {
+      _secureStorageData = true;
+    } else {
+      _secureStorageData = false;
+    }
+    notifyListeners();
+  }
 
   Future<void> loginCheacker() async {
-    //// biometrik and get from secure storage login and password
+    if (await BiometrickAuth.didAuthenticate()) {
+      await getDataFromSecureStorage();
+      onLoginButtonPress();
+    } else {
+      _errorMessage = "Your device have no biometrick";
+      changeAuthStatus(AuthStatus.failed);
+    }
   }
 
   void onLoginButtonPress() async {
@@ -43,6 +76,7 @@ class AuthViewModel extends ChangeNotifier {
     if (_user != null) {
       changeAuthStatus(AuthStatus.success);
       goToPage();
+      addAuthCredToSecureStorage(login: _login, password: _password);
     }
   }
 

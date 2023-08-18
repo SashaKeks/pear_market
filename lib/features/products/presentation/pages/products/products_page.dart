@@ -63,7 +63,11 @@ class ProductsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: context.read<ProductViewModel>().onAddProductButtonPress,
-        child: Icon(Icons.add, size: AppDemensions.appSize25),
+        child: Icon(
+          Icons.add,
+          size: AppDemensions.appSize25,
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
       ),
     );
   }

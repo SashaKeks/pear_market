@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
 import 'package:pear_market/features/auth/presentation/widgets/custom_form_field.dart';
@@ -10,6 +11,7 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColorLight,
       body: Padding(
           padding: EdgeInsets.all(AppDemensions.appSize50),
           child: Builder(
@@ -22,9 +24,7 @@ class AuthPage extends StatelessWidget {
                 case AuthStatus.success:
                 case AuthStatus.progress:
                   return const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.black,
-                    ),
+                    child: CircularProgressIndicator(),
                   );
               }
             },
@@ -44,9 +44,9 @@ class AuthForm extends StatelessWidget {
         children: [
           Text(
             "SIGN IN",
-            style: TextStyle(fontSize: AppDemensions.appSize25),
+            style: GoogleFonts.nanumGothic(fontSize: AppDemensions.appSize25),
           ),
-          SizedBox(height: AppDemensions.appSize20),
+          SizedBox(height: AppDemensions.appSize25),
           CustomTextFormField(
             iconData: Icons.person_outline_outlined,
             onChanged: context.read<AuthViewModel>().onLoginChange,
@@ -61,39 +61,34 @@ class AuthForm extends StatelessWidget {
           SizedBox(height: AppDemensions.appSize20),
           Text(context.watch<AuthViewModel>().eror),
           SizedBox(height: AppDemensions.appSize20),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              height: AppDemensions.appSize50,
-              padding: EdgeInsets.all(AppDemensions.appSize10),
-              decoration: BoxDecoration(
-                color: Colors.purple.shade100,
-                borderRadius: BorderRadius.circular(AppDemensions.appSize5),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Забули пароль?"),
-                  Icon(Icons.keyboard_double_arrow_right_sharp),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: AppDemensions.appSize20),
           Container(
             width: double.infinity,
             child: ElevatedButton(
-              style: const ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll(Color.fromARGB(255, 21, 5, 47)),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(
+                    Theme.of(context).primaryColorDark),
               ),
               onPressed: context.read<AuthViewModel>().onLoginButtonPress,
               child: Padding(
                 padding: EdgeInsets.all(AppDemensions.appSize20),
-                child: const Text("LOGIN"),
+                child: Text(
+                  "LOGIN",
+                  style: GoogleFonts.nanumGothic(
+                      color: Theme.of(context).textTheme.bodyMedium?.color),
+                ),
               ),
             ),
-          )
+          ),
+          SizedBox(height: AppDemensions.appSize20),
+          !context.watch<AuthViewModel>().showBiometrickButton
+              ? const SizedBox()
+              : Center(
+                  child: IconButton(
+                    iconSize: AppDemensions.appSize50,
+                    onPressed: context.read<AuthViewModel>().loginCheacker,
+                    icon: const Icon(Icons.fingerprint),
+                  ),
+                ),
         ],
       ),
     );

@@ -1,8 +1,17 @@
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/features/auth/data/repository/auth_ropository_impl.dart';
+import 'package:pear_market/features/auth/data/repository/auth_secure_storage_repository_impl.dart';
 import 'package:pear_market/features/auth/domain/repository/auth_repository.dart';
+import 'package:pear_market/features/auth/domain/repository/auth_secure_storage_repository.dart';
+import 'package:pear_market/features/auth/domain/usecase/add_auth_cred_to_secure_storage.dart';
+import 'package:pear_market/features/auth/domain/usecase/get_auth_cred_from_secure_storage_use_case.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_in_usecase.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
+import 'package:pear_market/features/loader/data/repository/theme_repository_impl.dart';
+import 'package:pear_market/features/loader/data/source/theme_data_source.dart';
+import 'package:pear_market/features/loader/domain/repository/theme_repository.dart';
+import 'package:pear_market/features/loader/domain/usecase/get_theme_mode_use_case.dart';
+import 'package:pear_market/features/loader/domain/usecase/set_theme_mode_use_case.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source_impl.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_create_source.dart';
@@ -75,11 +84,28 @@ class ServicesLocator {
     getIt.registerLazySingleton(
       () => SignOutUseCase(getIt()),
     );
+    getIt.registerLazySingleton(
+      () => AddAuthCredToSecureStorage(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => GetAuthCredFromSecureStorage(getIt()),
+    );
+
+    ///theme
+    getIt.registerLazySingleton(
+      () => GetThemeModeUseCase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => SetThemeModeUseCase(getIt()),
+    );
 
     ///repositories
     //auth
     getIt.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(),
+    );
+    getIt.registerLazySingleton<AuthSecureStorageRepository>(
+      () => AuthSecureStorageRepositoryImpl(),
     );
     //product
     getIt.registerLazySingleton<ProductBaseRepositoryImpl>(
@@ -89,6 +115,11 @@ class ServicesLocator {
       () => ProductParametersRepositoryImpl(getIt()),
     );
 
+    ///theme
+    getIt.registerLazySingleton<ThemeRepository>(
+      () => ThemeRepositoryImpl(getIt()),
+    );
+
     //datasources
     getIt.registerLazySingleton<ProducBaseRemoteDataSource>(
       () => ProductBaseRemoteDataSourceImpl(),
@@ -96,8 +127,10 @@ class ServicesLocator {
     getIt.registerLazySingleton<RemoteProductCreateSource>(
       () => RemoteProductCreateSource(),
     );
-    // getIt.registerLazySingleton<LocalProductCreateSource>(
-    //   () => LocalProductCreateSource(),
-    // );
+
+    //theme
+    getIt.registerLazySingleton<ThemeDataSource>(
+      () => ThemeDataSource(),
+    );
   }
 }
