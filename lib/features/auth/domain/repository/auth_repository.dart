@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dartz/dartz.dart';
+import 'package:pear_market/core/error/failure.dart';
+import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
 
 abstract class AuthRepository {
-  Future<User?> signIn({
+  Future<Either<Failure, CustomUser?>> signIn({
     required String login,
     required String password,
   });
-  Future<void> signOut();
+  Future<Either<Failure, void>> signOut();
 }

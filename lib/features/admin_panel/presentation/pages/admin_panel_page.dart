@@ -13,11 +13,9 @@ class AdminPanelPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(AppDemensions.appSize10),
-        child: Column(
+        child: const Column(
           children: [
-            Container(
-              child: UserListWidget(),
-            ),
+            UserListWidget(),
             SizedBox(height: 20),
             AddUserButton(),
           ],
@@ -63,7 +61,7 @@ class UserButtonDetail extends StatelessWidget {
           SlidableAction(
             onPressed: (context) =>
                 context.read<AdminPanelViewModel>().deleteUser(index),
-            backgroundColor: Color(0xFFFE4A49),
+            backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
@@ -77,7 +75,7 @@ class UserButtonDetail extends StatelessWidget {
             flex: 2,
             onPressed: (context) =>
                 context.read<AdminPanelViewModel>().updateUser(index),
-            backgroundColor: Color(0xFF7BC043),
+            backgroundColor: const Color(0xFF7BC043),
             foregroundColor: Colors.white,
             icon: Icons.edit,
             label: 'Edit',

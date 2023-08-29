@@ -1,13 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/core/service/page_factory.dart';
 import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/admin_panel/presentation/pages/admin_panel_page.dart';
+import 'package:pear_market/features/auth/data/repository/auth_ropository_impl.dart';
+import 'package:pear_market/features/auth/domain/repository/auth_repository.dart';
 import 'package:pear_market/features/main_app/presentation/provider/main_view_model.dart';
 import 'package:pear_market/features/menu/presentation/provider/menu_view_model.dart';
 import 'package:provider/provider.dart';
+
+final getIt = GetIt.instance;
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -19,9 +22,9 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   int currentPageIndex = 0;
   final pages = <Widget>[
-    TypeMenu(),
-    Placeholder(),
-    Placeholder(),
+    const TypeMenu(),
+    const Placeholder(),
+    const Placeholder(),
     PageFactory.createAdminPanel(),
   ];
 
@@ -29,7 +32,7 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser?.email);
+    print((getIt<AuthRepository>() as AuthRepositoryImpl).currentUser?.email);
     return Scaffold(
       appBar: AppBar(
         title: Text(titles[currentPageIndex]),

@@ -25,10 +25,12 @@ class MenuViewModel extends ChangeNotifier {
     }
   }
 
-  void onSignOutButonPress() {
-    signOutUseCase();
-    Navigator.pushNamedAndRemoveUntil(
-        context, AppNavigationNames.authPage, (route) => false);
+  void onSignOutButonPress() async {
+    final result = await signOutUseCase();
+    result.fold((l) => print(l.errorMessage), (_) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppNavigationNames.authPage, (route) => false);
+    });
   }
 
   void onThemeSwitcher() {}

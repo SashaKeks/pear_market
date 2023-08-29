@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/error/failure.dart';
 import 'package:pear_market/core/resources/app_constants.dart';
 import 'package:pear_market/core/service/service_navigation.dart';
+import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
 import 'package:pear_market/features/auth/domain/usecase/add_auth_cred_to_secure_storage.dart';
 import 'package:pear_market/features/auth/domain/usecase/get_auth_cred_from_secure_storage_use_case.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_in_usecase.dart';
@@ -17,7 +17,7 @@ class AuthViewModel extends ChangeNotifier {
   final GetAuthCredFromSecureStorage getAuthCredFromSecureStorage;
   final AddAuthCredToSecureStorage addAuthCredToSecureStorage;
   String _errorMessage = "";
-  User? _user;
+  CustomUser? _user;
   String get eror => _errorMessage;
 
   AuthStatus _authStatus = AuthStatus.none;
@@ -70,7 +70,8 @@ class AuthViewModel extends ChangeNotifier {
     _errorMessage = "";
     changeAuthStatus(AuthStatus.progress);
     try {
-      _user = await signInUseCase(login: _login, password: _password);
+      final result = await signInUseCase(login: _login, password: _password);
+      result.fold((l) => throw l, (r) => _user = r);
     } on Failure catch (e) {
       _errorMessage = e.errorMessage;
       changeAuthStatus(AuthStatus.failed);

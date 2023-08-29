@@ -14,7 +14,6 @@ class BiometrickAuth {
     try {
       final List<BiometricType> availableBiometrics =
           await _auth.getAvailableBiometrics();
-      print(availableBiometrics);
       if (availableBiometrics.contains(BiometricType.fingerprint) ||
           availableBiometrics.contains(BiometricType.face)) {
         return await _auth.authenticate(
@@ -44,7 +43,6 @@ class BiometrickAuth {
             ]);
       }
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }

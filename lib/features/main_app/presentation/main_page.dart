@@ -15,7 +15,7 @@ class MainPage extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: state.isDark ? ThemeMode.dark : ThemeMode.light,
-        initialRoute: AppNavigationNames.homePage,
+        initialRoute: AppNavigationNames.authPage,
         routes: AppNavigation.routes,
         onGenerateRoute: AppNavigation.onGenerateRoute,
       ),

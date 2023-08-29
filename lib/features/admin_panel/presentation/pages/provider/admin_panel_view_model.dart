@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/create_user_usecase.dart';
@@ -28,6 +27,7 @@ class AdminPanelViewModel with ChangeNotifier {
     email: "email@gmail.com",
     password: "password",
     access: Access.user,
+    isAuth: false,
   );
 
   int get userCount => _userList.length;
@@ -60,6 +60,7 @@ class AdminPanelViewModel with ChangeNotifier {
   }
 
   Future<void> updateUser(int index) async {
+    _updateUserUsecase(userList[index]);
     print('edit user $index');
   }
 
