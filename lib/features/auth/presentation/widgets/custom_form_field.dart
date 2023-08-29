@@ -6,7 +6,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool isPassword;
   final void Function(String)? onChanged;
 
-  CustomTextFormField(
+  const CustomTextFormField(
       {super.key,
       required this.iconData,
       required this.onChanged,

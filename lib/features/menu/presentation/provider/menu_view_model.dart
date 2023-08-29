@@ -12,10 +12,17 @@ class MenuViewModel extends ChangeNotifier {
   });
 
   Future<void> onMenuItemTap(int index) async {
-    await Navigator.of(context).pushNamed(
-      AppNavigationNames.productList,
-      arguments: ProductType.values[index],
-    );
+    if (ProductType.values[index] == ProductType.other) {
+      await Navigator.of(context).pushNamed(
+        AppNavigationNames.productList,
+        arguments: ProductType.values[index],
+      );
+    } else {
+      await Navigator.of(context).pushNamed(
+        AppNavigationNames.subMenu,
+        arguments: ProductType.values[index],
+      );
+    }
   }
 
   void onSignOutButonPress() {

@@ -1,49 +1,57 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
+import 'package:pear_market/core/service/page_factory.dart';
 import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/loader/presentation/provider/main_view_model.dart';
+import 'package:pear_market/features/admin_panel/presentation/pages/admin_panel_page.dart';
+import 'package:pear_market/features/main_app/presentation/provider/main_view_model.dart';
 import 'package:pear_market/features/menu/presentation/provider/menu_view_model.dart';
 import 'package:provider/provider.dart';
 
-class MenuPage extends StatelessWidget {
+class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
   @override
+  State<MenuPage> createState() => _MenuPageState();
+}
+
+class _MenuPageState extends State<MenuPage> {
+  int currentPageIndex = 0;
+  final pages = <Widget>[
+    TypeMenu(),
+    Placeholder(),
+    Placeholder(),
+    PageFactory.createAdminPanel(),
+  ];
+
+  final titles = const <String>['MENU', 'STATISTIC', "INFO", "ADMIN PANEL"];
+
+  @override
   Widget build(BuildContext context) {
+    print(FirebaseAuth.instance.currentUser?.email);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("MENU"),
+        title: Text(titles[currentPageIndex]),
         centerTitle: true,
+        leading: const ThemeModeSwitcher(),
         actions: [
-          const ThemeModeSwitcher(),
           IconButton(
             onPressed: context.read<MenuViewModel>().onSignOutButonPress,
             icon: const Icon(Icons.exit_to_app),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: AppDemensions.appSize10,
-            ),
-            Wrap(
-              children: List.generate(
-                ProductType.values.length,
-                (index) => MenuItem(index: index),
-              ),
-            )
-          ],
-        ),
-      ),
+      body: pages[currentPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
         type: BottomNavigationBarType.fixed,
-        // fixedColor: Theme.of(context).primaryColorLight,
         fixedColor: Colors.white,
         unselectedItemColor: Theme.of(context).primaryColorLight,
+        currentIndex: currentPageIndex,
+        onTap: (value) => setState(() {
+          currentPageIndex = value;
+        }),
         items: const [
           BottomNavigationBarItem(
             label: "Home",
@@ -67,6 +75,29 @@ class MenuPage extends StatelessWidget {
   }
 }
 
+class TypeMenu extends StatelessWidget {
+  const TypeMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: AppDemensions.appSize10,
+          ),
+          Wrap(
+            children: List.generate(
+              ProductType.values.length,
+              (index) => MenuItem(index: index),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class ThemeModeSwitcher extends StatelessWidget {
   const ThemeModeSwitcher({
     super.key,
@@ -74,19 +105,11 @@ class ThemeModeSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        const Icon(Icons.light_mode),
-        Switch(
-          value: context.watch<MainViewModel>().isDark,
-          activeColor: Theme.of(context).primaryColorLight,
-          inactiveThumbColor: Theme.of(context).primaryColorLight,
-          onChanged: context.read<MainViewModel>().changeThemeMode,
-        ),
-        const Icon(Icons.dark_mode),
-        SizedBox(width: AppDemensions.appSize5),
-      ],
+    return IconButton(
+      onPressed: context.read<MainViewModel>().changeThemeMode,
+      icon: Icon(context.watch<MainViewModel>().isDark
+          ? Icons.light_mode
+          : Icons.dark_mode),
     );
   }
 }

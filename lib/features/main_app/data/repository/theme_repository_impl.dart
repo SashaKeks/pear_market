@@ -1,6 +1,6 @@
 import 'package:pear_market/core/error/failure.dart';
-import 'package:pear_market/features/loader/data/source/theme_data_source.dart';
-import 'package:pear_market/features/loader/domain/repository/theme_repository.dart';
+import 'package:pear_market/features/main_app/data/source/theme_data_source.dart';
+import 'package:pear_market/features/main_app/domain/repository/theme_repository.dart';
 
 class ThemeRepositoryImpl implements ThemeRepository {
   final ThemeDataSource _dataSource;

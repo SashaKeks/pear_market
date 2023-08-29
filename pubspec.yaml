@@ -48,6 +48,8 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   local_auth: ^2.1.6
   shared_preferences: ^2.2.0
+  dotted_border: ^2.0.0+3
+  flutter_slidable: ^3.0.0
   
 dependency_overrides:
   firebase_core_platform_interface: 4.8.0

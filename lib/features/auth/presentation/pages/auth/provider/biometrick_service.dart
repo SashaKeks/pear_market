@@ -12,19 +12,39 @@ class BiometrickAuth {
   static Future<bool> didAuthenticate() async {
     if (!await canAuthenticate()) return false;
     try {
-      return await _auth.authenticate(
-          localizedReason: 'Please authenticate to show account balance',
-          options: const AuthenticationOptions(biometricOnly: true),
-          authMessages: const <AuthMessages>[
-            AndroidAuthMessages(
-              signInTitle: 'Oops! Biometric authentication required!',
-              cancelButton: 'No thanks',
-            ),
-            IOSAuthMessages(
-              cancelButton: 'No thanks',
-            ),
-          ]);
+      final List<BiometricType> availableBiometrics =
+          await _auth.getAvailableBiometrics();
+      print(availableBiometrics);
+      if (availableBiometrics.contains(BiometricType.fingerprint) ||
+          availableBiometrics.contains(BiometricType.face)) {
+        return await _auth.authenticate(
+            localizedReason: 'Please authenticate to enter the app',
+            options: const AuthenticationOptions(biometricOnly: true),
+            authMessages: const <AuthMessages>[
+              AndroidAuthMessages(
+                signInTitle: 'Oops! Biometric authentication required!',
+                cancelButton: 'No thanks',
+              ),
+              IOSAuthMessages(
+                cancelButton: 'No thanks',
+              ),
+            ]);
+      } else {
+        return await _auth.authenticate(
+            localizedReason: 'Please authenticate to enter the app',
+            options: const AuthenticationOptions(biometricOnly: false),
+            authMessages: const <AuthMessages>[
+              AndroidAuthMessages(
+                signInTitle: 'Oops! Biometric authentication required!',
+                cancelButton: 'No thanks',
+              ),
+              IOSAuthMessages(
+                cancelButton: 'No thanks',
+              ),
+            ]);
+      }
     } catch (e) {
+      print(e.toString());
       return false;
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pear_market/features/loader/domain/usecase/get_theme_mode_use_case.dart';
-import 'package:pear_market/features/loader/domain/usecase/set_theme_mode_use_case.dart';
+import 'package:pear_market/features/main_app/domain/usecase/get_theme_mode_use_case.dart';
+import 'package:pear_market/features/main_app/domain/usecase/set_theme_mode_use_case.dart';
 
 class MainViewModel with ChangeNotifier {
   late bool _isDark;
@@ -16,9 +16,9 @@ class MainViewModel with ChangeNotifier {
     getPreferences();
   }
 
-  Future<void> changeThemeMode(bool value) async {
-    _isDark = value;
-    await _setThemeModeUseCase(themeMode: value);
+  Future<void> changeThemeMode() async {
+    _isDark = !_isDark;
+    await _setThemeModeUseCase(themeMode: _isDark);
     notifyListeners();
   }
 

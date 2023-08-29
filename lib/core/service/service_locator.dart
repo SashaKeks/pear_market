@@ -1,4 +1,11 @@
 import 'package:get_it/get_it.dart';
+import 'package:pear_market/features/admin_panel/data/datasource/users_datasource.dart';
+import 'package:pear_market/features/admin_panel/data/repository/users_repository_impl.dart';
+import 'package:pear_market/features/admin_panel/domain/repository/users_repository.dart';
+import 'package:pear_market/features/admin_panel/domain/usecase/create_user_usecase.dart';
+import 'package:pear_market/features/admin_panel/domain/usecase/delete_user_usecase.dart';
+import 'package:pear_market/features/admin_panel/domain/usecase/get_all_users_usecase.dart';
+import 'package:pear_market/features/admin_panel/domain/usecase/update_user_usecase.dart';
 import 'package:pear_market/features/auth/data/repository/auth_ropository_impl.dart';
 import 'package:pear_market/features/auth/data/repository/auth_secure_storage_repository_impl.dart';
 import 'package:pear_market/features/auth/domain/repository/auth_repository.dart';
@@ -7,11 +14,15 @@ import 'package:pear_market/features/auth/domain/usecase/add_auth_cred_to_secure
 import 'package:pear_market/features/auth/domain/usecase/get_auth_cred_from_secure_storage_use_case.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_in_usecase.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
-import 'package:pear_market/features/loader/data/repository/theme_repository_impl.dart';
-import 'package:pear_market/features/loader/data/source/theme_data_source.dart';
-import 'package:pear_market/features/loader/domain/repository/theme_repository.dart';
-import 'package:pear_market/features/loader/domain/usecase/get_theme_mode_use_case.dart';
-import 'package:pear_market/features/loader/domain/usecase/set_theme_mode_use_case.dart';
+import 'package:pear_market/features/main_app/data/repository/theme_repository_impl.dart';
+import 'package:pear_market/features/main_app/data/source/theme_data_source.dart';
+import 'package:pear_market/features/main_app/domain/repository/theme_repository.dart';
+import 'package:pear_market/features/main_app/domain/usecase/get_theme_mode_use_case.dart';
+import 'package:pear_market/features/main_app/domain/usecase/set_theme_mode_use_case.dart';
+import 'package:pear_market/features/menu/data/repository/generation_repository_impl.dart';
+import 'package:pear_market/features/menu/data/source/generation_source.dart';
+import 'package:pear_market/features/menu/domain/repository/generation_repository.dart';
+import 'package:pear_market/features/menu/domain/usecase/get_generations_usecase.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source_impl.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_create_source.dart';
@@ -90,6 +101,19 @@ class ServicesLocator {
     getIt.registerLazySingleton(
       () => GetAuthCredFromSecureStorage(getIt()),
     );
+    //users usecase
+    getIt.registerLazySingleton(
+      () => GetAllUsersUsecase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => CreateUserUsecase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => DeleteUserUsecase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => UpdateUserUsecase(getIt()),
+    );
 
     ///theme
     getIt.registerLazySingleton(
@@ -97,6 +121,11 @@ class ServicesLocator {
     );
     getIt.registerLazySingleton(
       () => SetThemeModeUseCase(getIt()),
+    );
+
+    ///generation
+    getIt.registerLazySingleton(
+      () => GetGenerationsUseCase(getIt()),
     );
 
     ///repositories
@@ -120,6 +149,15 @@ class ServicesLocator {
       () => ThemeRepositoryImpl(getIt()),
     );
 
+    ///generation
+    getIt.registerLazySingleton<GenerationRepository>(
+      () => GenerationRepositoryImpl(getIt()),
+    );
+
+    /// users
+    getIt.registerLazySingleton<UsersRepository>(
+      () => UsersRepositoryImpl(getIt()),
+    );
     //datasources
     getIt.registerLazySingleton<ProducBaseRemoteDataSource>(
       () => ProductBaseRemoteDataSourceImpl(),
@@ -131,6 +169,16 @@ class ServicesLocator {
     //theme
     getIt.registerLazySingleton<ThemeDataSource>(
       () => ThemeDataSource(),
+    );
+
+    ///generation
+    getIt.registerLazySingleton<GenerationSource>(
+      () => GenerationSource(),
+    );
+
+    //users
+    getIt.registerLazySingleton<UsersDataSource>(
+      () => UsersDataSource(),
     );
   }
 }

@@ -4,6 +4,8 @@ import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/auth_page.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
 import 'package:pear_market/features/menu/presentation/pages/menu_page.dart';
+import 'package:pear_market/features/menu/presentation/pages/sub_menu_page.dart';
+import 'package:pear_market/features/menu/presentation/provider/sub_menu_view_model.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/add_product_other_page.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/provider/add_product_other_view_model.dart';
@@ -24,6 +26,7 @@ final getIt = GetIt.instance;
 class AppNavigationNames {
   static const String authPage = '/auth';
   static const String homePage = '/home';
+  static const String subMenu = '/home/submenu';
   static const String productList = '/product_list';
   static const String productDetail = '/product_list/product_detail';
   static const String formForProduct = '/form_for_product';
@@ -48,12 +51,20 @@ class AppNavigation {
             context,
             signOutUseCase: getIt(),
           ),
-          child: const MenuPage(),
+          child: MenuPage(),
         ),
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case AppNavigationNames.subMenu:
+        final subMenuType = settings.arguments as ProductType;
+        return MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+                  create: (context) => SubMenuViewModel(getIt(),
+                      subMenuType: subMenuType, context: context),
+                  child: const SubMenuPage(),
+                ));
       case AppNavigationNames.productList:
         final ProductType productType = settings.arguments as ProductType;
         return MaterialPageRoute(

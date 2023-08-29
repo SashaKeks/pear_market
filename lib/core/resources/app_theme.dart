@@ -4,10 +4,11 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     primarySwatch: _createMaterialColor(const Color(0xffadc178)),
     scaffoldBackgroundColor: const Color(0xfffefae0),
-    textTheme: const TextTheme(
-      bodyMedium: TextStyle(
-        color: Color.fromARGB(255, 253, 252, 252),
+    textTheme: TextTheme(
+      bodyMedium: const TextStyle(
+        color: Color.fromARGB(255, 255, 255, 255),
       ),
+      titleSmall: TextStyle(color: Colors.lightGreen[800]),
     ),
     appBarTheme: const AppBarTheme(foregroundColor: Colors.white),
   );
@@ -18,6 +19,7 @@ class AppTheme {
       bodyMedium: TextStyle(
         color: Color.fromARGB(255, 253, 252, 252),
       ),
+      titleSmall: TextStyle(color: Colors.white),
     ),
     appBarTheme: const AppBarTheme(foregroundColor: Colors.white),
   );

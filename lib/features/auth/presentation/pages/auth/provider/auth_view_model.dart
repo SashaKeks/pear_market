@@ -45,20 +45,23 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> canAuthBiometrick() async {
+    _errorMessage = "";
     if (await BiometrickAuth.canAuthenticate()) {
       _secureStorageData = true;
     } else {
       _secureStorageData = false;
+      _errorMessage = "Your device have no biometrick";
     }
     notifyListeners();
   }
 
   Future<void> loginCheacker() async {
+    _errorMessage = "";
     if (await BiometrickAuth.didAuthenticate()) {
       await getDataFromSecureStorage();
       onLoginButtonPress();
     } else {
-      _errorMessage = "Your device have no biometrick";
+      _errorMessage = "Somthing was wrong, try again";
       changeAuthStatus(AuthStatus.failed);
     }
   }
