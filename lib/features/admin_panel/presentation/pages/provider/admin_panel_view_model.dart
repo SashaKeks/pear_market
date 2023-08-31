@@ -1,6 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:pear_market/core/error/failure.dart';
+import 'package:pear_market/core/service/service_navigation.dart';
 import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
-import 'package:pear_market/features/admin_panel/domain/usecase/create_user_usecase.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/delete_user_usecase.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/get_all_users_usecase.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/update_user_usecase.dart';
@@ -11,13 +14,13 @@ class AdminPanelViewModel with ChangeNotifier {
   final GetAllUsersUsecase _getAllUsersUsecase;
   final DeleteUserUsecase _deleteUserUsecase;
   final UpdateUserUsecase _updateUserUsecase;
-  final CreateUserUsecase _createUserUsecase;
+  final BuildContext context;
   AdminPanelViewModel(
     this._getAllUsersUsecase,
-    this._createUserUsecase,
     this._deleteUserUsecase,
-    this._updateUserUsecase,
-  ) {
+    this._updateUserUsecase, {
+    required this.context,
+  }) {
     getAllUsers();
   }
   final user = CustomUser(
@@ -48,20 +51,23 @@ class AdminPanelViewModel with ChangeNotifier {
     result.fold((l) => print(l.errorMessage), (_) {});
     getAllUsers();
     notifyListeners();
-    print("delete user");
   }
 
   Future<void> createUser() async {
-    final result = await _createUserUsecase(user);
-    result.fold((l) => print(l.errorMessage), (_) {});
-    print('create user');
+    final result =
+        (await Navigator.pushNamed(context, AppNavigationNames.regPage))
+            as Either<Failure, void>?;
+    result?.fold((l) => print(l.errorMessage), (_) {});
     getAllUsers();
     notifyListeners();
   }
 
   Future<void> updateUser(int index) async {
-    _updateUserUsecase(userList[index]);
-    print('edit user $index');
+    await Navigator.pushNamed(
+      context,
+      AppNavigationNames.regPage,
+      arguments: userList[index],
+    );
   }
 
   Future<void> openUserDetail() async {}

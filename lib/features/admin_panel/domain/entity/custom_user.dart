@@ -16,10 +16,19 @@ class CustomUser {
       required this.email,
       required this.password,
       required this.access,
-      required this.isAuth});
+      this.isAuth = false});
 
   String get fullName => "$name $surname";
-
+  factory CustomUser.empty() {
+    return CustomUser(
+        name: "",
+        surname: "",
+        phone: "",
+        email: "",
+        password: "",
+        access: Access.user,
+        isAuth: false);
+  }
   factory CustomUser.fromJson(Map<String, dynamic> json) {
     return CustomUser(
         id: json["id"],

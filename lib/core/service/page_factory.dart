@@ -9,12 +9,8 @@ final getIt = GetIt.instance;
 class PageFactory {
   static Widget createAdminPanel() {
     return ChangeNotifierProvider(
-      create: (context) => AdminPanelViewModel(
-        getIt(),
-        getIt(),
-        getIt(),
-        getIt(),
-      ),
+      create: (context) =>
+          AdminPanelViewModel(getIt(), getIt(), getIt(), context: context),
       child: const AdminPanelPage(),
     );
   }

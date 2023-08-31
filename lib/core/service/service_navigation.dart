@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/auth_page.dart';
 import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
+import 'package:pear_market/features/auth/presentation/pages/reg/provider/reg_view_model.dart';
+import 'package:pear_market/features/auth/presentation/pages/reg/reg_page.dart';
 import 'package:pear_market/features/menu/presentation/pages/menu_page.dart';
 import 'package:pear_market/features/menu/presentation/pages/sub_menu_page.dart';
 import 'package:pear_market/features/menu/presentation/provider/sub_menu_view_model.dart';
@@ -25,6 +28,7 @@ final getIt = GetIt.instance;
 
 class AppNavigationNames {
   static const String authPage = '/auth';
+  static const String regPage = '/reg';
   static const String homePage = '/home';
   static const String subMenu = '/home/submenu';
   static const String productList = '/product_list';
@@ -64,6 +68,18 @@ class AppNavigation {
                   create: (context) => SubMenuViewModel(getIt(),
                       subMenuType: subMenuType, context: context),
                   child: const SubMenuPage(),
+                ));
+      case AppNavigationNames.regPage:
+        final user = settings.arguments as CustomUser?;
+        return MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+                  create: (context) => RegViewModel(
+                    user,
+                    getIt(),
+                    getIt(),
+                    context: context,
+                  ),
+                  child: const RegPage(),
                 ));
       case AppNavigationNames.productList:
         final ProductType productType = settings.arguments as ProductType;

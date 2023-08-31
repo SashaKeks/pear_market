@@ -26,7 +26,7 @@ class UsersDataSource {
   Future<List<CustomUser>> getAllUsers() {
     CollectionReference users =
         FirebaseFirestore.instance.collection(AppConstants.usersDB);
-    final result = users.get().then(
+    final result = users.where("access", isNotEqualTo: 0).get().then(
       (value) {
         if (value.docs.isNotEmpty) {
           return value.docs
