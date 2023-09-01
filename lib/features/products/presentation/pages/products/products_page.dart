@@ -14,61 +14,73 @@ class ProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final productList = context.watch<ProductViewModel>().state.productList;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          context.watch<ProductViewModel>().productType.name.toUpperCase(),
+        appBar: AppBar(
+          title: Text(
+            context
+                .watch<ProductViewModel>()
+                .generation
+                .type!
+                .name
+                .toUpperCase(),
+          ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  final filter = await showModalBottomSheet(
+                    isDismissible: false,
+                    context: context,
+                    builder: (_) {
+                      return ChangeNotifierProvider.value(
+                        value: Provider.of<ProductViewModel>(context),
+                        child: BottomSheetFilter(
+                          savedFilter:
+                              context.watch<ProductViewModel>().state.filter,
+                        ),
+                      );
+                    },
+                  );
+                  context
+                      .read<ProductViewModel>()
+                      .onFilterButtonPress(filter as FilterEntity?);
+                },
+                icon: const Icon(Icons.filter_alt_outlined))
+          ],
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () async {
-                final filter = await showModalBottomSheet(
-                  isDismissible: true,
-                  context: context,
-                  builder: (_) {
-                    return ChangeNotifierProvider.value(
-                      value: Provider.of<ProductViewModel>(context),
-                      child: BottomSheetFilter(
-                        savedFilter:
-                            context.watch<ProductViewModel>().state.filter,
-                      ),
-                    );
-                  },
-                );
-                context
+        body: Container(
+          padding: EdgeInsets.all(AppDemensions.appSize20),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: productList.length,
+            itemBuilder: ((context, index) {
+              return ProductCard(
+                product: productList[index],
+                onTapCard: () => context
                     .read<ProductViewModel>()
-                    .onFilterButtonPress(filter as FilterEntity?);
-              },
-              icon: const Icon(Icons.filter_alt_outlined))
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(AppDemensions.appSize20),
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemCount: productList.length,
-          itemBuilder: ((context, index) {
-            return ProductCard(
-              product: productList[index],
-              onTapCard: () =>
-                  context.read<ProductViewModel>().onDetailProductButton(index),
-              onTapSell: () =>
-                  context.read<ProductViewModel>().onSellButtonPress(index),
-            );
-          }),
-          separatorBuilder: (_, index) => SizedBox(
-            height: AppDemensions.appSize20,
+                    .onDetailProductButton(index),
+                onTapSell: () =>
+                    context.read<ProductViewModel>().onSellButtonPress(index),
+              );
+            }),
+            separatorBuilder: (_, index) => SizedBox(
+              height: AppDemensions.appSize20,
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: context.read<ProductViewModel>().onAddProductButtonPress,
-        child: Icon(
-          Icons.add,
-          size: AppDemensions.appSize25,
-          color: Theme.of(context).scaffoldBackgroundColor,
-        ),
-      ),
-    );
+        floatingActionButton: context
+                .watch<ProductViewModel>()
+                .userAccessService
+                .addProductAccess
+            ? FloatingActionButton(
+                backgroundColor: Theme.of(context).primaryColorLight,
+                onPressed:
+                    context.read<ProductViewModel>().onAddProductButtonPress,
+                child: Icon(
+                  Icons.add,
+                  size: AppDemensions.appSize25,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
+              )
+            : const SizedBox());
   }
 }

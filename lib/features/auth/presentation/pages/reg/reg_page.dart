@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
 import 'package:pear_market/features/auth/presentation/pages/reg/provider/reg_view_model.dart';
+import 'package:pear_market/features/main_app/presentation/provider/main_view_model.dart';
 import 'package:provider/provider.dart';
 
 class RegPage extends StatelessWidget {
@@ -12,7 +13,13 @@ class RegPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          context.watch<RegViewModel>().userForUpdate != null
+              ? "UPDATE USER"
+              : "REGISTRATION USER",
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(AppDemensions.appSize20),
@@ -22,13 +29,6 @@ class RegPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    context.watch<RegViewModel>().userForUpdate != null
-                        ? "UPDATE USER"
-                        : "REGISTRATION USER",
-                    style: GoogleFonts.nanumGothic(
-                        fontSize: AppDemensions.appSize25),
-                  ),
                   TextFormField(
                     initialValue:
                         context.watch<RegViewModel>().userForUpdate?.name ?? "",
@@ -110,7 +110,7 @@ class RegPage extends StatelessWidget {
                             "",
                     decoration: InputDecoration(
                         labelText: "Password",
-                        prefixIcon: IconButton(
+                        suffixIcon: IconButton(
                             onPressed: context
                                 .read<RegViewModel>()
                                 .changeShowPasswordButtonPress,
@@ -131,37 +131,50 @@ class RegPage extends StatelessWidget {
                   ),
                   SizedBox(height: AppDemensions.appSize20),
                   DropdownButtonFormField(
+                    // dropdownColor: context.read<MainViewModel>().isDark
+                    //     ? Theme.of(context).primaryColorLight
+                    //     : Theme.of(context).scaffoldBackgroundColor,
                     value:
                         context.watch<RegViewModel>().userForUpdate?.access ??
                             Access.user,
                     key: key,
                     hint: const Text("User access"),
-                    borderRadius:
-                        BorderRadius.circular(AppDemensions.appSize20),
                     icon: const Icon(
                       Icons.keyboard_double_arrow_down_sharp,
                     ),
                     items: Access.values
-                        .map((e) =>
-                            DropdownMenuItem(value: e, child: Text(e.name)))
+                        .map((e) => DropdownMenuItem(
+                            value: e, child: Text(e.name.toUpperCase())))
                         .toList(),
                     onChanged: context.read<RegViewModel>().onChangeAccess,
                   ),
                   SizedBox(height: AppDemensions.appSize20),
-                  InkWell(
-                    onTap: context.read<RegViewModel>().onValidateButtonPress,
-                    child: Container(
-                      padding: EdgeInsets.all(AppDemensions.appSize10),
-                      width: double.infinity,
-                      color: Theme.of(context).primaryColor,
-                      child: Center(
-                          child: Text(
-                              context.watch<RegViewModel>().userForUpdate !=
-                                      null
-                                  ? "UPDATE"
-                                  : "REGISTER")),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).primaryColor),
+                      ),
+                      onPressed:
+                          context.read<RegViewModel>().onValidateButtonPress,
+                      child: Padding(
+                        padding: EdgeInsets.all(AppDemensions.appSize20),
+                        child: Text(
+                          context.watch<RegViewModel>().userForUpdate != null
+                              ? "UPDATE"
+                              : "REGISTER",
+                          style: GoogleFonts.nanumGothic(
+                              textStyle:
+                                  TextStyle(fontSize: AppDemensions.appSize20),
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.color),
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

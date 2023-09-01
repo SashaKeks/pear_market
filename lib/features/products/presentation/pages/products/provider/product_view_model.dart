@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pear_market/core/service/user_access_service.dart';
 
 import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
+import 'package:pear_market/features/admin_panel/domain/usecase/get_user_by_id_usecase.dart';
+import 'package:pear_market/features/menu/domain/entities/generation.dart';
 import 'package:pear_market/features/products/domain/entities/filter_entity.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
@@ -50,7 +54,6 @@ class ProductState {
 
 class ProductViewModel extends ChangeNotifier {
   final BuildContext context;
-  final ProductType productType;
   GlobalKey<FormFieldState> key = GlobalKey<FormFieldState>();
   ProductState _state = ProductState(filter: FilterEntity());
   ProductState get state => _state;
@@ -61,34 +64,49 @@ class ProductViewModel extends ChangeNotifier {
   final GetProductStorageParameterUsecase storageParameterUsecase;
   final GetProductColorParameterUsecase colorParameterUsecase;
   final GetProductVersionParameterUsecase versionParameterUsecase;
-  ProductViewModel({
+  final Generation generation;
+  final UserAccessService userAccessService;
+  final GetUserByIdUsecase getUserByIdUsecase;
+  ProductViewModel(
+    this.userAccessService, {
     required this.getAllProductsUseCase,
     required this.generationParameterUsecase,
     required this.storageParameterUsecase,
     required this.colorParameterUsecase,
     required this.versionParameterUsecase,
     required this.context,
-    required this.productType,
+    required this.generation,
+    required this.getUserByIdUsecase,
   }) {
     init();
+    getProductColor(generation.generation);
   }
   void init() {
+    _state = _state.copyWith(
+        filter:
+            _state.filter.copyWith(generation: () => generation.generation));
     getAllProducts();
 
-    if (productType != ProductType.accessories &&
-        productType != ProductType.other) {
+    if (generation.type != ProductType.accessories &&
+        generation.type != ProductType.other) {
       getProductGeneration();
     }
 
-    if (productType == ProductType.mac ||
-        productType == ProductType.iphone ||
-        productType == ProductType.ipad) {
+    if (generation.type == ProductType.mac ||
+        generation.type == ProductType.iphone ||
+        generation.type == ProductType.ipad) {
       getProductStorage();
     }
   }
 
+  Future<CustomUser> getProductOwner(String userId) async {
+    final result = await getUserByIdUsecase(userId);
+    return result.fold(
+        (l) => showSnackbarInfo(context, "Failed get owner"), (r) => r);
+  }
+
   void getProductGeneration() async {
-    final generations = await generationParameterUsecase(productType.name);
+    final generations = await generationParameterUsecase(generation.type!.name);
     generations.fold(
       (l) => showSnackbarInfo(context, "Failed load generation"),
       (r) => _state = _state.copyWith(generationList: r),
@@ -100,7 +118,7 @@ class ProductViewModel extends ChangeNotifier {
       _state = _state.copyWith(colorList: []);
     } else {
       final colors =
-          await colorParameterUsecase(productType.name, productGeneration);
+          await colorParameterUsecase(generation.type!.name, productGeneration);
       colors.fold(
         (l) => showSnackbarInfo(context, "Failed load colors"),
         (r) => _state = _state.copyWith(colorList: r),
@@ -111,7 +129,7 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductStorage() async {
-    final storages = await storageParameterUsecase(productType.name);
+    final storages = await storageParameterUsecase(generation.type!.name);
     storages.fold(
       (l) => showSnackbarInfo(context, "Failed load storages"),
       (r) => _state = _state.copyWith(storagetList: r),
@@ -120,7 +138,7 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   Future<void> getProductVersion() async {
-    final versions = await versionParameterUsecase(productType.name);
+    final versions = await versionParameterUsecase(generation.type!.name);
     versions.fold(
       (l) => showSnackbarInfo(context, "Failed load versions"),
       (r) => _state = _state.copyWith(versiontList: r),
@@ -135,7 +153,7 @@ class ProductViewModel extends ChangeNotifier {
 
   Future<void> getAllProducts() async {
     final result =
-        await getAllProductsUseCase(productType, _state.filter.toJson());
+        await getAllProductsUseCase(generation.type!, _state.filter.toJson());
     result.fold(
       (l) => showSnackbarInfo(context, "Failed load products"),
       (right) => _state = _state.copyWith(
@@ -155,7 +173,7 @@ class ProductViewModel extends ChangeNotifier {
 
   void onAddProductButtonPress() async {
     await Navigator.pushNamed(context, AppNavigationNames.formForProduct,
-        arguments: productType);
+        arguments: generation.type!);
     getAllProducts();
   }
 

@@ -48,4 +48,14 @@ class UsersRepositoryImpl implements UsersRepository {
       return left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, CustomUser>> getUserById(String userId) async {
+    try {
+      final result = await _usersDataSource.getUserById(userId);
+      return right(result);
+    } catch (e) {
+      return left(ServerFailure(e.toString()));
+    }
+  }
 }

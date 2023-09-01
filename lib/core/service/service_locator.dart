@@ -1,10 +1,12 @@
 import 'package:get_it/get_it.dart';
+import 'package:pear_market/core/service/user_access_service.dart';
 import 'package:pear_market/features/admin_panel/data/datasource/users_datasource.dart';
 import 'package:pear_market/features/admin_panel/data/repository/users_repository_impl.dart';
 import 'package:pear_market/features/admin_panel/domain/repository/users_repository.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/create_user_usecase.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/delete_user_usecase.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/get_all_users_usecase.dart';
+import 'package:pear_market/features/admin_panel/domain/usecase/get_user_by_id_usecase.dart';
 import 'package:pear_market/features/admin_panel/domain/usecase/update_user_usecase.dart';
 import 'package:pear_market/features/auth/data/repository/auth_ropository_impl.dart';
 import 'package:pear_market/features/auth/data/repository/auth_secure_storage_repository_impl.dart';
@@ -46,6 +48,10 @@ final getIt = GetIt.instance;
 
 class ServicesLocator {
   void init() {
+    getIt.registerLazySingleton(
+      () => UserAccessService(),
+    );
+
     //USECASE
 
     ///product
@@ -113,6 +119,9 @@ class ServicesLocator {
     );
     getIt.registerLazySingleton(
       () => UpdateUserUsecase(getIt()),
+    );
+    getIt.registerLazySingleton(
+      () => GetUserByIdUsecase(getIt()),
     );
 
     ///theme

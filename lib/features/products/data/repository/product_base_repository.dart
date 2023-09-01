@@ -42,10 +42,12 @@ class ProductBaseRepositoryImpl extends ProductBaseRepository {
     try {
       final result =
           await _remoteDatasource.getAllProducts(productType, params);
-      return right(
-          result.map((e) => ProductModel.fromJson(e).toEntity()).toList());
+      return right(result.map((e) {
+        final result = ProductModel.fromJson(e).toEntity();
+        return result;
+      }).toList());
     } on ServerFailure catch (e) {
-      return left(ServerFailure(e.toString()));
+      return left(ServerFailure(e.errorMessage));
     } catch (e) {
       return left(UnknowingFailure(e.toString()));
     }

@@ -65,8 +65,8 @@ class AuthForm extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
-                    Theme.of(context).primaryColorDark),
+                backgroundColor:
+                    MaterialStatePropertyAll(Theme.of(context).primaryColor),
               ),
               onPressed: context.read<AuthViewModel>().onLoginButtonPress,
               child: Padding(
@@ -74,6 +74,7 @@ class AuthForm extends StatelessWidget {
                 child: Text(
                   "LOGIN",
                   style: GoogleFonts.nanumGothic(
+                      textStyle: TextStyle(fontSize: AppDemensions.appSize20),
                       color: Theme.of(context).textTheme.bodyMedium?.color),
                 ),
               ),

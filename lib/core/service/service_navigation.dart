@@ -6,6 +6,7 @@ import 'package:pear_market/features/auth/presentation/pages/auth/auth_page.dart
 import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
 import 'package:pear_market/features/auth/presentation/pages/reg/provider/reg_view_model.dart';
 import 'package:pear_market/features/auth/presentation/pages/reg/reg_page.dart';
+import 'package:pear_market/features/menu/domain/entities/generation.dart';
 import 'package:pear_market/features/menu/presentation/pages/menu_page.dart';
 import 'package:pear_market/features/menu/presentation/pages/sub_menu_page.dart';
 import 'package:pear_market/features/menu/presentation/provider/sub_menu_view_model.dart';
@@ -44,6 +45,7 @@ class AppNavigation {
           create: (context) => AuthViewModel(
             context: context,
             signInUseCase: getIt(),
+            userAccessService: getIt(),
             getAuthCredFromSecureStorage: getIt(),
             addAuthCredToSecureStorage: getIt(),
           ),
@@ -53,6 +55,7 @@ class AppNavigation {
     AppNavigationNames.homePage: (context) => ChangeNotifierProvider(
           create: (context) => MenuViewModel(
             context,
+            getIt(),
             signOutUseCase: getIt(),
           ),
           child: MenuPage(),
@@ -82,17 +85,20 @@ class AppNavigation {
                   child: const RegPage(),
                 ));
       case AppNavigationNames.productList:
-        final ProductType productType = settings.arguments as ProductType;
+        final Generation generation = settings.arguments as Generation;
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
             create: (context) => ProductViewModel(
-                getAllProductsUseCase: getIt(),
-                storageParameterUsecase: getIt(),
-                generationParameterUsecase: getIt(),
-                colorParameterUsecase: getIt(),
-                versionParameterUsecase: getIt(),
-                context: context,
-                productType: productType),
+              getIt(),
+              getAllProductsUseCase: getIt(),
+              storageParameterUsecase: getIt(),
+              generationParameterUsecase: getIt(),
+              colorParameterUsecase: getIt(),
+              versionParameterUsecase: getIt(),
+              context: context,
+              generation: generation,
+              getUserByIdUsecase: getIt(),
+            ),
             child: const ProductsPage(),
           ),
         );
@@ -158,6 +164,7 @@ class AppNavigation {
                 context: context,
                 productType: productType,
                 editproduct: product,
+                userAccessService: getIt(),
                 addProductUseCase: getIt(),
                 updateProductUseCase: getIt(),
                 getProductColorUsecase: getIt(),

@@ -35,14 +35,17 @@ class ProductBaseRemoteDataSourceImpl implements ProducBaseRemoteDataSource {
                 : "generation"
             : "status")
         .get()
-        .then((snapshot) => snapshot.docs.map((e) {
-              final product = e.data() as Map<String, dynamic>;
-              product["id"] = e.id;
-              return product;
-            }).toList())
-        .catchError(
-          (e) => throw ServerFailure(e.toString()),
-        );
+        .then((snapshot) {
+      final productsListRef = snapshot.docs;
+
+      return productsListRef.map((e) {
+        final product = e.data() as Map<String, dynamic>;
+        product["id"] = e.id;
+        return product;
+      }).toList();
+    }).catchError(
+      (e) => throw ServerFailure(e.toString()),
+    );
     productsCollection = null;
     return result;
   }
@@ -80,5 +83,16 @@ class ProductBaseRemoteDataSourceImpl implements ProducBaseRemoteDataSource {
     }).catchError((e) => throw ServerFailure(e.toString()));
     docRef = null;
     return result;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getOwner(String customUserId) {
+    DocumentReference? docRef = FirebaseFirestore.instance
+        .collection(AppConstants.usersDB)
+        .doc(customUserId);
+    final result =
+        docRef.get().catchError((e) => throw ServerFailure(e.toString()));
+
+    return result.then((value) => value.data() as Map<String, dynamic>);
   }
 }

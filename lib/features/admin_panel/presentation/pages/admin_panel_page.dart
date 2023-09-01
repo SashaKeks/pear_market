@@ -13,11 +13,12 @@ class AdminPanelPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(AppDemensions.appSize10),
-        child: const Column(
+        child: Column(
           children: [
+            SizedBox(height: AppDemensions.appSize10),
             UserListWidget(),
-            SizedBox(height: 20),
-            AddUserButton(),
+            SizedBox(height: AppDemensions.appSize20),
+            const AddUserButton(),
           ],
         ),
       ),
@@ -39,8 +40,9 @@ class UserListWidget extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) => UserButtonDetail(index: index),
-          separatorBuilder: (context, index) =>
-              SizedBox(height: AppDemensions.appSize20),
+          separatorBuilder: (context, index) => SizedBox(
+                height: AppDemensions.appSize10,
+              ),
           itemCount: context.watch<AdminPanelViewModel>().userCount);
     }
   }
@@ -82,30 +84,30 @@ class UserButtonDetail extends StatelessWidget {
           ),
         ],
       ),
-      child: InkWell(
-        onTap: context.read<AdminPanelViewModel>().openUserDetail,
-        child: Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppDemensions.appSize10,
+        ),
+        child: InkWell(
+          onTap: context.read<AdminPanelViewModel>().openUserDetail,
+          child: Container(
             height: AppDemensions.appSize100,
-            padding: EdgeInsets.all(AppDemensions.appSize20),
             decoration: BoxDecoration(
-                border: Border.all(
-              color: Theme.of(context).textTheme.titleSmall?.color ??
-                  Colors.transparent,
-            )),
+                color: Theme.of(context).primaryColorLight,
+                borderRadius: BorderRadius.circular(20.0)),
             child: Center(
               child: Text(
                 user.fullName.toUpperCase(),
-                textAlign: TextAlign.center,
                 style: GoogleFonts.nanumGothic(
-                  textStyle: TextStyle(
-                    color: Theme.of(context).textTheme.titleSmall?.color ??
-                        Colors.transparent,
+                  textStyle: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 27,
                   ),
                 ),
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -116,27 +118,35 @@ class AddUserButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: context.read<AdminPanelViewModel>().createUser,
-      child: DottedBorder(
-        color:
-            Theme.of(context).textTheme.titleSmall?.color ?? Colors.transparent,
-        strokeWidth: 1,
-        dashPattern: [AppDemensions.appSize10, AppDemensions.appSize10],
-        child: SizedBox(
-          width: double.infinity,
-          height: AppDemensions.appSize100,
-          child: Center(
-              child: Text(
-            "+ ADD USER",
-            style: GoogleFonts.nanumGothic(
-                textStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 27,
-              color: Theme.of(context).textTheme.titleSmall?.color ??
-                  Colors.transparent,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppDemensions.appSize10,
+      ),
+      child: InkWell(
+        onTap: context.read<AdminPanelViewModel>().createUser,
+        child: DottedBorder(
+          strokeCap: StrokeCap.round,
+          borderType: BorderType.RRect,
+          radius: Radius.circular(AppDemensions.appSize20),
+          color: Theme.of(context).textTheme.titleSmall?.color ??
+              Colors.transparent,
+          strokeWidth: 1,
+          dashPattern: [AppDemensions.appSize10, AppDemensions.appSize10],
+          child: SizedBox(
+            width: double.infinity,
+            height: AppDemensions.appSize100,
+            child: Center(
+                child: Text(
+              "+ ADD USER",
+              style: GoogleFonts.nanumGothic(
+                  textStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 27,
+                color: Theme.of(context).textTheme.titleSmall?.color ??
+                    Colors.transparent,
+              )),
             )),
-          )),
+          ),
         ),
       ),
     );

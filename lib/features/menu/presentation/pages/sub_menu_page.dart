@@ -25,7 +25,7 @@ class SubMenuPage extends StatelessWidget {
             children: List.generate(
               context.watch<SubMenuViewModel>().generationList.length,
               (index) => SubMenuItem(
-                  title:
+                  generation:
                       context.watch<SubMenuViewModel>().generationList[index]),
             ),
           ),
@@ -36,13 +36,15 @@ class SubMenuPage extends StatelessWidget {
 }
 
 class SubMenuItem extends StatelessWidget {
-  final Generation title;
-  const SubMenuItem({super.key, required this.title});
+  final Generation generation;
+  const SubMenuItem({super.key, required this.generation});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {},
+        onTap: () => context
+            .read<SubMenuViewModel>()
+            .onSubMenuItemButtonPress(generation),
         child: Container(
           width: double.infinity,
           height: AppDemensions.appSize100,
@@ -53,7 +55,7 @@ class SubMenuItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  title.generation.toUpperCase(),
+                  generation.generation.toUpperCase(),
                   textAlign: TextAlign.center,
                   style: GoogleFonts.nanumGothic(
                     textStyle: const TextStyle(

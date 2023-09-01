@@ -7,4 +7,5 @@ abstract class UsersRepository {
   Future<Either<Failure, void>> deleteUser(CustomUser user);
   Future<Either<Failure, void>> updateUser(CustomUser newUser);
   Future<Either<Failure, List<CustomUser>>> getAllUsers();
+  Future<Either<Failure, CustomUser>> getUserById(String userId);
 }

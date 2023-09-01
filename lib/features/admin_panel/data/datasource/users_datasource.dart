@@ -48,4 +48,11 @@ class UsersDataSource {
 
     await users.doc(newUser.id).update(newUser.toJson());
   }
+
+  Future<CustomUser> getUserById(String userId) async {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection(AppConstants.usersDB);
+    return users.doc(userId).get().then(
+        (value) => CustomUser.fromJson(value.data() as Map<String, dynamic>));
+  }
 }

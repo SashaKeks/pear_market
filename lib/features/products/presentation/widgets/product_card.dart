@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
+import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
+import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   final Function() onTapCard;
@@ -72,6 +74,61 @@ class ProductCard extends StatelessWidget {
             const Divider(
               color: Colors.black,
             ),
+            context
+                    .watch<ProductViewModel>()
+                    .userAccessService
+                    .canSeeProductOwner
+                ? Column(
+                    children: [
+                      FutureBuilder(
+                          future: context
+                              .read<ProductViewModel>()
+                              .getProductOwner(product.ownerid),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Owner:",
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        fontSize: AppDemensions.appSize20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "${snapshot.data?.name} ${snapshot.data?.surname}",
+                                    style: GoogleFonts.montserrat(
+                                      textStyle: TextStyle(
+                                        fontSize: AppDemensions.appSize20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Text(
+                                "Unknowing",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: AppDemensions.appSize20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              );
+                            }
+                          }),
+                      const Divider(
+                        color: Colors.black,
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
             product.status == ProductStatus.instock
                 ? SizedBox(
                     width: double.infinity,
@@ -88,7 +145,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   )
                 : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "DAYS: ${product.getDateTimeDiference}",

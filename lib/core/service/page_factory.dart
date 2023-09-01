@@ -10,7 +10,7 @@ class PageFactory {
   static Widget createAdminPanel() {
     return ChangeNotifierProvider(
       create: (context) =>
-          AdminPanelViewModel(getIt(), getIt(), getIt(), context: context),
+          AdminPanelViewModel(getIt(), getIt(), context: context),
       child: const AdminPanelPage(),
     );
   }

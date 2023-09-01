@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pear_market/core/error/failure.dart';
 import 'package:pear_market/core/resources/app_constants.dart';
 import 'package:pear_market/core/service/service_navigation.dart';
+import 'package:pear_market/core/service/user_access_service.dart';
 import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
 import 'package:pear_market/features/auth/domain/usecase/add_auth_cred_to_secure_storage.dart';
 import 'package:pear_market/features/auth/domain/usecase/get_auth_cred_from_secure_storage_use_case.dart';
@@ -14,6 +15,7 @@ class AuthViewModel extends ChangeNotifier {
   String _login = "";
   String _password = "";
   bool _secureStorageData = false;
+  final UserAccessService userAccessService;
   final GetAuthCredFromSecureStorage getAuthCredFromSecureStorage;
   final AddAuthCredToSecureStorage addAuthCredToSecureStorage;
   String _errorMessage = "";
@@ -27,6 +29,7 @@ class AuthViewModel extends ChangeNotifier {
   AuthViewModel(
       {required this.signInUseCase,
       required this.context,
+      required this.userAccessService,
       required this.addAuthCredToSecureStorage,
       required this.getAuthCredFromSecureStorage}) {
     canAuthBiometrick();
@@ -78,6 +81,7 @@ class AuthViewModel extends ChangeNotifier {
       return;
     }
     if (_user != null) {
+      userAccessService.userSet = _user!;
       changeAuthStatus(AuthStatus.success);
       goToPage();
       addAuthCredToSecureStorage(login: _login, password: _password);

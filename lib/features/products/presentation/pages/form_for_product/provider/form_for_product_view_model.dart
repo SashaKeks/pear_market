@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pear_market/core/service/user_access_service.dart';
 
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
@@ -60,6 +61,7 @@ class FormForProductState {
 class FormForProductViewModel extends ChangeNotifier {
   final BuildContext context;
   final ProductType? productType;
+  final UserAccessService userAccessService;
   final formKey = GlobalKey<FormState>();
   final ProductEntity? editproduct;
   late FormForProductState state = FormForProductState(
@@ -109,6 +111,7 @@ class FormForProductViewModel extends ChangeNotifier {
     required this.updateProductUseCase,
     required this.getProductColorUsecase,
     required this.getProductVersionUsecase,
+    required this.userAccessService,
   }) {
     initFields();
   }
@@ -397,7 +400,8 @@ class FormForProductViewModel extends ChangeNotifier {
   void saveProduct() async {
     if (formKey.currentState!.validate()) {
       if (editproduct == null) {
-        await addProductUseCase(state.product);
+        await addProductUseCase(
+            state.product.copyWith(ownerid: userAccessService.userGet?.id));
       } else {
         await updateProductUseCase(state.product);
       }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pear_market/core/service/service_navigation.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/menu/domain/entities/generation.dart';
 import 'package:pear_market/features/menu/domain/usecase/get_generations_usecase.dart';
@@ -19,5 +20,10 @@ class SubMenuViewModel with ChangeNotifier {
     result.fold((l) => showSnackbarInfo(context, l.errorMessage.toString()),
         (r) => generationList = r.reversed.toList());
     notifyListeners();
+  }
+
+  void onSubMenuItemButtonPress(Generation generation) {
+    Navigator.pushNamed(context, AppNavigationNames.productList,
+        arguments: generation.copyWith(type: subMenuType));
   }
 }

@@ -1,4 +1,6 @@
-class CustomUser {
+import 'package:equatable/equatable.dart';
+
+class CustomUser extends Equatable {
   final String id;
   final String name;
   final String surname;
@@ -8,7 +10,7 @@ class CustomUser {
   final Access access;
   final bool isAuth;
 
-  CustomUser(
+  const CustomUser(
       {this.id = "",
       required this.name,
       required this.surname,
@@ -20,7 +22,7 @@ class CustomUser {
 
   String get fullName => "$name $surname";
   factory CustomUser.empty() {
-    return CustomUser(
+    return const CustomUser(
         name: "",
         surname: "",
         phone: "",
@@ -73,6 +75,18 @@ class CustomUser {
       isAuth: isAuth ?? this.isAuth,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        surname,
+        phone,
+        email,
+        password,
+        access,
+        isAuth,
+      ];
 }
 
 enum Access { admin, user }

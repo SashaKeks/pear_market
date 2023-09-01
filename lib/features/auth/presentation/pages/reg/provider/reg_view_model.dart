@@ -71,7 +71,7 @@ class RegViewModel with ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.black,
-          content: Text('Incorrect data'),
+          content: const Text('Incorrect data'),
           action: SnackBarAction(
             textColor: Theme.of(context).primaryColorLight,
             label: 'Hide',

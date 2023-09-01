@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/resources/demencions.dart';
+import 'package:pear_market/core/service/user_access_service.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/products/domain/entities/filter_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
@@ -39,7 +41,8 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context,
+                      FilterEntity(generation: widget.savedFilter!.generation)),
                   child: const Text("Clear filter")),
               TextButton(
                   onPressed: () => Navigator.pop(context, filterEntity),
@@ -69,20 +72,24 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
               },
             ),
           ),
-          DropDownFilter<String>(
-              hint: const Text("Generation filter"),
-              value: filterEntity.generation,
-              items: context.watch<ProductViewModel>().state.generationList,
-              onChanged: (newGeneration) {
-                filterEntity = filterEntity.copyWith(color: () => null);
-                context.read<ProductViewModel>().getProductColor(newGeneration);
-                setState(
-                  () {
-                    filterEntity =
-                        filterEntity.copyWith(generation: () => newGeneration);
-                  },
-                );
-              }),
+          GetIt.I<UserAccessService>().canDeleteGenerationFromFilter
+              ? DropDownFilter<String>(
+                  hint: const Text("Generation filter"),
+                  value: filterEntity.generation,
+                  items: context.watch<ProductViewModel>().state.generationList,
+                  onChanged: (newGeneration) {
+                    filterEntity = filterEntity.copyWith(color: () => null);
+                    context
+                        .read<ProductViewModel>()
+                        .getProductColor(newGeneration);
+                    setState(
+                      () {
+                        filterEntity = filterEntity.copyWith(
+                            generation: () => newGeneration);
+                      },
+                    );
+                  })
+              : const SizedBox(),
           DropDownFilter<String?>(
             hint: const Text("Color filter"),
             keyF: context.watch<ProductViewModel>().key,

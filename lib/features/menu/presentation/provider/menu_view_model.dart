@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/service/service_navigation.dart';
+import 'package:pear_market/core/service/user_access_service.dart';
 import 'package:pear_market/core/util/enums.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
 
 class MenuViewModel extends ChangeNotifier {
   final SignOutUseCase signOutUseCase;
+  final UserAccessService userAccessService;
   final BuildContext context;
+  int currentPageIndex = 0;
   MenuViewModel(
-    this.context, {
+    this.context,
+    this.userAccessService, {
     required this.signOutUseCase,
   });
 
@@ -33,5 +37,9 @@ class MenuViewModel extends ChangeNotifier {
     });
   }
 
-  void onThemeSwitcher() {}
+  void onChangePage(int index) {
+    print(userAccessService.showAdminPanelAccess);
+    currentPageIndex = index;
+    notifyListeners();
+  }
 }

@@ -7,15 +7,9 @@ import 'package:pear_market/features/main_app/presentation/provider/main_view_mo
 import 'package:pear_market/features/menu/presentation/provider/menu_view_model.dart';
 import 'package:provider/provider.dart';
 
-class MenuPage extends StatefulWidget {
-  const MenuPage({super.key});
+class MenuPage extends StatelessWidget {
+  MenuPage({super.key});
 
-  @override
-  State<MenuPage> createState() => _MenuPageState();
-}
-
-class _MenuPageState extends State<MenuPage> {
-  int currentPageIndex = 0;
   final pages = <Widget>[
     const TypeMenu(),
     const Placeholder(),
@@ -29,7 +23,7 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(titles[currentPageIndex]),
+        title: Text(titles[context.watch<MenuViewModel>().currentPageIndex]),
         centerTitle: true,
         leading: const ThemeModeSwitcher(),
         actions: [
@@ -39,36 +33,58 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ],
       ),
-      body: pages[currentPageIndex],
+      body: pages[context.watch<MenuViewModel>().currentPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
         type: BottomNavigationBarType.fixed,
         fixedColor: Colors.white,
         unselectedItemColor: Theme.of(context).primaryColorLight,
-        currentIndex: currentPageIndex,
-        onTap: (value) => setState(() {
-          currentPageIndex = value;
-        }),
-        items: const [
-          BottomNavigationBarItem(
-            label: "Home",
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: "Statistic",
-            icon: Icon(Icons.stacked_line_chart),
-          ),
-          BottomNavigationBarItem(
-            label: "Info",
-            icon: Icon(Icons.info_outline),
-          ),
-          BottomNavigationBarItem(
-            label: "Admin",
-            icon: Icon(Icons.all_inclusive_sharp),
-          ),
-        ],
+        currentIndex: context.watch<MenuViewModel>().currentPageIndex,
+        onTap: context.read<MenuViewModel>().onChangePage,
+        items: bottomNavigationBarItems(context
+            .watch<MenuViewModel>()
+            .userAccessService
+            .showAdminPanelAccess),
       ),
     );
+  }
+
+  List<BottomNavigationBarItem> bottomNavigationBarItems(bool isAdmin) {
+    if (isAdmin) {
+      return const [
+        BottomNavigationBarItem(
+          label: "Home",
+          icon: Icon(Icons.home),
+        ),
+        BottomNavigationBarItem(
+          label: "Statistic",
+          icon: Icon(Icons.stacked_line_chart),
+        ),
+        BottomNavigationBarItem(
+          label: "Info",
+          icon: Icon(Icons.info_outline),
+        ),
+        BottomNavigationBarItem(
+          label: "Admin",
+          icon: Icon(Icons.all_inclusive_sharp),
+        ),
+      ];
+    } else {
+      return const [
+        BottomNavigationBarItem(
+          label: "Home",
+          icon: Icon(Icons.home),
+        ),
+        BottomNavigationBarItem(
+          label: "Statistic",
+          icon: Icon(Icons.stacked_line_chart),
+        ),
+        BottomNavigationBarItem(
+          label: "Info",
+          icon: Icon(Icons.info_outline),
+        ),
+      ];
+    }
   }
 }
 

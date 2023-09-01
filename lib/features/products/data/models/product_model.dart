@@ -1,4 +1,5 @@
 import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 
 class ProductModel extends ProductEntity {
@@ -22,6 +23,7 @@ class ProductModel extends ProductEntity {
     required super.condition,
     required super.generation,
     required super.description,
+    required super.ownerid,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -45,30 +47,31 @@ class ProductModel extends ProductEntity {
       condition: ProductCondition.values[json["condition"]],
       generation: json["generation"],
       description: json["description"],
+      ownerid: json["owner"],
     );
   }
   factory ProductModel.fromEntity(ProductEntity entity) {
     return ProductModel(
-      id: entity.id,
-      type: entity.type,
-      color: entity.color,
-      ram: entity.ram,
-      proc: entity.proc,
-      video: entity.video,
-      status: entity.status,
-      buyPrice: entity.buyPrice,
-      buyCurrency: entity.buyCurrency,
-      buyExRate: entity.buyExRate,
-      buyDateTime: entity.buyDateTime,
-      storage: entity.storage,
-      sellPrice: entity.sellPrice,
-      sellCurrency: entity.sellCurrency,
-      sellExRate: entity.sellExRate,
-      sellDateTime: entity.sellDateTime,
-      condition: entity.condition,
-      generation: entity.generation,
-      description: entity.description,
-    );
+        id: entity.id,
+        type: entity.type,
+        color: entity.color,
+        ram: entity.ram,
+        proc: entity.proc,
+        video: entity.video,
+        status: entity.status,
+        buyPrice: entity.buyPrice,
+        buyCurrency: entity.buyCurrency,
+        buyExRate: entity.buyExRate,
+        buyDateTime: entity.buyDateTime,
+        storage: entity.storage,
+        sellPrice: entity.sellPrice,
+        sellCurrency: entity.sellCurrency,
+        sellExRate: entity.sellExRate,
+        sellDateTime: entity.sellDateTime,
+        condition: entity.condition,
+        generation: entity.generation,
+        description: entity.description,
+        ownerid: entity.ownerid);
   }
   ProductEntity toEntity() {
     return ProductEntity(
@@ -91,6 +94,7 @@ class ProductModel extends ProductEntity {
       condition: condition,
       generation: generation,
       description: description,
+      ownerid: ownerid,
     );
   }
 
@@ -115,6 +119,7 @@ class ProductModel extends ProductEntity {
       "condition": condition.index,
       "generation": generation,
       "description": description,
+      "owner": ownerid,
     };
   }
 }

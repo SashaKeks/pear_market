@@ -6,6 +6,7 @@ abstract class ProducBaseRemoteDataSource {
     Map<String, dynamic>? params,
   ]);
   Future<Map<String, dynamic>> getDetail(String productId);
+  Future<Map<String, dynamic>> getOwner(String customUserId);
   Future<void> addProduct(Map<String, dynamic> product);
   Future<void> deleteProduct(String productId);
   Future<void> updateProduct(Map<String, dynamic> updatedProduct);
