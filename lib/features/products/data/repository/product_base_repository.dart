@@ -1,8 +1,10 @@
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/error/exception.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
 import 'package:pear_market/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:pear_market/features/products/data/models/product_model.dart';
+import 'package:pear_market/features/products/domain/entities/filter_product_entity.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/repository/product_base_repository.dart';
 
@@ -12,68 +14,65 @@ class ProductBaseRepositoryImpl extends ProductBaseRepository {
   ProductBaseRepositoryImpl(this._remoteDatasource);
 
   @override
-  Future<void> addProduct(ProductEntity product) async {
+  Future<Either<Failure, void>> addProduct(ProductEntity product) async {
     try {
-      await _remoteDatasource
-          .addProduct(ProductModel.fromEntity(product).toJson());
-    } on AddProductFailure catch (e) {
-      throw ServerFailure(e.errorMessage);
+      await _remoteDatasource.addProduct(ProductModel.fromEntity(product));
+      return right(null);
+    } on ServerAddProductException {
+      return left(AddProductFailure());
     } catch (e) {
-      throw UnknowingFailure(e.toString());
+      return left(UnknownFailure());
     }
   }
 
   @override
-  Future<void> deleteProduct(String productId) async {
+  Future<Either<Failure, void>> deleteProduct(String productId) async {
     try {
       await _remoteDatasource.deleteProduct(productId);
-    } on ServerFailure catch (e) {
-      throw ServerFailure(e.toString());
+      return right(null);
+    } on ServerDeleteProductException {
+      return left(DeleteProductFailure());
     } catch (e) {
-      throw UnknowingFailure(e.toString());
+      return left(UnknownFailure());
     }
   }
 
   @override
   Future<Either<Failure, List<ProductEntity>>> getAllProducts(
-    ProductType productType, [
-    Map<String, dynamic>? params,
+    ProductTypeEnum productType, [
+    FilterProductEntity? filter,
   ]) async {
     try {
-      final result =
-          await _remoteDatasource.getAllProducts(productType, params);
-      return right(result.map((e) {
-        final result = ProductModel.fromJson(e).toEntity();
-        return result;
-      }).toList());
-    } on ServerFailure catch (e) {
-      return left(ServerFailure(e.errorMessage));
+      return right(await _remoteDatasource.getAllProducts(productType, filter));
+    } on ServerGetProductException {
+      return left(ServerFailure());
     } catch (e) {
-      return left(UnknowingFailure(e.toString()));
+      return left(UnknownFailure());
     }
   }
 
   @override
   Future<Either<Failure, ProductEntity>> getDetail(String productId) async {
     try {
-      final result = await _remoteDatasource.getDetail(productId);
-      return right(ProductModel.fromJson(result).toEntity());
-    } on ServerFailure catch (e) {
-      return left(ServerFailure(e.toString()));
+      return right(await _remoteDatasource.getDetail(productId));
+    } on ServerGetProductException {
+      return left(ServerFailure());
     } catch (e) {
-      return left(UnknowingFailure(e.toString()));
+      return left(UnknownFailure());
     }
   }
 
   @override
-  Future<void> updateProduct(ProductEntity updatedProduct) async {
+  Future<Either<Failure, void>> updateProduct(
+      ProductEntity updatedProduct) async {
     try {
       await _remoteDatasource
-          .updateProduct(ProductModel.fromEntity(updatedProduct).toJson());
-    } on UpdateProductFailure catch (e) {
-      ServerFailure(e.toString());
+          .updateProduct(ProductModel.fromEntity(updatedProduct));
+      return right(null);
+    } on ServerUpdateProductException {
+      return left(UpdateProductFailure());
     } catch (e) {
-      throw UnknowingFailure(e.toString());
+      return left(UnknownFailure());
     }
   }
 }

@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pear_market/core/service/navigation_service/navigation_names.dart';
 import 'package:pear_market/core/service/user_access_service.dart';
-
-import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
-import 'package:pear_market/features/admin_panel/domain/usecase/get_user_by_id_usecase.dart';
-import 'package:pear_market/features/menu/domain/entities/generation.dart';
-import 'package:pear_market/features/products/domain/entities/filter_entity.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
+import 'package:pear_market/core/widgets/snackbar/show_snackbar_error.dart';
+import 'package:pear_market/features/admin/domain/entity/custom_user_entity.dart';
+import 'package:pear_market/features/admin/domain/usecase/get_user_by_id_usecase.dart';
+import 'package:pear_market/features/menu/domain/entities/generation_entity.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_storage_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_version_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_all_products_usecase.dart';
-import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
-
-import '../../../../../../core/service/service_navigation.dart';
 
 class ProductState {
   final List<ProductEntity> productList;
@@ -64,7 +61,7 @@ class ProductViewModel extends ChangeNotifier {
   final GetProductStorageParameterUsecase storageParameterUsecase;
   final GetProductColorParameterUsecase colorParameterUsecase;
   final GetProductVersionParameterUsecase versionParameterUsecase;
-  final Generation generation;
+  final GenerationEntity generation;
   final UserAccessService userAccessService;
   final GetUserByIdUsecase getUserByIdUsecase;
   ProductViewModel(
@@ -79,36 +76,35 @@ class ProductViewModel extends ChangeNotifier {
     required this.getUserByIdUsecase,
   }) {
     init();
-    getProductColor(generation.generation);
+    getProductColor(generation.name);
   }
   void init() {
     _state = _state.copyWith(
-        filter:
-            _state.filter.copyWith(generation: () => generation.generation));
+        filter: _state.filter.copyWith(generation: () => generation.name));
     getAllProducts();
 
-    if (generation.type != ProductType.accessories &&
-        generation.type != ProductType.other) {
+    if (generation.type != ProductTypeEnum.accessories &&
+        generation.type != ProductTypeEnum.other) {
       getProductGeneration();
     }
 
-    if (generation.type == ProductType.mac ||
-        generation.type == ProductType.iphone ||
-        generation.type == ProductType.ipad) {
+    if (generation.type == ProductTypeEnum.mac ||
+        generation.type == ProductTypeEnum.iphone ||
+        generation.type == ProductTypeEnum.ipad) {
       getProductStorage();
     }
   }
 
-  Future<CustomUser> getProductOwner(String userId) async {
-    final result = await getUserByIdUsecase(userId);
+  Future<CustomUserEntity> getProductOwner(String userId) async {
+    final result = await getUserByIdUsecase(params: userId);
     return result.fold(
-        (l) => showSnackbarInfo(context, "Failed get owner"), (r) => r);
+        (l) => showSnackbarError(context, "Failed get owner"), (r) => r);
   }
 
   void getProductGeneration() async {
     final generations = await generationParameterUsecase(generation.type!.name);
     generations.fold(
-      (l) => showSnackbarInfo(context, "Failed load generation"),
+      (l) => showSnackbarError(context, "Failed load generation"),
       (r) => _state = _state.copyWith(generationList: r),
     );
   }
@@ -120,7 +116,7 @@ class ProductViewModel extends ChangeNotifier {
       final colors =
           await colorParameterUsecase(generation.type!.name, productGeneration);
       colors.fold(
-        (l) => showSnackbarInfo(context, "Failed load colors"),
+        (l) => showSnackbarError(context, "Failed load colors"),
         (r) => _state = _state.copyWith(colorList: r),
       );
     }
@@ -131,7 +127,7 @@ class ProductViewModel extends ChangeNotifier {
   Future<void> getProductStorage() async {
     final storages = await storageParameterUsecase(generation.type!.name);
     storages.fold(
-      (l) => showSnackbarInfo(context, "Failed load storages"),
+      (l) => showSnackbarError(context, "Failed load storages"),
       (r) => _state = _state.copyWith(storagetList: r),
     );
     notifyListeners();
@@ -140,7 +136,7 @@ class ProductViewModel extends ChangeNotifier {
   Future<void> getProductVersion() async {
     final versions = await versionParameterUsecase(generation.type!.name);
     versions.fold(
-      (l) => showSnackbarInfo(context, "Failed load versions"),
+      (l) => showSnackbarError(context, "Failed load versions"),
       (r) => _state = _state.copyWith(versiontList: r),
     );
     notifyListeners();
@@ -155,7 +151,7 @@ class ProductViewModel extends ChangeNotifier {
     final result =
         await getAllProductsUseCase(generation.type!, _state.filter.toJson());
     result.fold(
-      (l) => showSnackbarInfo(context, "Failed load products"),
+      (l) => showSnackbarError(context, "Failed load products"),
       (right) => _state = _state.copyWith(
         productList: right,
       ),

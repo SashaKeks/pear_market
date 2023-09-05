@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/resources/demencions.dart';
 import 'package:pear_market/core/service/user_access_service.dart';
-import 'package:pear_market/core/util/enums.dart';
-import 'package:pear_market/features/products/domain/entities/filter_entity.dart';
+import 'package:pear_market/core/util/enums/product_condition_enum.dart';
+import 'package:pear_market/core/util/enums/product_status_enum.dart';
+import 'package:pear_market/features/products/domain/entities/filter_product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
 import 'package:pear_market/features/products/presentation/widgets/drop_down_filter.dart';
 import 'package:provider/provider.dart';
 
 class BottomSheetFilter extends StatefulWidget {
-  final FilterEntity? savedFilter;
+  final FilterProductEntity? savedFilter;
   const BottomSheetFilter({
     Key? key,
     this.savedFilter,
@@ -20,7 +21,7 @@ class BottomSheetFilter extends StatefulWidget {
 }
 
 class _BottomSheetFilterState extends State<BottomSheetFilter> {
-  FilterEntity filterEntity = FilterEntity();
+  FilterProductEntity filterEntity = FilterProductEntity.empty();
   @override
   void initState() {
     if (widget.savedFilter != null) {
@@ -41,19 +42,21 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                  onPressed: () => Navigator.pop(context,
-                      FilterEntity(generation: widget.savedFilter!.generation)),
+                  onPressed: () => Navigator.pop(
+                      context,
+                      FilterProductEntity(
+                          generation: widget.savedFilter!.generation)),
                   child: const Text("Clear filter")),
               TextButton(
                   onPressed: () => Navigator.pop(context, filterEntity),
                   child: const Text("Filter"))
             ],
           ),
-          DropDownFilter<ProductCondition>(
+          DropDownFilter<ProductConditionEnum>(
             enumList: true,
             hint: const Text("Condition filter"),
             value: filterEntity.condition,
-            items: ProductCondition.values,
+            items: ProductConditionEnum.values,
             onChanged: (newCondition) => setState(
               () {
                 filterEntity =
@@ -61,11 +64,11 @@ class _BottomSheetFilterState extends State<BottomSheetFilter> {
               },
             ),
           ),
-          DropDownFilter<ProductStatus>(
+          DropDownFilter<ProductStatusEnum>(
             enumList: true,
             hint: const Text("Status filter"),
             value: filterEntity.status,
-            items: ProductStatus.values,
+            items: ProductStatusEnum.values,
             onChanged: (newStatus) => setState(
               () {
                 filterEntity = filterEntity.copyWith(status: () => newStatus);

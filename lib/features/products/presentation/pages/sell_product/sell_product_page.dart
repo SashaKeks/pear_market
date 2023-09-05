@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_currency_enum.dart';
 import 'package:pear_market/features/products/presentation/pages/sell_product/provider/sell_product_view_model.dart';
 import 'package:pear_market/features/products/presentation/widgets/date_time_picker.dart';
 import 'package:pear_market/features/products/presentation/widgets/drop_down_button_for_form.dart';
@@ -46,13 +46,13 @@ class SellProductPage extends StatelessWidget {
                       context.read<SellProductViewModel>().addProductSellPrice,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
-                dropDownButtonForForm<ProductCurrency>(
+                dropDownButtonForForm<ProductCurrencyEnum>(
                   enumList: true,
                   value: context
                       .watch<SellProductViewModel>()
                       .product
                       .sellCurrency,
-                  items: ProductCurrency.values,
+                  items: ProductCurrencyEnum.values,
                   onChanged: (value) => context
                       .read<SellProductViewModel>()
                       .addProductSellCurrency(value?.index),

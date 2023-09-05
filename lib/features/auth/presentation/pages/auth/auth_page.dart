@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/features/auth/presentation/pages/auth/provider/auth_view_model.dart';
+import 'package:pear_market/core/util/enums/data_status_enum.dart';
+import 'package:pear_market/features/auth/presentation/providers/auth_view_model.dart';
 import 'package:pear_market/features/auth/presentation/widgets/custom_form_field.dart';
 import 'package:provider/provider.dart';
 
@@ -18,11 +19,11 @@ class AuthPage extends StatelessWidget {
             builder: (context) {
               final authStatus = context.watch<AuthViewModel>().authStatus;
               switch (authStatus) {
-                case AuthStatus.none:
-                case AuthStatus.failed:
+                case DataStatusEnum.none:
+                case DataStatusEnum.failed:
                   return const AuthForm();
-                case AuthStatus.success:
-                case AuthStatus.progress:
+                case DataStatusEnum.success:
+                case DataStatusEnum.progress:
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
@@ -59,7 +60,7 @@ class AuthForm extends StatelessWidget {
             showPassIcon: Icons.lock_outline_rounded,
           ),
           SizedBox(height: AppDemensions.appSize20),
-          Text(context.watch<AuthViewModel>().eror),
+          Text(context.watch<AuthViewModel>().error),
           SizedBox(height: AppDemensions.appSize20),
           SizedBox(
             width: double.infinity,

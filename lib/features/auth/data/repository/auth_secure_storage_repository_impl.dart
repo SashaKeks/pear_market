@@ -1,28 +1,44 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pear_market/core/resources/app_constants.dart';
+import 'package:dartz/dartz.dart';
+import 'package:pear_market/core/error/exception.dart';
+import 'package:pear_market/core/error/failure.dart';
+import 'package:pear_market/features/auth/data/datasource/local/auth_local_datasource.dart';
+import 'package:pear_market/features/auth/data/models/user_credential_model.dart';
+import 'package:pear_market/features/auth/domain/entities/user_credentials_entity.dart';
 import 'package:pear_market/features/auth/domain/repository/auth_secure_storage_repository.dart';
 
 class AuthSecureStorageRepositoryImpl implements AuthSecureStorageRepository {
-  final storage = const FlutterSecureStorage();
+  final AuthLocalDataSource _dataSource;
+  AuthSecureStorageRepositoryImpl(this._dataSource);
   @override
-  Future<Map<String, String>?> getLoginAndPasswordFromSecureStorage() async {
-    String? login = await storage.read(key: AppConstants.loginSecStorageKey);
-    String? password =
-        await storage.read(key: AppConstants.passwordSecStorageKey);
-    if (login != null && password != null) {
-      return {
-        AppConstants.loginSecStorageKey: login,
-        AppConstants.passwordSecStorageKey: password
-      };
+  Future<Either<Failure, void>> addLoginAndPassword({
+    required UserCredentialsEntity credentials,
+  }) async {
+    try {
+      await _dataSource.addLoginAndPasswordToSecureStorage(
+        credentials: UserCredentialsModel.fromEntity(credentials),
+      );
+      return right(null);
+    } on SharedPreferenceWriteException {
+      return left(LocalDatabaseFailure(
+          error: "Could not write data to local database"));
+    } catch (_) {
+      return left(UnknownFailure());
     }
-    return null;
   }
 
   @override
-  Future<void> addLoginAndPasswordToSecureStorage(
-      {required String login, required String password}) async {
-    await storage.write(key: AppConstants.loginSecStorageKey, value: login);
-    await storage.write(
-        key: AppConstants.passwordSecStorageKey, value: password);
+  Future<Either<Failure, UserCredentialsEntity>> getLoginAndPassword() async {
+    try {
+      final result = await _dataSource.getLoginAndPasswordFromSecureStorage();
+      return right(result.toEntity());
+    } on SharedPreferenceReadException {
+      return left(LocalDatabaseFailure(
+          error: "Could not read data from local database"));
+    } on SharedPreferenceNoUserCredentials {
+      return left(LocalDatabaseFailure(
+          error: "Could not find user credentials in local database"));
+    } catch (_) {
+      return left(UnknownFailure());
+    }
   }
 }

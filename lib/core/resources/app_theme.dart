@@ -10,6 +10,9 @@ class AppTheme {
       ),
       titleSmall: TextStyle(color: Colors.lightGreen[800]),
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+      labelStyle: TextStyle(color: Colors.black),
+    ),
     appBarTheme: const AppBarTheme(foregroundColor: Colors.white),
   );
   static ThemeData darkTheme = ThemeData(
@@ -20,6 +23,15 @@ class AppTheme {
         color: Color.fromARGB(255, 253, 252, 252),
       ),
       titleSmall: TextStyle(color: Colors.white),
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      errorStyle: TextStyle(color: Colors.cyan),
+      focusedErrorBorder:
+          UnderlineInputBorder(borderSide: BorderSide(color: Colors.cyan)),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.cyan),
+      ),
+      labelStyle: TextStyle(color: Colors.white),
     ),
     appBarTheme: const AppBarTheme(foregroundColor: Colors.white),
   );

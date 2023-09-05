@@ -1,13 +1,15 @@
 import 'package:get_it/get_it.dart';
 import 'package:pear_market/core/service/user_access_service.dart';
-import 'package:pear_market/features/admin_panel/data/datasource/users_datasource.dart';
-import 'package:pear_market/features/admin_panel/data/repository/users_repository_impl.dart';
-import 'package:pear_market/features/admin_panel/domain/repository/users_repository.dart';
-import 'package:pear_market/features/admin_panel/domain/usecase/create_user_usecase.dart';
-import 'package:pear_market/features/admin_panel/domain/usecase/delete_user_usecase.dart';
-import 'package:pear_market/features/admin_panel/domain/usecase/get_all_users_usecase.dart';
-import 'package:pear_market/features/admin_panel/domain/usecase/get_user_by_id_usecase.dart';
-import 'package:pear_market/features/admin_panel/domain/usecase/update_user_usecase.dart';
+import 'package:pear_market/features/admin/data/datasource/users_datasource.dart';
+import 'package:pear_market/features/admin/data/repository/users_repository_impl.dart';
+import 'package:pear_market/features/admin/domain/repository/users_repository.dart';
+import 'package:pear_market/features/admin/domain/usecase/create_user_usecase.dart';
+import 'package:pear_market/features/admin/domain/usecase/delete_user_usecase.dart';
+import 'package:pear_market/features/admin/domain/usecase/get_all_users_usecase.dart';
+import 'package:pear_market/features/admin/domain/usecase/get_user_by_id_usecase.dart';
+import 'package:pear_market/features/admin/domain/usecase/update_user_usecase.dart';
+import 'package:pear_market/features/auth/data/datasource/local/auth_local_datasource.dart';
+import 'package:pear_market/features/auth/data/datasource/remote/auth_remote_datasource.dart';
 import 'package:pear_market/features/auth/data/repository/auth_ropository_impl.dart';
 import 'package:pear_market/features/auth/data/repository/auth_secure_storage_repository_impl.dart';
 import 'package:pear_market/features/auth/domain/repository/auth_repository.dart';
@@ -16,13 +18,14 @@ import 'package:pear_market/features/auth/domain/usecase/add_auth_cred_to_secure
 import 'package:pear_market/features/auth/domain/usecase/get_auth_cred_from_secure_storage_use_case.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_in_usecase.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
+import 'package:pear_market/features/main_app/data/datasource/theme_datasource.dart';
 import 'package:pear_market/features/main_app/data/repository/theme_repository_impl.dart';
-import 'package:pear_market/features/main_app/data/source/theme_data_source.dart';
+import 'package:pear_market/features/main_app/data/datasource/theme_datasource_impl.dart';
 import 'package:pear_market/features/main_app/domain/repository/theme_repository.dart';
 import 'package:pear_market/features/main_app/domain/usecase/get_theme_mode_use_case.dart';
 import 'package:pear_market/features/main_app/domain/usecase/set_theme_mode_use_case.dart';
 import 'package:pear_market/features/menu/data/repository/generation_repository_impl.dart';
-import 'package:pear_market/features/menu/data/source/generation_source.dart';
+import 'package:pear_market/features/menu/data/datasource/generation_datasource.dart';
 import 'package:pear_market/features/menu/domain/repository/generation_repository.dart';
 import 'package:pear_market/features/menu/domain/usecase/get_generations_usecase.dart';
 import 'package:pear_market/features/products/data/data_source/remote/product_base_remote_data_source.dart';
@@ -48,6 +51,7 @@ final getIt = GetIt.instance;
 
 class ServicesLocator {
   void init() {
+    //SERVICE
     getIt.registerLazySingleton(
       () => UserAccessService(),
     );
@@ -140,11 +144,12 @@ class ServicesLocator {
     ///repositories
     //auth
     getIt.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(),
+      () => AuthRepositoryImpl(getIt()),
     );
     getIt.registerLazySingleton<AuthSecureStorageRepository>(
-      () => AuthSecureStorageRepositoryImpl(),
+      () => AuthSecureStorageRepositoryImpl(getIt()),
     );
+
     //product
     getIt.registerLazySingleton<ProductBaseRepositoryImpl>(
       () => ProductBaseRepositoryImpl(getIt()),
@@ -177,17 +182,25 @@ class ServicesLocator {
 
     //theme
     getIt.registerLazySingleton<ThemeDataSource>(
-      () => ThemeDataSource(),
+      () => ThemeDataSourceImpl(),
     );
 
     ///generation
-    getIt.registerLazySingleton<GenerationSource>(
-      () => GenerationSource(),
+    getIt.registerLazySingleton<GenerationDataSource>(
+      () => GenerationDataSource(),
     );
 
     //users
     getIt.registerLazySingleton<UsersDataSource>(
       () => UsersDataSource(),
+    );
+
+    //auth
+    getIt.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSource(getIt()),
+    );
+    getIt.registerLazySingleton<AuthLocalDataSource>(
+      () => AuthLocalDataSource(),
     );
   }
 }

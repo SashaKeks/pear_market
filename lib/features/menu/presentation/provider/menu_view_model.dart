@@ -1,45 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:pear_market/core/service/service_navigation.dart';
+import 'package:pear_market/core/service/navigation_service/navigation_names.dart';
 import 'package:pear_market/core/service/user_access_service.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
+import 'package:pear_market/core/widgets/snackbar/show_snackbar_error.dart';
 import 'package:pear_market/features/auth/domain/usecase/sign_out_usecase.dart';
 
 class MenuViewModel extends ChangeNotifier {
-  final SignOutUseCase signOutUseCase;
-  final UserAccessService userAccessService;
-  final BuildContext context;
-  int currentPageIndex = 0;
   MenuViewModel(
-    this.context,
-    this.userAccessService, {
-    required this.signOutUseCase,
-  });
+    this._context,
+    this.userAccessService,
+    this.signOutUseCase,
+  );
 
-  Future<void> onMenuItemTap(int index) async {
-    if (ProductType.values[index] == ProductType.other) {
-      await Navigator.of(context).pushNamed(
-        AppNavigationNames.productList,
-        arguments: ProductType.values[index],
-      );
-    } else {
-      await Navigator.of(context).pushNamed(
-        AppNavigationNames.subMenu,
-        arguments: ProductType.values[index],
-      );
-    }
+  //dependency from auth feature
+  final SignOutUseCase signOutUseCase;
+  //dependency from access service
+  final UserAccessService userAccessService;
+
+  final BuildContext _context;
+
+  int _currentPageIndex = 0;
+
+  int get currentPageIndex => _currentPageIndex;
+
+  List<String> get titleList =>
+      const <String>['MENU', 'STATISTIC', "INFO", "ADMIN PANEL"];
+  String getImagePath(int index) {
+    return "assets/images/${ProductTypeEnum.values[index].name}.png";
+  }
+
+  void onMenuItemTap(int index) {
+    Navigator.of(_context).pushNamed(
+      AppNavigationNames.subMenu,
+      arguments: ProductTypeEnum.values[index],
+    );
   }
 
   void onSignOutButonPress() async {
     final result = await signOutUseCase();
-    result.fold((l) => print(l.errorMessage), (_) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, AppNavigationNames.authPage, (route) => false);
-    });
+    result.fold(
+      (l) => showSnackbarError(_context, l.errorMessage),
+      (_) => Navigator.pushNamedAndRemoveUntil(
+          _context, AppNavigationNames.authPage, (route) => false),
+    );
   }
 
   void onChangePage(int index) {
-    print(userAccessService.showAdminPanelAccess);
-    currentPageIndex = index;
+    _currentPageIndex = index;
     notifyListeners();
   }
 }

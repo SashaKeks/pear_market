@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
-import 'package:pear_market/features/auth/presentation/pages/reg/provider/reg_view_model.dart';
-import 'package:pear_market/features/main_app/presentation/provider/main_view_model.dart';
+import 'package:pear_market/core/util/enums/access_enum.dart';
+import 'package:pear_market/features/auth/presentation/providers/reg_view_model.dart';
 import 'package:provider/provider.dart';
 
 class RegPage extends StatelessWidget {
@@ -33,12 +32,8 @@ class RegPage extends StatelessWidget {
                     initialValue:
                         context.watch<RegViewModel>().userForUpdate?.name ?? "",
                     decoration: const InputDecoration(
-                        labelText: "Name",
-                        errorStyle: TextStyle(color: Colors.cyan),
-                        focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.cyan)),
-                        errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.cyan))),
+                      labelText: "Name",
+                    ),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Please enter name";
@@ -131,20 +126,25 @@ class RegPage extends StatelessWidget {
                   ),
                   SizedBox(height: AppDemensions.appSize20),
                   DropdownButtonFormField(
-                    // dropdownColor: context.read<MainViewModel>().isDark
-                    //     ? Theme.of(context).primaryColorLight
-                    //     : Theme.of(context).scaffoldBackgroundColor,
+                    dropdownColor: Theme.of(context).primaryColor,
                     value:
                         context.watch<RegViewModel>().userForUpdate?.access ??
-                            Access.user,
+                            AccessEnum.user,
                     key: key,
-                    hint: const Text("User access"),
                     icon: const Icon(
                       Icons.keyboard_double_arrow_down_sharp,
                     ),
-                    items: Access.values
+                    items: AccessEnum.values
                         .map((e) => DropdownMenuItem(
-                            value: e, child: Text(e.name.toUpperCase())))
+                            value: e,
+                            child: Text(
+                              e.name.toUpperCase(),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.color),
+                            )))
                         .toList(),
                     onChanged: context.read<RegViewModel>().onChangeAccess,
                   ),

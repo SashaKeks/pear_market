@@ -1,16 +1,18 @@
 import 'package:flutter/widgets.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_condition_enum.dart';
+import 'package:pear_market/core/util/enums/product_currency_enum.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
+import 'package:pear_market/core/widgets/snackbar/show_snackbar_error.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
-import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class AddProductOtherViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   ProductEntity product = ProductEntity.empty();
   final BuildContext context;
   final ProductEntity? editProduct;
-  final ProductType? productType;
+  final ProductTypeEnum? productType;
   final UpdateProductUseCase updateProductUseCase;
   final AddProductUseCase addProductUseCase;
 
@@ -40,7 +42,7 @@ class AddProductOtherViewModel extends ChangeNotifier {
       }
       goBAck();
     } else {
-      showSnackbarInfo(context, "Fields are wrong cheak it and try again");
+      showSnackbarError(context, "Fields are wrong cheak it and try again");
     }
   }
 
@@ -48,7 +50,7 @@ class AddProductOtherViewModel extends ChangeNotifier {
     Navigator.pop(context);
   }
 
-  void onConditionChange(ProductCondition? condition) {
+  void onConditionChange(ProductConditionEnum? condition) {
     if (condition == null) return;
     product = product.copyWith(condition: condition);
     notifyListeners();
@@ -97,7 +99,7 @@ class AddProductOtherViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onBuyCurrencyChange(ProductCurrency? currency) {
+  void onBuyCurrencyChange(ProductCurrencyEnum? currency) {
     if (currency == null) return;
     product = product.copyWith(buyCurrency: currency);
     notifyListeners();

@@ -1,13 +1,14 @@
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
+import 'package:pear_market/features/products/data/models/product_model.dart';
+import 'package:pear_market/features/products/domain/entities/filter_product_entity.dart';
 
 abstract class ProducBaseRemoteDataSource {
-  Future<List<Map<String, dynamic>>> getAllProducts(
-    ProductType productType, [
-    Map<String, dynamic>? params,
+  Future<List<ProductModel>> getAllProducts(
+    ProductTypeEnum productType, [
+    FilterProductEntity? params,
   ]);
-  Future<Map<String, dynamic>> getDetail(String productId);
-  Future<Map<String, dynamic>> getOwner(String customUserId);
-  Future<void> addProduct(Map<String, dynamic> product);
+  Future<ProductModel> getDetail(String productId);
+  Future<void> addProduct(ProductModel product);
   Future<void> deleteProduct(String productId);
-  Future<void> updateProduct(Map<String, dynamic> updatedProduct);
+  Future<void> updateProduct(ProductModel updatedProduct);
 }

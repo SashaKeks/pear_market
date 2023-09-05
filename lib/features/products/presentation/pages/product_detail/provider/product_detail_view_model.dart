@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pear_market/core/service/service_navigation.dart';
+import 'package:pear_market/core/service/navigation_service/navigation_names.dart';
 
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
+import 'package:pear_market/core/widgets/snackbar/show_snackbar_error.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/delete_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/get_product_detail_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
 import 'package:pear_market/features/products/presentation/widgets/show_alert_dialog_reanswer.dart';
-import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class ProductDetailState {
   final ProductEntity product;
@@ -24,7 +24,7 @@ class ProductDetailState {
 }
 
 class ProductDetailViewModel extends ChangeNotifier {
-  final ProductType productType;
+  final ProductTypeEnum productType;
   final String productId;
   final BuildContext context;
   final GetProductDetailUseCase getProductDetailUsecase;
@@ -47,7 +47,7 @@ class ProductDetailViewModel extends ChangeNotifier {
   Future<void> getProductDetail() async {
     final result = await getProductDetailUsecase(productId);
     result.fold(
-      (left) => showSnackbarInfo(context, "Failed load product"),
+      (left) => showSnackbarError(context, "Failed load product"),
       (right) {
         state = state.copyWith(productEntity: right);
       },

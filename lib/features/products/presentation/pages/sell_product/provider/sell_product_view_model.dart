@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_currency_enum.dart';
+import 'package:pear_market/core/util/enums/product_status_enum.dart';
+import 'package:pear_market/core/widgets/snackbar/show_snackbar_error.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
-import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class SellProductViewModel extends ChangeNotifier {
   ProductEntity product;
@@ -21,11 +22,11 @@ class SellProductViewModel extends ChangeNotifier {
 
   void init() {
     product = product.copyWith(
-        sellCurrency: ProductCurrency.UAH, sellDateTime: DateTime.now());
+        sellCurrency: ProductCurrencyEnum.UAH, sellDateTime: DateTime.now());
   }
 
   void showExRateInit() {
-    showExRateField = product.sellCurrency != ProductCurrency.UAH;
+    showExRateField = product.sellCurrency != ProductCurrencyEnum.UAH;
     notifyListeners();
   }
 
@@ -42,7 +43,7 @@ class SellProductViewModel extends ChangeNotifier {
     if (currency == null) return;
 
     product = product.copyWith(
-      sellCurrency: ProductCurrency.values[currency],
+      sellCurrency: ProductCurrencyEnum.values[currency],
     );
     showExRateInit();
   }
@@ -66,11 +67,11 @@ class SellProductViewModel extends ChangeNotifier {
 
   void onSellPress() {
     if (formKey.currentState!.validate()) {
-      product = product.copyWith(status: ProductStatus.sold);
+      product = product.copyWith(status: ProductStatusEnum.sold);
       updateProductUseCase(product);
       Navigator.of(context).pop();
     } else {
-      showSnackbarInfo(context, "Fields are wrong cheak it and try again");
+      showSnackbarError(context, "Fields are wrong cheak it and try again");
     }
   }
 }

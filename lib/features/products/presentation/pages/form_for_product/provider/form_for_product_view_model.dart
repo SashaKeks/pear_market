@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/service/user_access_service.dart';
+import 'package:pear_market/core/util/enums/product_condition_enum.dart';
 
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_currency_enum.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
+import 'package:pear_market/core/widgets/snackbar/show_snackbar_error.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_color_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_generation_parameter_usecase.dart';
@@ -12,7 +15,6 @@ import 'package:pear_market/features/products/domain/usecase/produc_parameters/g
 import 'package:pear_market/features/products/domain/usecase/produc_parameters/get_product_video_parameter_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/add_product_usecase.dart';
 import 'package:pear_market/features/products/domain/usecase/product_usecases/update_product_usecase.dart';
-import 'package:pear_market/features/products/presentation/widgets/show_snackbar_info.dart';
 
 class FormForProductState {
   final ProductEntity product;
@@ -60,7 +62,7 @@ class FormForProductState {
 
 class FormForProductViewModel extends ChangeNotifier {
   final BuildContext context;
-  final ProductType? productType;
+  final ProductTypeEnum? productType;
   final UserAccessService userAccessService;
   final formKey = GlobalKey<FormState>();
   final ProductEntity? editproduct;
@@ -68,7 +70,7 @@ class FormForProductViewModel extends ChangeNotifier {
     product: editproduct ?? ProductEntity.empty(),
     showExRateField: editproduct == null
         ? false
-        : editproduct?.buyCurrency != ProductCurrency.UAH,
+        : editproduct?.buyCurrency != ProductCurrencyEnum.UAH,
   );
 
   /// product add usecase
@@ -120,13 +122,13 @@ class FormForProductViewModel extends ChangeNotifier {
         product:
             state.product.copyWith(type: productType ?? editproduct?.type));
     await getProductGeneration();
-    if (state.product.type == ProductType.mac ||
-        state.product.type == ProductType.iphone ||
-        state.product.type == ProductType.ipad) {
+    if (state.product.type == ProductTypeEnum.mac ||
+        state.product.type == ProductTypeEnum.iphone ||
+        state.product.type == ProductTypeEnum.ipad) {
       await getProductStorage();
     }
 
-    if (state.product.type == ProductType.mac) {
+    if (state.product.type == ProductTypeEnum.mac) {
       await getProductProc();
       await getProductRam();
       await getProductVideo();
@@ -138,7 +140,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, "Failed load product generation"),
+      (l) => showSnackbarError(context, "Failed load product generation"),
       (right) {
         state = state.copyWith(
           generationList: right,
@@ -161,7 +163,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, "Failed load product RAM"),
+      (l) => showSnackbarError(context, "Failed load product RAM"),
       (right) {
         state = state.copyWith(
           ramList: right,
@@ -183,7 +185,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, "Failed load product processors"),
+      (l) => showSnackbarError(context, "Failed load product processors"),
       (right) {
         state = state.copyWith(
           procList: right,
@@ -205,7 +207,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, "Failed load product video cards"),
+      (l) => showSnackbarError(context, "Failed load product video cards"),
       (right) {
         state = state.copyWith(
           videoList: right,
@@ -228,7 +230,7 @@ class FormForProductViewModel extends ChangeNotifier {
       generetion,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, "Failed load product colors"),
+      (l) => showSnackbarError(context, "Failed load product colors"),
       (right) {
         state = state.copyWith(
           colorList: right,
@@ -250,7 +252,7 @@ class FormForProductViewModel extends ChangeNotifier {
       state.product.type.name,
     );
     result.fold(
-      (l) => showSnackbarInfo(context, "Failed load product storages"),
+      (l) => showSnackbarError(context, "Failed load product storages"),
       (right) {
         state = state.copyWith(
           storageList: right,
@@ -286,10 +288,11 @@ class FormForProductViewModel extends ChangeNotifier {
 
     state = state.copyWith(
       product: state.product.copyWith(
-        buyCurrency: ProductCurrency.values[currency],
+        buyCurrency: ProductCurrencyEnum.values[currency],
         buyExRate: 1,
       ),
-      showExRateField: ProductCurrency.values[currency] != ProductCurrency.UAH,
+      showExRateField:
+          ProductCurrencyEnum.values[currency] != ProductCurrencyEnum.UAH,
     );
     notifyListeners();
   }
@@ -321,7 +324,7 @@ class FormForProductViewModel extends ChangeNotifier {
 
     state = state.copyWith(
       product: state.product.copyWith(
-        condition: ProductCondition.values[condition],
+        condition: ProductConditionEnum.values[condition],
       ),
     );
     notifyListeners();
@@ -400,14 +403,14 @@ class FormForProductViewModel extends ChangeNotifier {
   void saveProduct() async {
     if (formKey.currentState!.validate()) {
       if (editproduct == null) {
-        await addProductUseCase(
-            state.product.copyWith(ownerid: userAccessService.userGet?.id));
+        await addProductUseCase(state.product
+            .copyWith(ownerid: (await userAccessService.currentUser())?.id));
       } else {
         await updateProductUseCase(state.product);
       }
       returnToPreviosPage();
     } else {
-      showSnackbarInfo(context, "Fields are wrong cheak it and try again");
+      showSnackbarError(context, "Fields are wrong cheak it and try again");
     }
   }
 

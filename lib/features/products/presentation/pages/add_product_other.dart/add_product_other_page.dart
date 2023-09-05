@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_condition_enum.dart';
+import 'package:pear_market/core/util/enums/product_currency_enum.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
 import 'package:pear_market/features/products/presentation/pages/add_product_other.dart/provider/add_product_other_view_model.dart';
 import 'package:pear_market/features/products/presentation/widgets/date_time_picker.dart';
 import 'package:pear_market/features/products/presentation/widgets/drop_down_button_for_form.dart';
@@ -11,7 +13,7 @@ class AddProductOtherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProductType productType =
+    final ProductTypeEnum productType =
         context.read<AddProductOtherViewModel>().productType ??
             context.read<AddProductOtherViewModel>().product.type;
     return Scaffold(
@@ -35,13 +37,13 @@ class AddProductOtherPage extends StatelessWidget {
             key: context.read<AddProductOtherViewModel>().formKey,
             child: Column(
               children: [
-                dropDownButtonForForm<ProductCondition>(
+                dropDownButtonForForm<ProductConditionEnum>(
                   enumList: true,
                   value: context
                       .watch<AddProductOtherViewModel>()
                       .product
                       .condition,
-                  items: ProductCondition.values,
+                  items: ProductConditionEnum.values,
                   onChanged: context
                       .read<AddProductOtherViewModel>()
                       .onConditionChange,
@@ -69,7 +71,7 @@ class AddProductOtherPage extends StatelessWidget {
                       context.read<AddProductOtherViewModel>().onColorChange,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
-                productType == ProductType.accessories
+                productType == ProductTypeEnum.accessories
                     ? const SizedBox()
                     : Column(
                         mainAxisSize: MainAxisSize.min,
@@ -89,7 +91,7 @@ class AddProductOtherPage extends StatelessWidget {
                           SizedBox(height: AppDemensions.appSize20),
                         ],
                       ),
-                productType == ProductType.accessories
+                productType == ProductTypeEnum.accessories
                     ? const SizedBox()
                     : Column(
                         mainAxisSize: MainAxisSize.min,
@@ -109,7 +111,7 @@ class AddProductOtherPage extends StatelessWidget {
                           SizedBox(height: AppDemensions.appSize20),
                         ],
                       ),
-                productType == ProductType.accessories
+                productType == ProductTypeEnum.accessories
                     ? const SizedBox()
                     : Column(
                         children: [
@@ -128,7 +130,7 @@ class AddProductOtherPage extends StatelessWidget {
                           SizedBox(height: AppDemensions.appSize20),
                         ],
                       ),
-                productType == ProductType.accessories
+                productType == ProductTypeEnum.accessories
                     ? const SizedBox()
                     : Column(
                         children: [
@@ -147,7 +149,7 @@ class AddProductOtherPage extends StatelessWidget {
                           SizedBox(height: AppDemensions.appSize20),
                         ],
                       ),
-                productType == ProductType.accessories
+                productType == ProductTypeEnum.accessories
                     ? const SizedBox()
                     : Column(
                         children: [
@@ -193,19 +195,19 @@ class AddProductOtherPage extends StatelessWidget {
                       context.read<AddProductOtherViewModel>().onBuyPriceChange,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
-                dropDownButtonForForm<ProductCurrency>(
+                dropDownButtonForForm<ProductCurrencyEnum>(
                   enumList: true,
                   value: context
                       .watch<AddProductOtherViewModel>()
                       .product
                       .buyCurrency,
-                  items: ProductCurrency.values,
+                  items: ProductCurrencyEnum.values,
                   onChanged: context
                       .read<AddProductOtherViewModel>()
                       .onBuyCurrencyChange,
                 ),
                 context.watch<AddProductOtherViewModel>().product.buyCurrency ==
-                        ProductCurrency.UAH
+                        ProductCurrencyEnum.UAH
                     ? const SizedBox()
                     : Column(
                         children: [

@@ -1,0 +1,4 @@
+enum AccessEnum {
+  admin,
+  user,
+}

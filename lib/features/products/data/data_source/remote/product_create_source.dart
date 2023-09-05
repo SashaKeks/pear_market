@@ -1,52 +1,56 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pear_market/core/error/failure.dart';
+import 'package:pear_market/core/error/exception.dart';
+import 'package:pear_market/core/util/enums/product_type_enum.dart';
 
 class RemoteProductCreateSource {
-  Future<List<String>> getProductVersion(String type) async {
-    final json = await _readData(collectionName: "versions", type: type);
+  Future<List<String>> getProductVersion(ProductTypeEnum type) async {
+    final json = await _readData(collectionName: "versions", type: type.name);
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
   }
 
-  Future<List<String>> getProductRam(String type) async {
-    final json = await _readData(collectionName: "ram", type: type);
+  Future<List<String>> getProductRam(ProductTypeEnum type) async {
+    final json = await _readData(collectionName: "ram", type: type.name);
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
   }
 
-  Future<List<String>> getProductProc(String type) async {
-    final json = await _readData(collectionName: "processors", type: type);
+  Future<List<String>> getProductProc(ProductTypeEnum type) async {
+    final json = await _readData(collectionName: "processors", type: type.name);
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
   }
 
-  Future<List<String>> getProductVideo(String type) async {
-    final json = await _readData(collectionName: "video_cards", type: type);
+  Future<List<String>> getProductVideo(ProductTypeEnum type) async {
+    final json =
+        await _readData(collectionName: "video_cards", type: type.name);
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
   }
 
-  Future<List<String>> getProductGeneration(String type) async {
-    final json = await _readData(collectionName: "generations", type: type);
+  Future<List<String>> getProductGeneration(ProductTypeEnum type) async {
+    final json =
+        await _readData(collectionName: "generations", type: type.name);
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
   }
 
-  Future<List<String>> getProductColor(String type, String generation) async {
-    final json = await _readData(collectionName: "colors", type: type);
+  Future<List<String>> getProductColor(
+      ProductTypeEnum type, String generation) async {
+    final json = await _readData(collectionName: "colors", type: type.name);
     final list = (json[generation] as List).map((e) => e.toString()).toList();
     return list;
   }
 
-  Future<List<String>> getProductStorage(String type) async {
-    final json = await _readData(collectionName: "storages", type: type);
+  Future<List<String>> getProductStorage(ProductTypeEnum type) async {
+    final json = await _readData(collectionName: "storages", type: type.name);
     final list = (json[type] as List).map((e) => e.toString()).toList();
     return list;
   }
 
   Future<Map<String, dynamic>> _readData(
       {required String collectionName, required String type}) async {
-    CollectionReference? productsCollection =
+    CollectionReference productsCollection =
         FirebaseFirestore.instance.collection(collectionName);
 
     final result = await productsCollection
@@ -54,9 +58,8 @@ class RemoteProductCreateSource {
         .get()
         .then((value) => value.data() as Map<String, dynamic>)
         .catchError(
-          (e) => throw ServerFailure(e.toString()),
+          (e) => throw ServerNotFoundException(),
         );
-    productsCollection = null;
     return result;
   }
 }

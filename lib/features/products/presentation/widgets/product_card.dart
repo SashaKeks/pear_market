@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_status_enum.dart';
 import 'package:pear_market/features/products/domain/entities/product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,7 @@ class ProductCard extends StatelessWidget {
                             color: Theme.of(context).primaryColorDark)),
                     child: Center(
                       child: Text(
-                        product.condition.name,
+                        product.productInfo.condition.name,
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             fontSize: AppDemensions.appSize20,
@@ -54,8 +54,8 @@ class ProductCard extends StatelessWidget {
                   height: AppDemensions.appSize150,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image:
-                          AssetImage('assets/images/${product.type.name}.png'),
+                      image: AssetImage(
+                          'assets/images/${product.productInfo.type.name}.png'),
                     ),
                   ),
                 ),
@@ -80,56 +80,36 @@ class ProductCard extends StatelessWidget {
                     .canSeeProductOwner
                 ? Column(
                     children: [
-                      FutureBuilder(
-                          future: context
-                              .read<ProductViewModel>()
-                              .getProductOwner(product.ownerid),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Owner:",
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        fontSize: AppDemensions.appSize20,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    "${snapshot.data?.name} ${snapshot.data?.surname}",
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        fontSize: AppDemensions.appSize20,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Text(
-                                "Unknowing",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    fontSize: AppDemensions.appSize20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              );
-                            }
-                          }),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Owner:",
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                fontSize: AppDemensions.appSize20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${product.productInfo.owner.name} ${product.productInfo.owner.surname}",
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                fontSize: AppDemensions.appSize20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       const Divider(
                         color: Colors.black,
                       ),
                     ],
                   )
                 : const SizedBox(),
-            product.status == ProductStatus.instock
+            product.productInfo.status == ProductStatusEnum.instock
                 ? SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

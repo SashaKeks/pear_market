@@ -3,7 +3,7 @@ import 'package:pear_market/features/products/presentation/widgets/bottom_sheet_
 import 'package:provider/provider.dart';
 
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/features/products/domain/entities/filter_entity.dart';
+import 'package:pear_market/features/products/domain/entities/filter_product_entity.dart';
 import 'package:pear_market/features/products/presentation/pages/products/provider/product_view_model.dart';
 import 'package:pear_market/features/products/presentation/widgets/product_card.dart';
 

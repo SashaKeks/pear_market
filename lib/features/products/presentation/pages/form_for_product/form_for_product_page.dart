@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_condition_enum.dart';
+import 'package:pear_market/core/util/enums/product_currency_enum.dart';
 import 'package:pear_market/features/products/presentation/pages/form_for_product/provider/form_for_product_view_model.dart';
 import 'package:pear_market/features/products/presentation/widgets/date_time_picker.dart';
 import 'package:pear_market/features/products/presentation/widgets/drop_down_button_for_form.dart';
@@ -30,13 +31,13 @@ class FormForProductPage extends StatelessWidget {
             child: Column(
               children: [
                 // SizedBox(height: AppDemensions.appSize20),
-                dropDownButtonForForm<ProductCondition>(
+                dropDownButtonForForm<ProductConditionEnum>(
                   value: context
                       .watch<FormForProductViewModel>()
                       .state
                       .product
                       .condition,
-                  items: ProductCondition.values,
+                  items: ProductConditionEnum.values,
                   onChanged: (value) => context
                       .read<FormForProductViewModel>()
                       .addProductCondition(value?.index),
@@ -111,14 +112,14 @@ class FormForProductPage extends StatelessWidget {
                       .addProductBuyPrice,
                 ),
                 SizedBox(height: AppDemensions.appSize20),
-                dropDownButtonForForm<ProductCurrency>(
+                dropDownButtonForForm<ProductCurrencyEnum>(
                   enumList: true,
                   value: context
                       .watch<FormForProductViewModel>()
                       .state
                       .product
                       .buyCurrency,
-                  items: ProductCurrency.values,
+                  items: ProductCurrencyEnum.values,
                   onChanged: (value) => context
                       .read<FormForProductViewModel>()
                       .addProductBuyCurrency(value?.index),

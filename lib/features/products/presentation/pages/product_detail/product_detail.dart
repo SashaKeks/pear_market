@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pear_market/core/resources/demencions.dart';
-import 'package:pear_market/core/util/enums.dart';
+import 'package:pear_market/core/util/enums/product_status_enum.dart';
 import 'package:pear_market/features/products/presentation/pages/product_detail/provider/product_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -156,7 +156,7 @@ class ProductDetailPage extends StatelessWidget {
                 data: product.status.name.toUpperCase(),
                 style: TextStyle(
                     fontSize: AppDemensions.appSize20,
-                    color: product.status == ProductStatus.sold
+                    color: product.status == ProductStatusEnum.sold
                         ? Colors.green[800]
                         : Colors.red[800]),
               ),
@@ -177,7 +177,7 @@ class ProductDetailPage extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: product.status == ProductStatus.sold
+                  onPressed: product.status == ProductStatusEnum.sold
                       ? null
                       : context
                           .read<ProductDetailViewModel>()

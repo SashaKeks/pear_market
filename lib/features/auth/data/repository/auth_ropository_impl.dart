@@ -1,47 +1,41 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:pear_market/core/error/exception.dart';
 import 'package:pear_market/core/error/failure.dart';
-import 'package:pear_market/core/resources/app_constants.dart';
-import 'package:pear_market/features/admin_panel/domain/entity/custom_user.dart';
+import 'package:pear_market/features/auth/data/datasource/remote/auth_remote_datasource.dart';
+import 'package:pear_market/features/auth/data/models/user_credential_model.dart';
+import 'package:pear_market/features/auth/domain/entities/user_credentials_entity.dart';
 import 'package:pear_market/features/auth/domain/repository/auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
-  CustomUser? currentUser;
+  AuthRepositoryImpl(this._authRemoteDataSource);
+  final AuthRemoteDataSource _authRemoteDataSource;
+
   @override
-  Future<Either<Failure, CustomUser?>> signIn({
-    required String login,
-    required String password,
-  }) async {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection(AppConstants.usersDB);
-
-    final userWithSuchEmail =
-        await users.where("email", isEqualTo: login).get();
-
-    if (userWithSuchEmail.docs.isEmpty) {
-      throw ServerFailure("User not found");
-    }
-
-    currentUser = CustomUser.fromJson(
-        userWithSuchEmail.docs.first.data() as Map<String, dynamic>);
-    if (password == currentUser!.password) {
-      await users.doc(currentUser!.id).update({"isAuth": true});
-      return right(currentUser!.copyWith(isAuth: true));
-    } else {
-      return left(ServerFailure("Wrong password provided for that user"));
+  Future<Either<Failure, void>> signOut() async {
+    try {
+      await _authRemoteDataSource.signOut();
+      return right(null);
+    } on ServerNotFoundException {
+      return left(ServerFailure(error: "User not found"));
+    } catch (e) {
+      return left(UnknownFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> signOut() async {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection(AppConstants.usersDB);
-
-    if (currentUser != null) {
-      await users.doc(currentUser!.id).update({"isAuth": false});
+  Future<Either<Failure, void>> signIn(
+      {required UserCredentialsEntity credential}) async {
+    try {
+      await _authRemoteDataSource.signIn(
+        credentials: UserCredentialsModel.fromEntity(credential),
+      );
       return right(null);
-    } else {
-      return left(ServerFailure("Auth user not found"));
+    } on ServerNotFoundException {
+      return left(ServerFailure(error: "User not found"));
+    } on ServerIncorrectUserPassword {
+      return left(ServerFailure(error: "Wrong password for this user"));
+    } catch (e) {
+      return left(UnknownFailure());
     }
   }
 }

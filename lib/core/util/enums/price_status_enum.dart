@@ -1,0 +1,4 @@
+enum PriceStatusEnum {
+  buy,
+  sell,
+}
